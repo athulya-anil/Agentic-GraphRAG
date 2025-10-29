@@ -1,0 +1,43 @@
+# LLM & Agent Framework
+groq==0.9.0
+langchain==0.2.0
+langgraph==0.1.0
+langchain-groq==0.1.0
+
+# Graph Database
+neo4j==5.15.0
+py2neo==2021.2.3
+
+# Vector Database & Embeddings
+faiss-cpu==1.7.4
+sentence-transformers==2.3.1
+
+# NLP & Transformers
+spacy==3.7.2
+transformers==4.36.0
+
+# Configuration & Environment
+python-dotenv==1.0.0
+pydantic==2.5.0
+pyyaml==6.0.1
+
+# Evaluation & Metrics
+ragas==0.1.0
+deepeval==0.21.0
+
+# Visualization & UI
+streamlit==1.29.0
+plotly==5.18.0
+networkx==3.2
+
+# Development & Testing
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+black==23.12.0
+ruff==0.1.9
+
+# Utilities
+jupyter==1.0.0
+python-json-logger==2.0.7
+tenacity==8.2.3
