@@ -166,69 +166,6 @@ black src/ tests/
 ruff check src/ tests/
 ```
 
-### Project Status
-
-**Phase 1 (Completed)** ✅
-- [x] Project structure setup
-- [x] Virtual environment and dependencies
-- [x] Neo4j Docker setup
-- [x] Environment configuration
-- [x] LLM client implementation
-- [x] Configuration management
-
-**Phase 2 (Next)**
-- [ ] Neo4j manager (CRUD operations)
-- [ ] FAISS vector store
-- [ ] Testing suite
-
-**Phase 3 (Future)**
-- [ ] Agent implementations
-- [ ] Pipeline orchestration
-- [ ] Evaluation framework
-- [ ] Web UI
-
-## Troubleshooting
-
-### Docker Not Running
-```
-Error: Cannot connect to Docker daemon
-```
-**Solution**: Start Docker Desktop and wait for it to fully initialize.
-
-### API Key Error
-```
-Configuration Error: GROQ_API_KEY not set
-```
-**Solution**:
-1. Copy `.env.example` to `.env`
-2. Add your Groq API key
-3. Make sure you're in the project root directory
-
-### Neo4j Connection Failed
-```
-Error: Unable to connect to Neo4j
-```
-**Solution**:
-1. Check Docker is running: `docker ps`
-2. Restart Neo4j: `./scripts/start_neo4j.sh`
-3. Wait 10-15 seconds for Neo4j to initialize
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests
-5. Submit a pull request
-
 ## License
 
 MIT License
-
-## Contact
-
-For questions and support, please open an issue on GitHub.
-
----
-
-Built with ❤️ using Claude Code
