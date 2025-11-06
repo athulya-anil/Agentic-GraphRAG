@@ -1,16 +1,16 @@
 # LLM & Agent Framework
 groq==0.9.0
 langchain==0.2.0
-langgraph==0.1.0
-langchain-groq==0.1.0
+langgraph==0.1.19
+langchain-groq==0.1.9
 
 # Graph Database
-neo4j==5.15.0
-py2neo==2021.2.3
+neo4j>=6.0.0
+py2neo==2021.2.4
 
 # Vector Database & Embeddings
-faiss-cpu==1.7.4
-sentence-transformers==2.3.1
+faiss-cpu>=1.8.0
+sentence-transformers>=2.7.0
 
 # NLP & Transformers
 spacy==3.7.2

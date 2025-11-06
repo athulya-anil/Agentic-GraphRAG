@@ -154,13 +154,25 @@ class Neo4jManager:
         if not properties:
             raise ValueError("Node properties cannot be empty")
 
-        operation = "MERGE" if merge else "CREATE"
-        query = f"""
-        {operation} (n:{label} $properties)
-        RETURN n, id(n) as node_id
-        """
-
-        result = self.execute_query(query, {"properties": properties})
+        if merge:
+            # MERGE requires explicit property matching
+            query = f"""
+            MERGE (n:{label} {{name: $name}})
+            ON CREATE SET n = $properties
+            ON MATCH SET n += $properties
+            RETURN n, id(n) as node_id
+            """
+            # Use 'name' as merge key, or first property if no 'name' exists
+            merge_key = properties.get('name', list(properties.values())[0] if properties else '')
+            result = self.execute_query(query, {"properties": properties, "name": merge_key})
+        else:
+            # CREATE can use parameter map directly
+            query = f"""
+            CREATE (n:{label})
+            SET n = $properties
+            RETURN n, id(n) as node_id
+            """
+            result = self.execute_query(query, {"properties": properties})
         if result:
             node_data = dict(result[0]["n"])
             node_data["_id"] = result[0]["node_id"]
@@ -292,17 +304,29 @@ class Neo4jManager:
             Relationship properties
         """
         relationship_properties = relationship_properties or {}
-        operation = "MERGE" if merge else "CREATE"
 
         from_conditions = " AND ".join([f"from.{key} = $from_{key}" for key in from_properties.keys()])
         to_conditions = " AND ".join([f"to.{key} = $to_{key}" for key in to_properties.keys()])
 
-        query = f"""
-        MATCH (from:{from_label}), (to:{to_label})
-        WHERE {from_conditions} AND {to_conditions}
-        {operation} (from)-[r:{relationship_type} $rel_props]->(to)
-        RETURN r, id(r) as rel_id
-        """
+        if merge:
+            # MERGE requires explicit property setting
+            query = f"""
+            MATCH (from:{from_label}), (to:{to_label})
+            WHERE {from_conditions} AND {to_conditions}
+            MERGE (from)-[r:{relationship_type}]->(to)
+            ON CREATE SET r = $rel_props
+            ON MATCH SET r += $rel_props
+            RETURN r, id(r) as rel_id
+            """
+        else:
+            # CREATE can set properties directly
+            query = f"""
+            MATCH (from:{from_label}), (to:{to_label})
+            WHERE {from_conditions} AND {to_conditions}
+            CREATE (from)-[r:{relationship_type}]->(to)
+            SET r = $rel_props
+            RETURN r, id(r) as rel_id
+            """
 
         params = {
             **{f"from_{k}": v for k, v in from_properties.items()},

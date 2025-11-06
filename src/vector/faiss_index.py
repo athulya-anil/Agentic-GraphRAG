@@ -73,6 +73,9 @@ class FAISSIndex:
 
         # Load embedding model
         logger.info(f"Loading embedding model: {self.embedding_config.model_name}")
+        # Disable multiprocessing to avoid segmentation faults on macOS
+        import os
+        os.environ['TOKENIZERS_PARALLELISM'] = 'false'
         self.model = SentenceTransformer(self.embedding_config.model_name)
         self.dimension = self.embedding_config.dimension
 
@@ -389,6 +392,19 @@ class FAISSIndex:
         logger.warning("Clearing all vectors from index")
         self._create_index()
         self.metadata = []
+
+    def cleanup(self) -> None:
+        """Clean up resources properly to avoid segmentation faults."""
+        try:
+            # Delete the model to free resources
+            if hasattr(self, 'model'):
+                del self.model
+            # Clear the index
+            if hasattr(self, 'index') and self.index is not None:
+                del self.index
+            self.metadata = []
+        except Exception as e:
+            logger.warning(f"Cleanup warning: {e}")
 
     def get_count(self) -> int:
         """
