@@ -204,17 +204,23 @@ We use RAGAS (RAG Assessment) framework to evaluate:
 - **Context Precision**: Is retrieved context relevant?
 - **Context Recall**: Is all necessary context retrieved?
 
-## Prerequisites
+## 🚀 Quick Start
+
+### Prerequisites
 
 - Python 3.11+
-- Docker Desktop
+- Docker Desktop (for Neo4j)
 - Groq API key (free at https://console.groq.com)
 
-## Setup Instructions
+## 📦 Installation
 
-### 1. Clone and Setup Environment
+### 1. Environment Setup
 
 ```bash
+# Clone repository
+git clone https://github.com/athulya-anil/agentic-graphrag.git
+cd agentic-graphrag
+
 # Create virtual environment
 python -m venv venv
 
@@ -226,6 +232,9 @@ source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Download spaCy model (required for entity extraction)
+python -m spacy download en_core_web_sm
 ```
 
 ### 2. Configure Environment Variables
@@ -277,42 +286,127 @@ JSON Response: {...}
 ✅ All tests passed!
 ```
 
-## Usage
+## 💻 Usage
 
-### Basic LLM Client Usage
+### Running the Demo
 
-```python
-from src.utils import get_llm_client
+The easiest way to see the system in action:
 
-# Initialize client
-client = get_llm_client()
+```bash
+# Make sure Neo4j is running
+./scripts/start_neo4j.sh
 
-# Generate text
-response = client.generate(
-    prompt="Explain knowledge graphs in one sentence.",
-    temperature=0.0
-)
-print(response)
-
-# Generate structured JSON
-json_response = client.generate_json(
-    prompt="Create a JSON with name='John' and age=30"
-)
-print(json_response)
+# Run the comprehensive demo
+python demo.py
 ```
 
-### Configuration Management
+This will demonstrate:
+- Automatic schema inference from documents
+- Entity extraction with metadata enrichment
+- Relationship extraction and knowledge graph construction
+- Intelligent query routing across multiple strategies
+- Performance evaluation with RAGAS metrics
+
+### Basic Usage
+
+#### 1. Document Ingestion
 
 ```python
-from src.utils import get_config
+from src.pipeline import get_ingestion_pipeline
 
-# Load configuration
-config = get_config()
+# Initialize pipeline
+pipeline = get_ingestion_pipeline(
+    schema_path="data/processed/schema.json",
+    auto_refine_schema=True
+)
 
-# Access settings
-print(config.llm.model)           # llama-3.3-70b-versatile
-print(config.neo4j.uri)           # bolt://localhost:7687
-print(config.embedding.model_name) # sentence-transformers/all-MiniLM-L6-v2
+# Ingest documents
+documents = [
+    "Your document text here...",
+    "Another document..."
+]
+
+results = pipeline.ingest_documents(
+    documents,
+    infer_schema=True,
+    enrich_metadata=True
+)
+
+print(f"Extracted {results['entities_extracted']} entities")
+print(f"Created {results['nodes_created']} nodes")
+```
+
+#### 2. Query Retrieval
+
+```python
+from src.pipeline import get_retrieval_pipeline
+
+# Initialize pipeline
+pipeline = get_retrieval_pipeline(
+    use_reranking=False,
+    use_reflection=True
+)
+
+# Query with automatic routing
+result = pipeline.query(
+    "What medications treat diabetes?",
+    top_k=5,
+    evaluate=True
+)
+
+print(f"Response: {result['response']}")
+print(f"Metrics: {result['metrics']}")
+```
+
+#### 3. Working with Individual Agents
+
+```python
+from src.agents import (
+    get_schema_agent,
+    get_entity_agent,
+    get_relation_agent,
+    get_orchestrator_agent
+)
+
+# Schema inference
+schema_agent = get_schema_agent()
+schema = schema_agent.infer_schema_from_documents(documents)
+
+# Entity extraction
+entity_agent = get_entity_agent(schema=schema)
+entities = entity_agent.extract_entities_from_text(
+    "Apple Inc. is headquartered in Cupertino.",
+    enrich_metadata=True
+)
+
+# Relationship extraction
+relation_agent = get_relation_agent(schema=schema)
+relations = relation_agent.extract_relations_from_text(
+    text,
+    entities
+)
+
+# Query routing
+orchestrator = get_orchestrator_agent()
+routing = orchestrator.route_query("Your query here")
+print(f"Strategy: {routing['strategy']}")
+```
+
+#### 4. Direct Database Access
+
+```python
+from src.graph import get_neo4j_manager
+from src.vector import get_faiss_index
+
+# Neo4j operations
+neo4j = get_neo4j_manager()
+neo4j.create_node("Person", {"name": "John", "age": 30})
+schema = neo4j.get_schema()
+
+# FAISS vector search
+faiss = get_faiss_index()
+faiss.add(["Text to index"], [{"metadata": "value"}])
+results = faiss.search("query text", top_k=5)
 ```
 
 ## Development
