@@ -1,41 +1,208 @@
 # Agentic GraphRAG
 
-A production-ready self-adaptive multi-agent system for knowledge graph construction and retrieval.
+A production-ready self-adaptive multi-agent system for autonomous knowledge graph construction and intelligent retrieval.
 
-## Overview
+## 🎯 Vision
 
-Agentic GraphRAG is an intelligent RAG system where AI agents automatically:
+**What if you could build domain-specific knowledge graphs automatically, without manual schema design?**
 
-1. **Infer graph schemas** from documents (SchemaAgent)
-2. **Extract entities and relations** (EntityAgent, RelationAgent)
-3. **Build Neo4j knowledge graphs** dynamically
-4. **Route queries intelligently** between vector/graph/hybrid retrieval (OrchestratorAgent)
-5. **Self-optimize through reflection** (ReflectionAgent)
+Agentic GraphRAG is a novel RAG system that uses autonomous AI agents to handle the entire lifecycle of knowledge graph construction and retrieval. Unlike traditional approaches that require manual schema definition and entity extraction rules, our system **adapts to any domain automatically**.
 
-## Tech Stack
+### The Core Innovation
 
-- **LLM**: Groq API (Llama 3.3-70B) - free tier
-- **Graph DB**: Neo4j (Docker)
-- **Vector DB**: FAISS
-- **Agent Framework**: LangGraph
-- **NER**: spaCy
-- **Evaluation**: RAGAS
+Instead of hard-coding schemas and extraction rules, **AI agents do all the work**:
 
-## Project Structure
+- **SchemaAgent** analyzes your documents and infers the optimal graph structure
+- **EntityAgent** extracts entities using hybrid NER (spaCy) + LLM reasoning
+- **RelationAgent** identifies meaningful relationships between entities
+- **OrchestratorAgent** intelligently routes queries to the best retrieval strategy
+- **ReflectionAgent** continuously evaluates and improves system performance
+
+This creates a **schema-agnostic, self-improving knowledge graph system** that works on any domain—medical literature, legal documents, technical manuals, research papers, and more.
+
+## 🚀 Key Features
+
+### 1. **Autonomous Schema Inference**
+No need to predefine node types or relationship types. The SchemaAgent analyzes your documents and automatically discovers:
+- Entity types (e.g., Disease, Drug, Symptom, Treatment)
+- Relationship types (e.g., TREATS, CAUSES, DIAGNOSED_BY)
+- Property schemas for each entity type
+
+### 2. **Intelligent Multi-Strategy Retrieval**
+The OrchestratorAgent dynamically chooses between:
+- **Vector Search**: Semantic similarity for conceptual questions
+- **Graph Traversal**: Relational queries leveraging knowledge structure
+- **Hybrid Retrieval**: Combines both approaches with learned weights
+
+### 3. **Self-Optimization Loop**
+The ReflectionAgent uses RAGAS metrics to:
+- Evaluate answer quality (faithfulness, relevancy)
+- Assess context precision and recall
+- Adjust retrieval strategies based on performance
+- Suggest schema improvements
+
+### 4. **Production-Ready Architecture**
+- Robust error handling with automatic retry logic
+- Batch operations for efficient large-scale processing
+- Type-safe configuration with Pydantic validation
+- Comprehensive logging and monitoring
+
+## 🏗️ Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        Document Ingestion                        │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │
+                    ┌───────────▼───────────┐
+                    │    SchemaAgent        │
+                    │  (Infer Graph Schema) │
+                    └───────────┬───────────┘
+                                │
+                    ┌───────────▼───────────┐
+                    │    EntityAgent        │
+                    │ (Extract Entities)    │
+                    └───────────┬───────────┘
+                                │
+                    ┌───────────▼───────────┐
+                    │   RelationAgent       │
+                    │ (Extract Relations)   │
+                    └───────────┬───────────┘
+                                │
+                ┌───────────────▼──────────────┐
+                │                              │
+        ┌───────▼────────┐          ┌────────▼─────────┐
+        │   Neo4j Graph  │          │  FAISS Vector DB │
+        │  (Nodes+Edges) │          │   (Embeddings)   │
+        └───────┬────────┘          └────────┬─────────┘
+                │                            │
+                └───────────┬────────────────┘
+                            │
+                ┌───────────▼────────────┐
+                │  OrchestratorAgent     │
+                │  (Query Router)        │
+                └───────────┬────────────┘
+                            │
+        ┌───────────────────┼───────────────────┐
+        │                   │                   │
+┌───────▼────────┐  ┌───────▼────────┐  ┌──────▼──────┐
+│ Vector Search  │  │ Graph Traversal│  │   Hybrid    │
+└───────┬────────┘  └───────┬────────┘  └──────┬──────┘
+        └───────────────────┼───────────────────┘
+                            │
+                ┌───────────▼────────────┐
+                │   ReflectionAgent      │
+                │ (Evaluate & Optimize)  │
+                └────────────────────────┘
+```
+
+## 🛠️ Tech Stack
+
+- **LLM**: Groq API (Llama 3.3-70B) - free tier with high throughput
+- **Graph DB**: Neo4j (Dockerized) - property graph database
+- **Vector DB**: FAISS - efficient similarity search
+- **Agent Framework**: LangGraph - orchestrate multi-agent workflows
+- **NER**: spaCy - fast named entity recognition
+- **Evaluation**: RAGAS - RAG assessment metrics
+- **Embeddings**: Sentence Transformers (all-MiniLM-L6-v2)
+
+## 📁 Project Structure
 
 ```
 agentic-graphrag/
 ├── src/
-│   ├── agents/           # 5+ agent implementations
-│   ├── graph/            # Neo4j manager
-│   ├── vector/           # FAISS index
-│   ├── pipeline/         # Ingestion + retrieval
-│   └── utils/            # LLM client, config
-├── data/                 # Raw + processed data
-├── scripts/              # Ingestion, eval, demo
-├── tests/                # Unit tests
-└── configs/              # YAML configs
+│   ├── agents/           # Multi-agent implementations
+│   │   ├── schema_agent.py       # Schema inference from documents
+│   │   ├── entity_agent.py       # Entity extraction (NER + LLM)
+│   │   ├── relation_agent.py     # Relationship extraction
+│   │   ├── orchestrator_agent.py # Query routing logic
+│   │   └── reflection_agent.py   # Performance evaluation
+│   ├── graph/            # Neo4j graph database layer
+│   │   └── neo4j_manager.py      # CRUD operations, schema management
+│   ├── vector/           # Vector store implementation
+│   │   └── faiss_index.py        # FAISS indexing and retrieval
+│   ├── pipeline/         # Data processing pipelines
+│   │   ├── ingestion.py          # Document ingestion pipeline
+│   │   └── retrieval.py          # Multi-strategy retrieval
+│   └── utils/            # Core utilities
+│       ├── llm_client.py         # Groq API client with retry logic
+│       └── config.py             # Configuration management
+├── data/                 # Data directory
+│   ├── raw/              # Raw documents
+│   └── processed/        # Processed outputs
+├── scripts/              # Utility scripts
+│   ├── start_neo4j.sh    # Start Neo4j container
+│   ├── stop_neo4j.sh     # Stop Neo4j container
+│   └── setup.sh          # Environment setup
+├── tests/                # Unit and integration tests
+├── configs/              # Configuration files
+└── requirements.txt      # Python dependencies
 ```
+
+## 🧠 Agent Responsibilities
+
+### **SchemaAgent**
+Analyzes document corpus to infer optimal knowledge graph structure:
+- Identifies entity types (node labels)
+- Discovers relationship types (edge labels)
+- Defines property schemas for nodes and edges
+- Adapts schema as new document types are encountered
+
+### **EntityAgent**
+Extracts entities using hybrid approach:
+- Fast entity recognition with spaCy NER
+- LLM-powered classification for ambiguous cases
+- Entity resolution and deduplication
+- Property extraction for each entity
+
+### **RelationAgent**
+Identifies and extracts relationships:
+- Dependency parsing for grammatical relationships
+- LLM-based relation classification
+- Confidence scoring for each relationship
+- Temporal and conditional relationship handling
+
+### **OrchestratorAgent**
+Routes queries to optimal retrieval strategy:
+- Query classification (factual vs. conceptual)
+- Strategy selection (vector/graph/hybrid)
+- Dynamic weight adjustment for hybrid retrieval
+- Response synthesis from multiple sources
+
+### **ReflectionAgent**
+Evaluates and improves system performance:
+- RAGAS metric computation (faithfulness, relevancy, precision, recall)
+- Identifies failure patterns
+- Suggests schema refinements
+- Triggers retraining or parameter adjustment
+
+## 🎓 Research Contributions
+
+This project advances the state-of-the-art in several areas:
+
+1. **Autonomous Knowledge Graph Construction**: Traditional KG construction requires domain experts to define schemas. Our approach automates this using LLM-powered agents.
+
+2. **Adaptive Multi-Strategy Retrieval**: Most RAG systems use fixed retrieval strategies. Our OrchestratorAgent learns when to use vector search vs. graph traversal vs. hybrid approaches.
+
+3. **Self-Improving RAG Systems**: The ReflectionAgent creates a feedback loop for continuous improvement, making the system more accurate over time without human intervention.
+
+4. **Domain-Agnostic Design**: Unlike domain-specific solutions, this architecture works across any document corpus—from medical research to legal documents to technical manuals.
+
+## 💡 Use Cases
+
+- **Medical Research**: Automatically build knowledge graphs from PubMed papers linking diseases, drugs, symptoms, and treatments
+- **Legal Analysis**: Extract entities and relationships from case law and regulations
+- **Technical Documentation**: Create navigable knowledge graphs from API docs, manuals, and specifications
+- **Academic Research**: Build citation networks and concept maps from research papers
+- **Business Intelligence**: Extract insights from company reports, market research, and competitive analysis
+
+## 📊 Evaluation Metrics
+
+We use RAGAS (RAG Assessment) framework to evaluate:
+- **Faithfulness**: Are answers grounded in retrieved context?
+- **Answer Relevancy**: Do answers directly address the question?
+- **Context Precision**: Is retrieved context relevant?
+- **Context Recall**: Is all necessary context retrieved?
 
 ## Prerequisites
 
