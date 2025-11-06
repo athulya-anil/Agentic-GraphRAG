@@ -288,9 +288,61 @@ JSON Response: {...}
 
 ## 💻 Usage
 
+### Quick Start: Real-Time Pipeline
+
+The simplest way to ingest your own documents and query them:
+
+```bash
+# Make sure Neo4j is running
+./scripts/start_neo4j.sh
+
+# STAGE 1: Ingest your documents
+python ingest.py --dir data/raw/
+
+# STAGE 2: Query your knowledge graph (interactive mode)
+python query.py
+```
+
+#### Ingest Your Documents
+
+```bash
+# Ingest a single file
+python ingest.py --file path/to/document.txt
+
+# Ingest multiple files
+python ingest.py --file doc1.txt --file doc2.pdf --file doc3.md
+
+# Ingest all files in a directory
+python ingest.py --dir data/raw/
+
+# Ingest recursively with options
+python ingest.py --dir data/raw/ --recursive --verbose
+
+# See all options
+python ingest.py --help
+```
+
+Supported formats: `.txt`, `.md`, `.pdf`, `.docx`
+
+#### Query Your Knowledge Graph
+
+```bash
+# Interactive mode (recommended)
+python query.py
+
+# Single query from command line
+python query.py --query "What medications treat diabetes?"
+
+# Query with custom options
+python query.py --query "Explain AI" --top-k 10 --verbose
+
+# See all options
+python query.py --help
+```
+
 ### Running the Demo
 
-The easiest way to see the system in action:
+To see the full system with pre-loaded examples:
 
 ```bash
 # Make sure Neo4j is running
@@ -307,7 +359,7 @@ This will demonstrate:
 - Intelligent query routing across multiple strategies
 - Performance evaluation with RAGAS metrics
 
-### Basic Usage
+### Advanced Usage (Python API)
 
 #### 1. Document Ingestion
 

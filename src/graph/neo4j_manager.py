@@ -30,6 +30,40 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def sanitize_label(label: str) -> str:
+    """
+    Sanitize a label or relationship type for Neo4j.
+
+    Neo4j labels and relationship types must:
+    - Start with a letter
+    - Contain only letters, numbers, and underscores
+    - Not contain spaces or special characters
+
+    Args:
+        label: Raw label string
+
+    Returns:
+        Sanitized label safe for Neo4j
+    """
+    import re
+
+    # Replace spaces and hyphens with underscores
+    sanitized = label.replace(' ', '_').replace('-', '_')
+
+    # Remove any characters that aren't alphanumeric or underscore
+    sanitized = re.sub(r'[^\w]', '', sanitized)
+
+    # Ensure it starts with a letter (add prefix if needed)
+    if sanitized and not sanitized[0].isalpha():
+        sanitized = 'N_' + sanitized
+
+    # Handle empty string
+    if not sanitized:
+        sanitized = 'Unknown'
+
+    return sanitized
+
+
 class Neo4jManager:
     """
     Manager class for Neo4j graph database operations.
@@ -154,10 +188,13 @@ class Neo4jManager:
         if not properties:
             raise ValueError("Node properties cannot be empty")
 
+        # Sanitize label
+        sanitized_label = sanitize_label(label)
+
         if merge:
             # MERGE requires explicit property matching
             query = f"""
-            MERGE (n:{label} {{name: $name}})
+            MERGE (n:{sanitized_label} {{name: $name}})
             ON CREATE SET n = $properties
             ON MATCH SET n += $properties
             RETURN n, id(n) as node_id
@@ -168,7 +205,7 @@ class Neo4jManager:
         else:
             # CREATE can use parameter map directly
             query = f"""
-            CREATE (n:{label})
+            CREATE (n:{sanitized_label})
             SET n = $properties
             RETURN n, id(n) as node_id
             """
@@ -176,7 +213,7 @@ class Neo4jManager:
         if result:
             node_data = dict(result[0]["n"])
             node_data["_id"] = result[0]["node_id"]
-            logger.info(f"{'Merged' if merge else 'Created'} node {label}: {node_data.get('name', 'unnamed')}")
+            logger.info(f"{'Merged' if merge else 'Created'} node {sanitized_label}: {node_data.get('name', 'unnamed')}")
             return node_data
         return {}
 
@@ -195,9 +232,10 @@ class Neo4jManager:
         Returns:
             Node properties if found, None otherwise
         """
+        sanitized_label = sanitize_label(label)
         conditions = " AND ".join([f"n.{key} = ${key}" for key in properties.keys()])
         query = f"""
-        MATCH (n:{label})
+        MATCH (n:{sanitized_label})
         WHERE {conditions}
         RETURN n, id(n) as node_id
         LIMIT 1
@@ -227,9 +265,10 @@ class Neo4jManager:
         Returns:
             True if node was updated, False otherwise
         """
+        sanitized_label = sanitize_label(label)
         conditions = " AND ".join([f"n.{key} = ${key}" for key in match_properties.keys()])
         query = f"""
-        MATCH (n:{label})
+        MATCH (n:{sanitized_label})
         WHERE {conditions}
         SET n += $update_props
         RETURN n
@@ -240,7 +279,7 @@ class Neo4jManager:
         success = len(result) > 0
 
         if success:
-            logger.info(f"Updated node {label}")
+            logger.info(f"Updated node {sanitized_label}")
         return success
 
     def delete_node(
@@ -260,10 +299,11 @@ class Neo4jManager:
         Returns:
             True if node was deleted, False otherwise
         """
+        sanitized_label = sanitize_label(label)
         conditions = " AND ".join([f"n.{key} = ${key}" for key in properties.keys()])
         delete_clause = "DETACH DELETE" if detach else "DELETE"
         query = f"""
-        MATCH (n:{label})
+        MATCH (n:{sanitized_label})
         WHERE {conditions}
         {delete_clause} n
         RETURN count(n) as deleted_count
@@ -273,7 +313,7 @@ class Neo4jManager:
         deleted_count = result[0]["deleted_count"] if result else 0
 
         if deleted_count > 0:
-            logger.info(f"Deleted {deleted_count} node(s) with label {label}")
+            logger.info(f"Deleted {deleted_count} node(s) with label {sanitized_label}")
         return deleted_count > 0
 
     # ==================== Relationship Operations ====================
@@ -305,15 +345,20 @@ class Neo4jManager:
         """
         relationship_properties = relationship_properties or {}
 
+        # Sanitize labels and relationship type
+        sanitized_from_label = sanitize_label(from_label)
+        sanitized_to_label = sanitize_label(to_label)
+        sanitized_rel_type = sanitize_label(relationship_type)
+
         from_conditions = " AND ".join([f"from.{key} = $from_{key}" for key in from_properties.keys()])
         to_conditions = " AND ".join([f"to.{key} = $to_{key}" for key in to_properties.keys()])
 
         if merge:
             # MERGE requires explicit property setting
             query = f"""
-            MATCH (from:{from_label}), (to:{to_label})
+            MATCH (from:{sanitized_from_label}), (to:{sanitized_to_label})
             WHERE {from_conditions} AND {to_conditions}
-            MERGE (from)-[r:{relationship_type}]->(to)
+            MERGE (from)-[r:{sanitized_rel_type}]->(to)
             ON CREATE SET r = $rel_props
             ON MATCH SET r += $rel_props
             RETURN r, id(r) as rel_id
@@ -321,9 +366,9 @@ class Neo4jManager:
         else:
             # CREATE can set properties directly
             query = f"""
-            MATCH (from:{from_label}), (to:{to_label})
+            MATCH (from:{sanitized_from_label}), (to:{sanitized_to_label})
             WHERE {from_conditions} AND {to_conditions}
-            CREATE (from)-[r:{relationship_type}]->(to)
+            CREATE (from)-[r:{sanitized_rel_type}]->(to)
             SET r = $rel_props
             RETURN r, id(r) as rel_id
             """
@@ -338,7 +383,7 @@ class Neo4jManager:
         if result:
             rel_data = dict(result[0]["r"])
             rel_data["_id"] = result[0]["rel_id"]
-            logger.info(f"{'Merged' if merge else 'Created'} relationship {relationship_type}")
+            logger.info(f"{'Merged' if merge else 'Created'} relationship {sanitized_rel_type}")
             return rel_data
         return {}
 
