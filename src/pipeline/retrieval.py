@@ -12,6 +12,9 @@ Author: Agentic GraphRAG Team
 """
 
 import logging
+import hashlib
+import json
+from pathlib import Path
 from typing import List, Dict, Any, Optional
 
 from ..agents import (
@@ -48,7 +51,9 @@ class RetrievalPipeline:
     def __init__(
         self,
         use_reranking: bool = False,
-        use_reflection: bool = True
+        use_reflection: bool = True,
+        enable_cache: bool = True,
+        cache_dir: Optional[Path] = None
     ):
         """
         Initialize the retrieval pipeline.
@@ -56,10 +61,18 @@ class RetrievalPipeline:
         Args:
             use_reranking: Whether to use cross-encoder reranking
             use_reflection: Whether to track performance with ReflectionAgent
+            enable_cache: Whether to enable query result caching
+            cache_dir: Directory for cache storage
         """
         self.config = get_config()
         self.use_reranking = use_reranking
         self.use_reflection = use_reflection
+        self.enable_cache = enable_cache
+        self.cache_dir = cache_dir or Path("data/cache/queries")
+
+        # Create cache directory
+        if self.enable_cache:
+            self.cache_dir.mkdir(parents=True, exist_ok=True)
 
         # Initialize agents
         self.orchestrator = get_orchestrator_agent()
@@ -85,6 +98,53 @@ class RetrievalPipeline:
         except ImportError:
             logger.warning("sentence-transformers not available, reranking disabled")
             self.use_reranking = False
+
+    def _get_cache_key(self, query: str, top_k: Optional[int], strategy: Optional[RetrievalStrategy]) -> str:
+        """Generate cache key from query parameters."""
+        cache_input = json.dumps({
+            "query": query.lower().strip(),
+            "top_k": top_k or self.config.retrieval.top_k_vector,
+            "strategy": strategy.value if strategy else "auto"
+        }, sort_keys=True)
+        return hashlib.md5(cache_input.encode()).hexdigest()
+
+    def _get_from_cache(self, cache_key: str) -> Optional[Dict[str, Any]]:
+        """Retrieve query result from cache."""
+        if not self.enable_cache:
+            return None
+
+        cache_file = self.cache_dir / f"{cache_key}.json"
+        if cache_file.exists():
+            try:
+                with open(cache_file, 'r') as f:
+                    cached = json.load(f)
+                    logger.debug(f"Cache hit for query: {cache_key}")
+                    return cached
+            except Exception as e:
+                logger.warning(f"Failed to read cache: {e}")
+
+        return None
+
+    def _save_to_cache(self, cache_key: str, result: Dict[str, Any]) -> None:
+        """Save query result to cache."""
+        if not self.enable_cache:
+            return
+
+        cache_file = self.cache_dir / f"{cache_key}.json"
+        try:
+            # Remove non-serializable fields
+            cacheable_result = {
+                "query": result.get("query"),
+                "response": result.get("response"),
+                "num_contexts": result.get("num_contexts"),
+                "strategy": result.get("strategy")
+            }
+
+            with open(cache_file, 'w') as f:
+                json.dump(cacheable_result, f)
+            logger.debug(f"Cached query result: {cache_key}")
+        except Exception as e:
+            logger.warning(f"Failed to save cache: {e}")
 
     def retrieve(
         self,
@@ -184,7 +244,7 @@ class RetrievalPipeline:
         return_metadata: bool
     ) -> List[Dict[str, Any]]:
         """
-        Retrieve using graph traversal.
+        Retrieve using graph traversal with multi-hop support.
 
         Args:
             query: User query
@@ -197,73 +257,131 @@ class RetrievalPipeline:
         top_k = params.get("top_k", self.config.retrieval.top_k_graph)
         max_depth = params.get("max_depth", 2)
 
-        # Extract entity names from query (simple approach)
-        # In production, would use NER here
+        # Extract entity names from query
         query_lower = query.lower()
-
-        # Search for entities in Neo4j that match query terms
         query_words = set(query_lower.split())
         entity_results = []
 
         try:
-            # Get all nodes (in production, would filter more efficiently)
+            # Get all labels
             all_labels = self.neo4j_manager.get_schema()["labels"]
 
-            for label in all_labels[:10]:  # Limit labels checked
-                # Search for nodes with names containing query words
-                for word in list(query_words)[:5]:  # Limit words checked
-                    if len(word) > 3:  # Skip short words
+            # Step 1: Find seed entities matching query words
+            seed_entities = []
+            for label in all_labels[:10]:
+                for word in list(query_words)[:5]:
+                    if len(word) > 3:
                         cypher = f"""
                         MATCH (n:{label})
                         WHERE toLower(n.name) CONTAINS $word
-                        RETURN n, id(n) as node_id
-                        LIMIT {top_k}
+                        RETURN n, id(n) as node_id, $word as matched_word
+                        LIMIT {min(top_k, 5)}
                         """
                         results = self.neo4j_manager.execute_query(
                             cypher, {"word": word}
                         )
 
                         for result in results:
-                            node = dict(result["n"])
-                            node_id = result["node_id"]
-
-                            # Get relationships
-                            relationships = self.neo4j_manager.get_relationships(
-                                label,
-                                {"name": node.get("name")},
-                                direction="both"
-                            )
-
-                            # Build context text
-                            context_parts = [f"{label}: {node.get('name')}"]
-
-                            if "summary" in node and node["summary"]:
-                                context_parts.append(f"Summary: {node['summary']}")
-
-                            for rel in relationships[:3]:  # Limit relationships
-                                rel_type = rel["relationship_type"]
-                                connected = rel["connected_node"].get("name", "unknown")
-                                context_parts.append(f"{rel_type} {connected}")
-
-                            context_text = ". ".join(context_parts)
-
-                            entity_results.append({
-                                "text": context_text,
-                                "score": 0.8,  # Fixed score for graph results
-                                "source": "graph",
-                                "metadata": {
-                                    "node": node,
-                                    "node_id": node_id,
-                                    "relationships": relationships
-                                } if return_metadata else {}
+                            seed_entities.append({
+                                "node": dict(result["n"]),
+                                "node_id": result["node_id"],
+                                "label": label,
+                                "matched_word": result["matched_word"]
                             })
+
+            # Step 2: Multi-hop traversal from seed entities
+            for seed in seed_entities[:top_k]:
+                node = seed["node"]
+                label = seed["label"]
+                node_id = seed["node_id"]
+
+                # Get multi-hop paths using Cypher
+                # This finds paths up to max_depth hops
+                cypher = f"""
+                MATCH path = (start:{label})-[*1..{max_depth}]-(connected)
+                WHERE id(start) = $node_id
+                WITH path, connected, start, length(path) as depth
+                ORDER BY depth
+                LIMIT {min(top_k * 2, 20)}
+                RETURN
+                    start,
+                    connected,
+                    [r in relationships(path) | type(r)] as rel_types,
+                    [n in nodes(path) | coalesce(n.name, labels(n)[0])] as path_names,
+                    depth
+                """
+
+                try:
+                    path_results = self.neo4j_manager.execute_query(
+                        cypher, {"node_id": node_id}
+                    )
+
+                    # Build comprehensive context from paths
+                    context_parts = [f"{label}: {node.get('name')}"]
+
+                    if "summary" in node and node["summary"]:
+                        context_parts.append(f"Summary: {node['summary']}")
+
+                    # Add path information for multi-hop reasoning
+                    paths_seen = set()
+                    for path_result in path_results:
+                        rel_types = path_result["rel_types"]
+                        path_names = path_result["path_names"]
+                        depth = path_result["depth"]
+
+                        # Create path description
+                        path_desc = " → ".join([
+                            f"{path_names[i]} -{rel_types[i]}-> {path_names[i+1]}"
+                            for i in range(len(rel_types))
+                        ])
+
+                        if path_desc and path_desc not in paths_seen:
+                            paths_seen.add(path_desc)
+                            context_parts.append(f"Path (depth {depth}): {path_desc}")
+
+                            # Limit path descriptions to avoid bloat
+                            if len(paths_seen) >= 5:
+                                break
+
+                    context_text = ". ".join(context_parts)
+
+                    # Score based on relevance and path depth
+                    # Shorter paths get higher scores
+                    avg_depth = sum(r["depth"] for r in path_results) / max(len(path_results), 1)
+                    score = max(0.5, 1.0 - (avg_depth / max_depth) * 0.3)
+
+                    entity_results.append({
+                        "text": context_text,
+                        "score": score,
+                        "source": "graph",
+                        "metadata": {
+                            "node": node,
+                            "node_id": node_id,
+                            "paths_found": len(paths_seen),
+                            "avg_path_depth": avg_depth
+                        } if return_metadata else {}
+                    })
+
+                except Exception as e:
+                    logger.error(f"Error in multi-hop traversal: {e}")
+                    # Fallback to simple retrieval
+                    context_text = f"{label}: {node.get('name')}"
+                    entity_results.append({
+                        "text": context_text,
+                        "score": 0.7,
+                        "source": "graph",
+                        "metadata": {"node": node, "node_id": node_id} if return_metadata else {}
+                    })
 
         except Exception as e:
             logger.error(f"Error in graph retrieval: {e}")
 
-        # Deduplicate and limit
+        # Deduplicate and rank by score
         seen_texts = set()
         unique_results = []
+        # Sort by score descending
+        entity_results.sort(key=lambda x: x["score"], reverse=True)
+
         for result in entity_results:
             text = result["text"]
             if text not in seen_texts:
@@ -395,7 +513,8 @@ class RetrievalPipeline:
         top_k: Optional[int] = None,
         strategy: Optional[RetrievalStrategy] = None,
         evaluate: bool = False,
-        ground_truth: Optional[str] = None
+        ground_truth: Optional[str] = None,
+        use_cache: bool = True
     ) -> Dict[str, Any]:
         """
         Complete query pipeline: retrieve + generate + optionally evaluate.
@@ -406,10 +525,25 @@ class RetrievalPipeline:
             strategy: Force specific strategy
             evaluate: Whether to evaluate with ReflectionAgent
             ground_truth: Optional ground truth for evaluation
+            use_cache: Whether to use cached results (default: True)
 
         Returns:
             Dictionary with response, context, and optional metrics
         """
+        # Check cache first (if not evaluating, since evaluation needs fresh metrics)
+        if use_cache and not evaluate:
+            cache_key = self._get_cache_key(query, top_k, strategy)
+            cached_result = self._get_from_cache(cache_key)
+            if cached_result:
+                logger.info("Returning cached query result")
+                return cached_result
+
+        # Route query if strategy not specified
+        if strategy is None:
+            routing = self.orchestrator.route_query(query)
+            strategy = routing["strategy"]
+            logger.info(f"Query routed to {strategy.value} strategy")
+
         # Retrieve context
         context = self.retrieve(query, top_k=top_k, strategy=strategy)
 
@@ -422,7 +556,8 @@ class RetrievalPipeline:
             "query": query,
             "response": response,
             "context": context,
-            "num_contexts": len(context)
+            "num_contexts": len(context),
+            "strategy": strategy.value  # Track which strategy was used
         }
 
         # Evaluate if requested
@@ -433,8 +568,12 @@ class RetrievalPipeline:
             result["metrics"] = metrics
 
             # Record performance for orchestrator
-            if strategy:
-                self.orchestrator.record_performance(strategy, metrics.get("overall", 0.5))
+            self.orchestrator.record_performance(strategy, metrics.get("overall", 0.5))
+
+        # Cache result if not evaluating
+        if use_cache and not evaluate:
+            cache_key = self._get_cache_key(query, top_k, strategy)
+            self._save_to_cache(cache_key, result)
 
         return result
 

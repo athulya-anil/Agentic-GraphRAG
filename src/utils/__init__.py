@@ -23,7 +23,7 @@ from .config import (
 )
 
 from .llm_client import (
-    LLMClient,
+    UnifiedLLMClient,
     get_llm_client,
     reset_llm_client,
 )
@@ -42,7 +42,7 @@ __all__ = [
     "get_config",
     "reset_config",
     # LLM client
-    "LLMClient",
+    "UnifiedLLMClient",
     "get_llm_client",
     "reset_llm_client",
 ]

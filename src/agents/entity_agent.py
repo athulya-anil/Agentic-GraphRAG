@@ -25,6 +25,7 @@ except ImportError:
 
 from ..utils.llm_client import get_llm_client
 from ..utils.config import get_config
+from ..utils.entity_hints import get_entity_hints_manager
 
 
 # Configure logging
@@ -57,14 +58,24 @@ class EntityAgent:
         self.config = get_config()
         self.schema = schema or {}
 
-        # Load spaCy model if available
+        # Load entity hints manager with LLM client for validation
+        self.hints_manager = get_entity_hints_manager(llm_client=self.llm_client)
+
+        # Load spaCy model if available (prefer large model for better accuracy)
         self.nlp = None
         if SPACY_AVAILABLE:
             try:
-                self.nlp = spacy.load("en_core_web_sm")
-                logger.info("Loaded spaCy model: en_core_web_sm")
+                # Try large model first for better NER accuracy
+                self.nlp = spacy.load("en_core_web_lg")
+                logger.info("Loaded spaCy model: en_core_web_lg")
             except OSError:
-                logger.warning("spaCy model not found. Run: python -m spacy download en_core_web_sm")
+                try:
+                    # Fallback to small model
+                    self.nlp = spacy.load("en_core_web_sm")
+                    logger.info("Loaded spaCy model: en_core_web_sm (fallback)")
+                    logger.warning("For better accuracy, run: python -m spacy download en_core_web_lg")
+                except OSError:
+                    logger.warning("No spaCy model found. Run: python -m spacy download en_core_web_lg")
 
         # Entity cache for deduplication
         self.entity_cache: Dict[str, Dict[str, Any]] = {}
@@ -107,6 +118,9 @@ class EntityAgent:
         logger.info(f"Extracted {len(unique_entities)} unique entities "
                    f"from {len(all_entities)} total mentions")
 
+        # Validate entity types using LLM
+        unique_entities = self.hints_manager.validate_entity_types(unique_entities)
+
         return unique_entities
 
     def extract_entities_from_text(
@@ -138,6 +152,9 @@ class EntityAgent:
         # Enrich with metadata if requested (inspired by MarcoRAG)
         if enrich_metadata:
             entities = self._enrich_entities_with_metadata(entities, text)
+
+        # Apply entity type hints to correct misclassifications
+        entities = self.hints_manager.apply_hints_to_entities(entities)
 
         return entities
 
@@ -226,7 +243,23 @@ class EntityAgent:
         if type_descriptions:
             schema_guide = "\n\nExpected entity types:\n" + "\n".join(type_descriptions)
 
-        prompt = f"""Extract all entities from the following text.{schema_guide}
+        # Add type definitions from hints manager
+        type_definitions = self.hints_manager.get_type_definitions_prompt()
+        if type_definitions:
+            schema_guide += f"\n\n{type_definitions}"
+
+        # Add specific entity type hints for known entities
+        entity_hints_text = ""
+        if self.hints_manager.entity_type_hints:
+            # Build a concise hints section for the prompt
+            hints_list = []
+            for entity_name, entity_type in list(self.hints_manager.entity_type_hints.items())[:20]:
+                hints_list.append(f"  - {entity_name}: {entity_type}")
+
+            if hints_list:
+                entity_hints_text = "\n\nKnown entity type hints:\n" + "\n".join(hints_list)
+
+        prompt = f"""Extract all entities from the following text.{schema_guide}{entity_hints_text}
 
 Text:
 {text}

@@ -1,0 +1,53 @@
+{
+  "entity_type_hints": {
+    "Champ de Mars": "Location",
+    "Eiffel Tower": "Facility",
+    "Paris": "Location",
+    "France": "Location",
+    "Queensland": "Location",
+    "Australia": "Location",
+    "Coral Sea": "Location",
+    "Great Barrier Reef": "Location",
+    "Wuhan": "Location",
+    "China": "Location",
+    "Cambridge": "Location",
+    "Massachusetts": "Location",
+    "MIT": "Organization",
+    "Massachusetts Institute of Technology": "Organization",
+    "CSAIL": "Organization",
+    "Gustave Eiffel": "Person",
+    "Steve Jobs": "Person",
+    "Steve Wozniak": "Person",
+    "Ronald Wayne": "Person",
+    "Tim Cook": "Person",
+    "Elon Musk": "Person",
+    "World's Fair": "Event",
+    "COVID-19 pandemic": "Event"
+  },
+  "entity_type_definitions": {
+    "Person": "Individual human beings, including historical figures, CEOs, scientists, etc.",
+    "Organization": "Companies, institutions, universities, departments, labs, etc.",
+    "Location": "Geographic places including cities, countries, states, regions, landmarks, etc.",
+    "Facility": "Man-made structures and buildings like towers, monuments, etc.",
+    "Event": "Significant occurrences or happenings like pandemics, fairs, etc.",
+    "Process": "Natural or artificial processes like photosynthesis, machine learning, etc.",
+    "Substance": "Chemical compounds, materials, gases, etc.",
+    "Technology": "Technical systems, computing concepts, software, etc.",
+    "Organism": "Living things including plants, animals, microorganisms, etc.",
+    "System": "Complex interconnected systems like the Internet, blockchain, etc.",
+    "Cell": "Biological cells and their components",
+    "Service": "Products or services offered by companies"
+  },
+  "validation_rules": {
+    "must_validate": [
+      "Organization",
+      "Location",
+      "Person"
+    ],
+    "common_errors": {
+      "parks_and_landmarks": "Often misclassified as Organization instead of Location or Facility",
+      "companies": "Should be Organization, not Technology or Service",
+      "people_names": "Should be Person, not Organization"
+    }
+  }
+}

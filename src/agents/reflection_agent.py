@@ -15,6 +15,7 @@ import json
 from typing import List, Dict, Any, Optional
 from collections import defaultdict
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from ..utils.llm_client import get_llm_client
 from ..utils.config import get_config
@@ -55,7 +56,8 @@ class ReflectionAgent:
         query: str,
         response: str,
         retrieved_context: List[Dict[str, Any]],
-        ground_truth: Optional[str] = None
+        ground_truth: Optional[str] = None,
+        parallel: bool = True
     ) -> Dict[str, float]:
         """
         Evaluate a single response using RAGAS metrics.
@@ -65,28 +67,53 @@ class ReflectionAgent:
             response: Generated response
             retrieved_context: Retrieved context items
             ground_truth: Optional ground truth answer for comparison
+            parallel: Whether to compute metrics in parallel (default: True)
 
         Returns:
             Dictionary of metric scores
         """
         metrics = {}
 
-        # 1. Faithfulness: Is the response grounded in the context?
-        metrics["faithfulness"] = self._compute_faithfulness(response, retrieved_context)
+        if parallel:
+            # Parallel computation for faster evaluation
+            with ThreadPoolExecutor(max_workers=4) as executor:
+                # Submit all metric computations concurrently
+                futures = {
+                    executor.submit(self._compute_faithfulness, response, retrieved_context): "faithfulness",
+                    executor.submit(self._compute_answer_relevancy, query, response): "answer_relevancy",
+                    executor.submit(self._compute_context_precision, query, retrieved_context, response): "context_precision",
+                }
 
-        # 2. Answer Relevancy: Does the answer address the query?
-        metrics["answer_relevancy"] = self._compute_answer_relevancy(query, response)
+                # Add context recall if ground truth available
+                if ground_truth:
+                    futures[executor.submit(self._compute_context_recall, ground_truth, retrieved_context)] = "context_recall"
 
-        # 3. Context Precision: Is the retrieved context relevant?
-        metrics["context_precision"] = self._compute_context_precision(
-            query, retrieved_context, response
-        )
+                # Collect results as they complete
+                for future in as_completed(futures):
+                    metric_name = futures[future]
+                    try:
+                        metrics[metric_name] = future.result()
+                    except Exception as e:
+                        logger.error(f"Error computing {metric_name}: {e}")
+                        metrics[metric_name] = 0.0
+        else:
+            # Sequential computation (original behavior)
+            # 1. Faithfulness: Is the response grounded in the context?
+            metrics["faithfulness"] = self._compute_faithfulness(response, retrieved_context)
 
-        # 4. Context Recall: Is all necessary context retrieved?
-        if ground_truth:
-            metrics["context_recall"] = self._compute_context_recall(
-                ground_truth, retrieved_context
+            # 2. Answer Relevancy: Does the answer address the query?
+            metrics["answer_relevancy"] = self._compute_answer_relevancy(query, response)
+
+            # 3. Context Precision: Is the retrieved context relevant?
+            metrics["context_precision"] = self._compute_context_precision(
+                query, retrieved_context, response
             )
+
+            # 4. Context Recall: Is all necessary context retrieved?
+            if ground_truth:
+                metrics["context_recall"] = self._compute_context_recall(
+                    ground_truth, retrieved_context
+                )
 
         # Compute overall score
         metrics["overall"] = sum(metrics.values()) / len(metrics)
