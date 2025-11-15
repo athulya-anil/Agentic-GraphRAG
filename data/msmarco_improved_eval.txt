@@ -1,0 +1,42 @@
+/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/pydantic/_internal/_fields.py:149: UserWarning: Field "model_name" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+2025-11-13 18:16:00,177 - faiss.loader - INFO - Loading faiss with AVX2 support.
+2025-11-13 18:16:00,307 - faiss.loader - INFO - Successfully loaded faiss with AVX2 support.
+/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+2025-11-13 18:16:05,843 - src.utils.llm_client - INFO - Initialized Groq provider with model: llama-3.3-70b-versatile
+2025-11-13 18:16:05,843 - src.utils.llm_client - INFO - Initialized UnifiedLLMClient with provider: groq
+2025-11-13 18:16:05,843 - src.agents.schema_agent - INFO - Initialized SchemaAgent
+2025-11-13 18:16:05,873 - src.graph.neo4j_manager - INFO - Successfully connected to Neo4j
+2025-11-13 18:16:05,873 - src.graph.neo4j_manager - INFO - Initialized Neo4j manager connected to bolt://localhost:7687
+2025-11-13 18:16:05,873 - src.vector.faiss_index - INFO - Loading embedding model: sentence-transformers/all-MiniLM-L6-v2
+2025-11-13 18:16:05,873 - sentence_transformers.SentenceTransformer - INFO - Use pytorch device_name: cpu
+2025-11-13 18:16:05,873 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: sentence-transformers/all-MiniLM-L6-v2
+/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/huggingface_hub/file_download.py:942: FutureWarning: `resume_download` is deprecated and will be removed in version 1.0.0. Downloads always resume when possible. If you want to force a new download, use `force_download=True`.
+  warnings.warn(
+2025-11-13 18:16:07,502 - src.vector.faiss_index - INFO - Initialized FAISS index with dimension 384
+2025-11-13 18:16:07,504 - src.pipeline.ingestion - INFO - Loaded schema from data/processed/schema_msmarco.json
+2025-11-13 18:16:07,504 - src.pipeline.ingestion - INFO - Initialized IngestionPipeline
+2025-11-13 18:16:07,504 - src.pipeline.ingestion - INFO - Starting ingestion of 12 documents...
+2025-11-13 18:16:07,506 - src.utils.entity_hints - INFO - Loaded 23 entity type hints
+2025-11-13 18:16:12,745 - src.agents.entity_agent - INFO - Loaded spaCy model: en_core_web_lg
+2025-11-13 18:16:12,745 - src.agents.entity_agent - INFO - Initialized EntityAgent
+2025-11-13 18:16:12,745 - src.agents.relation_agent - INFO - Initialized RelationAgent
+2025-11-13 18:16:12,745 - src.pipeline.ingestion - INFO - Extracting entities...
+2025-11-13 18:16:12,745 - src.pipeline.ingestion - INFO - Processing document 1/12
+2025-11-13 18:16:13,088 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-11-13 18:16:13,090 - src.utils.llm_client - ERROR - Groq API error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k6k6d73dfnfbfmwfacdj0sxg` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99744, Requested 734. Please try again in 6m52.992s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2025-11-13 18:16:13,090 - src.utils.llm_client - ERROR - Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k6k6d73dfnfbfmwfacdj0sxg` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99744, Requested 734. Please try again in 6m52.992s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2025-11-13 18:16:15,166 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-11-13 18:16:15,167 - src.utils.llm_client - ERROR - Groq API error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k6k6d73dfnfbfmwfacdj0sxg` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99742, Requested 734. Please try again in 6m51.264s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2025-11-13 18:16:15,167 - src.utils.llm_client - ERROR - Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k6k6d73dfnfbfmwfacdj0sxg` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99742, Requested 734. Please try again in 6m51.264s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2025-11-13 18:16:17,248 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-11-13 18:16:17,248 - src.utils.llm_client - ERROR - Groq API error: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k6k6d73dfnfbfmwfacdj0sxg` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99739, Requested 734. Please try again in 6m48.671999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2025-11-13 18:16:17,248 - src.utils.llm_client - ERROR - Error generating response: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k6k6d73dfnfbfmwfacdj0sxg` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99739, Requested 734. Please try again in 6m48.671999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2025-11-13 18:16:17,249 - src.agents.entity_agent - ERROR - Error extracting entities with LLM: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01k6k6d73dfnfbfmwfacdj0sxg` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99739, Requested 734. Please try again in 6m48.671999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}
+2025-11-13 18:16:17,319 - httpx - INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 429 Too Many Requests"
+2025-11-13 18:16:17,319 - groq._base_client - INFO - Retrying request to /openai/v1/chat/completions in 43.000000 seconds

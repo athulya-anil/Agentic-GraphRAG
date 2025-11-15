@@ -9,7 +9,6 @@ This script demonstrates the complete Agentic GraphRAG system:
 4. Intelligent query routing and retrieval
 5. Performance evaluation and self-optimization
 
-Author: Agentic GraphRAG Team
 """
 
 import sys

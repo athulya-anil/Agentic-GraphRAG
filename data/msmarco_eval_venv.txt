@@ -1,0 +1,70 @@
+/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/pydantic/_internal/_fields.py:149: UserWarning: Field "model_name" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+2025-11-13 15:52:46,131 - faiss.loader - INFO - Loading faiss with AVX2 support.
+2025-11-13 15:52:46,282 - faiss.loader - INFO - Successfully loaded faiss with AVX2 support.
+/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/transformers/utils/generic.py:441: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+The cache for model files in Transformers v4.22.0 has been updated. Migrating your old cache. This is a one-time only operation. You can interrupt this and resume the migration later on by calling `transformers.utils.move_cache()`.
+0it [00:00, ?it/s]0it [00:00, ?it/s]
+/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/transformers/utils/generic.py:309: UserWarning: torch.utils._pytree._register_pytree_node is deprecated. Please use torch.utils._pytree.register_pytree_node instead.
+  _torch_pytree._register_pytree_node(
+Traceback (most recent call last):
+  File "/Users/athulyaanil/agentic-graphrag/evaluate_msmarco.py", line 418, in <module>
+    main()
+  File "/Users/athulyaanil/agentic-graphrag/evaluate_msmarco.py", line 388, in main
+    ingestion_results = ingest_passages(eval_set['passages'])
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/athulyaanil/agentic-graphrag/evaluate_msmarco.py", line 80, in ingest_passages
+    pipeline = get_ingestion_pipeline(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/athulyaanil/agentic-graphrag/src/pipeline/ingestion.py", line 464, in get_ingestion_pipeline
+    _ingestion_pipeline = IngestionPipeline(
+                          ^^^^^^^^^^^^^^^^^^
+  File "/Users/athulyaanil/agentic-graphrag/src/pipeline/ingestion.py", line 67, in __init__
+    self.schema_agent = get_schema_agent()
+                        ^^^^^^^^^^^^^^^^^^
+  File "/Users/athulyaanil/agentic-graphrag/src/agents/schema_agent.py", line 349, in get_schema_agent
+    _schema_agent = SchemaAgent()
+                    ^^^^^^^^^^^^^
+  File "/Users/athulyaanil/agentic-graphrag/src/agents/schema_agent.py", line 43, in __init__
+    self.llm_client = get_llm_client()
+                      ^^^^^^^^^^^^^^^^
+  File "/Users/athulyaanil/agentic-graphrag/src/utils/llm_client.py", line 298, in get_llm_client
+    _llm_client = LLMClient()
+                  ^^^^^^^^^^^
+  File "/Users/athulyaanil/agentic-graphrag/src/utils/llm_client.py", line 57, in __init__
+    self.client = Groq(api_key=self.config.api_key)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/groq/_client.py", line 99, in __init__
+    super().__init__(
+  File "/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/groq/_base_client.py", line 824, in __init__
+    self._client = http_client or SyncHttpxClientWrapper(
+                                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/athulyaanil/agentic-graphrag/venv/lib/python3.11/site-packages/groq/_base_client.py", line 722, in __init__
+    super().__init__(**kwargs)
+TypeError: Client.__init__() got an unexpected keyword argument 'proxies'
+======================================================================
+  AGENTIC GRAPHRAG - MS MARCO EVALUATION
+======================================================================
+
+📚 Preparing MS MARCO-style evaluation set...
+✓ Prepared 12 passages and 15 queries
+✓ Saved to: data/msmarco/evaluation_set.json
+
+📊 Evaluation Set Statistics:
+   • Passages: 12
+   • Queries: 15
+   • Avg passage length: 68.2 words
+   • Avg query length: 6.4 words
+   • Queries with relevance judgments: 15
+
+======================================================================
+  STAGE 1: PASSAGE INGESTION
+======================================================================
+
+📚 Ingesting 12 passages...
+
+
+❌ Error during evaluation: Client.__init__() got an unexpected keyword argument 'proxies'

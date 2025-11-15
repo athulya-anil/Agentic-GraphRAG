@@ -640,9 +640,9 @@ class Neo4jManager:
             Number of relationships
         """
         if relationship_type:
-            query = f"MATCH ()-[r:{relationship_type}]-() RETURN count(r) as count"
+            query = f"MATCH ()-[r:{relationship_type}]->() RETURN count(r) as count"
         else:
-            query = "MATCH ()-[r]-() RETURN count(r) as count"
+            query = "MATCH ()-[r]->() RETURN count(r) as count"
 
         result = self.execute_query(query)
         return result[0]["count"] if result else 0

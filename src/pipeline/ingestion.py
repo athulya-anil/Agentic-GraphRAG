@@ -226,7 +226,7 @@ class IngestionPipeline:
         edges_created = 0
 
         # Create entity nodes
-        entity_lookup = {}  # Map (name, type) -> node properties
+        entity_lookup = {}  # Map (name, type) -> (node properties, entity_type)
 
         for entity in entities:
             name = entity.get("name", "")
@@ -244,6 +244,7 @@ class IngestionPipeline:
                 metadata = entity["metadata"]
                 node_props["summary"] = metadata.get("summary", "")
                 node_props["keywords"] = ",".join(metadata.get("keywords", []))
+                node_props["aliases"] = ",".join(metadata.get("aliases", []))
 
             # Create or merge node
             try:
@@ -252,7 +253,8 @@ class IngestionPipeline:
                     properties=node_props,
                     merge=True  # Avoid duplicates
                 )
-                entity_lookup[(name.lower(), entity_type)] = node
+                # Store both node and entity_type
+                entity_lookup[(name.lower(), entity_type)] = (node, entity_type)
                 nodes_created += 1
             except Exception as e:
                 logger.error(f"Error creating node for {name}: {e}")
@@ -267,27 +269,32 @@ class IngestionPipeline:
             # Add confidence
             rel_props["confidence"] = relation.get("confidence", 0.5)
 
-            # Find source and target nodes
+            # Find source and target nodes with their types
             source_node = None
+            source_type = None
             target_node = None
+            target_type = None
 
             # Try to find in entity lookup
-            for (name, _), node in entity_lookup.items():
-                if name == source_name:
+            for (name, etype), (node, node_type) in entity_lookup.items():
+                if name == source_name and source_node is None:
                     source_node = node
-                if name == target_name:
+                    source_type = node_type
+                if name == target_name and target_node is None:
                     target_node = node
+                    target_type = node_type
 
             if not source_node or not target_node:
+                logger.debug(f"Skipping relationship {source_name}->{target_name}: nodes not found")
                 continue
 
             # Create relationship
             try:
                 self.neo4j_manager.create_relationship(
-                    from_label=source_node.get("type", "Entity"),
-                    from_properties={"name": source_name},
-                    to_label=target_node.get("type", "Entity"),
-                    to_properties={"name": target_name},
+                    from_label=source_type,
+                    from_properties={"name": source_node.get("name")},
+                    to_label=target_type,
+                    to_properties={"name": target_node.get("name")},
                     relationship_type=rel_type,
                     relationship_properties=rel_props,
                     merge=True

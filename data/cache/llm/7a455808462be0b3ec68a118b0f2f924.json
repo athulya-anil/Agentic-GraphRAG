@@ -1,0 +1,1 @@
+{"response": "{\n  \"target_type\": \"Organization\",\n  \"anchor_entity\": \"Aspirin\",\n  \"anchor_type\": \"Drug\",\n  \"relationship_type\": \"MANUFACTURES\",\n  \"direction\": \"reverse\",\n  \"confidence\": 1.0,\n  \"reasoning\": \"The user is asking who manufactures Aspirin, indicating they know the drug and are looking for the organization that manufactures it.\"\n}"}

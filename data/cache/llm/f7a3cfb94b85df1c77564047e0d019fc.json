@@ -1,0 +1,1 @@
+{"response": "{\n  \"target_type\": \"Disease\",\n  \"anchor_entity\": \"Aspirin\",\n  \"anchor_type\": \"Drug\",\n  \"relationship_type\": \"TREATS\",\n  \"direction\": \"forward\",\n  \"confidence\": 1.0,\n  \"reasoning\": \"The query asks what Aspirin treats, indicating a forward query from the known drug Aspirin to the diseases it treats via the TREATS relationship.\"\n}"}

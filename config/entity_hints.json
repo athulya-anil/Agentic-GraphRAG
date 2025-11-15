@@ -22,11 +22,16 @@
     "Tim Cook": "Person",
     "Elon Musk": "Person",
     "World's Fair": "Event",
-    "COVID-19 pandemic": "Event"
+    "COVID-19 pandemic": "Event",
+    "Aspirin": "Drug",
+    "Metformin": "Drug",
+    "Bayer": "Organization",
+    "Diabetes": "Disease",
+    "Type 2 diabetes": "Disease"
   },
   "entity_type_definitions": {
     "Person": "Individual human beings, including historical figures, CEOs, scientists, etc.",
-    "Organization": "Companies, institutions, universities, departments, labs, etc.",
+    "Organization": "Companies, institutions, universities, departments, labs, pharmaceutical companies, etc.",
     "Location": "Geographic places including cities, countries, states, regions, landmarks, etc.",
     "Facility": "Man-made structures and buildings like towers, monuments, etc.",
     "Event": "Significant occurrences or happenings like pandemics, fairs, etc.",
@@ -36,18 +41,24 @@
     "Organism": "Living things including plants, animals, microorganisms, etc.",
     "System": "Complex interconnected systems like the Internet, blockchain, etc.",
     "Cell": "Biological cells and their components",
-    "Service": "Products or services offered by companies"
+    "Service": "Products or services offered by companies",
+    "Drug": "Medications, pharmaceuticals, medicines used to treat diseases or conditions",
+    "Disease": "Medical conditions, illnesses, disorders, syndromes that affect health"
   },
   "validation_rules": {
     "must_validate": [
       "Organization",
       "Location",
-      "Person"
+      "Person",
+      "Drug",
+      "Disease"
     ],
     "common_errors": {
       "parks_and_landmarks": "Often misclassified as Organization instead of Location or Facility",
       "companies": "Should be Organization, not Technology or Service",
-      "people_names": "Should be Person, not Organization"
+      "people_names": "Should be Person, not Organization",
+      "medications": "Drug names like Aspirin, Metformin should be Drug, not Organization or Product",
+      "medical_conditions": "Diseases like Diabetes should be Disease, not Organization"
     }
   }
 }

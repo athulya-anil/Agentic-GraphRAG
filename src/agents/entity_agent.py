@@ -156,6 +156,9 @@ class EntityAgent:
         # Apply entity type hints to correct misclassifications
         entities = self.hints_manager.apply_hints_to_entities(entities)
 
+        # Validate entity types using LLM for types that commonly have errors
+        entities = self.hints_manager.validate_entity_types(entities)
+
         return entities
 
     def _extract_with_spacy(self, text: str) -> List[Dict[str, Any]]:
@@ -338,7 +341,8 @@ Entities: {', '.join(entity_names)}
 For each entity, provide:
 1. A brief summary (1 sentence)
 2. 3-5 relevant keywords
-3. A short context snippet (where it appears in text)
+3. Alternative names/synonyms (e.g., for "Aspirin": ["medication", "medicine", "painkiller"])
+4. A short context snippet (where it appears in text)
 
 Return JSON:
 [
@@ -346,6 +350,7 @@ Return JSON:
     "entity": "entity name",
     "summary": "brief description",
     "keywords": ["keyword1", "keyword2", "keyword3"],
+    "aliases": ["synonym1", "synonym2"],
     "context": "...surrounding text..."
   }}
 ]"""
@@ -370,6 +375,7 @@ Return JSON:
                     entity["metadata"] = {
                         "summary": metadata.get("summary", ""),
                         "keywords": metadata.get("keywords", []),
+                        "aliases": metadata.get("aliases", []),
                         "context": metadata.get("context", "")
                     }
 

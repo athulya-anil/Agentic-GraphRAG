@@ -22,6 +22,7 @@ from ..agents import (
     get_reflection_agent,
     RetrievalStrategy
 )
+from ..agents.query_parser_agent import get_query_parser
 from ..graph import get_neo4j_manager
 from ..vector import get_faiss_index
 from ..utils.config import get_config
@@ -244,7 +245,7 @@ class RetrievalPipeline:
         return_metadata: bool
     ) -> List[Dict[str, Any]]:
         """
-        Retrieve using graph traversal with multi-hop support.
+        Retrieve using graph traversal with multi-hop support and intelligent query parsing.
 
         Args:
             query: User query
@@ -256,49 +257,93 @@ class RetrievalPipeline:
         """
         top_k = params.get("top_k", self.config.retrieval.top_k_graph)
         max_depth = params.get("max_depth", 2)
-
-        # Extract entity names from query
-        query_lower = query.lower()
-        query_words = set(query_lower.split())
         entity_results = []
 
         try:
-            # Get all labels
-            all_labels = self.neo4j_manager.get_schema()["labels"]
+            # Step 1: Parse query intent using LLM (smart approach!)
+            schema = self.neo4j_manager.get_schema()
+            parser = get_query_parser(schema={
+                "entity_types": schema.get("labels", []),
+                "relationship_types": schema.get("relationship_types", [])
+            })
 
-            # Step 1: Find seed entities matching query words
+            intent = parser.parse_query(query)
+            logger.info(
+                f"Query intent: target={intent.get('target_type')}, "
+                f"anchor={intent.get('anchor_entity')}, "
+                f"direction={intent.get('direction')}"
+            )
+
+            # Step 2: Use intent to guide retrieval
+            anchor_entity = intent.get("anchor_entity", "")
+            anchor_type = intent.get("anchor_type", "")
+            target_type = intent.get("target_type", "")
+            relationship = intent.get("relationship_type", "")
+            direction = intent.get("direction", "bidirectional")
+
+            # Step 3: Find anchor (seed) entities using enhanced search
             seed_entities = []
-            for label in all_labels[:10]:
-                for word in list(query_words)[:5]:
-                    if len(word) > 3:
-                        cypher = f"""
-                        MATCH (n:{label})
-                        WHERE toLower(n.name) CONTAINS $word
-                        RETURN n, id(n) as node_id, $word as matched_word
-                        LIMIT {min(top_k, 5)}
-                        """
-                        results = self.neo4j_manager.execute_query(
-                            cypher, {"word": word}
-                        )
 
-                        for result in results:
-                            seed_entities.append({
-                                "node": dict(result["n"]),
-                                "node_id": result["node_id"],
-                                "label": label,
-                                "matched_word": result["matched_word"]
-                            })
+            if anchor_entity and anchor_type:
+                # Use parsed anchor for precise matching
+                search_labels = [anchor_type] if anchor_type != "Unknown" else schema.get("labels", [])[:10]
+            else:
+                # Fallback to keyword-based search
+                search_labels = schema.get("labels", [])[:10]
 
-            # Step 2: Multi-hop traversal from seed entities
+            for label in search_labels:
+                # Search for anchor entity in multiple fields
+                search_term = anchor_entity.lower() if anchor_entity else ""
+                if not search_term:
+                    # Fallback: extract from query
+                    query_words = [w for w in query.lower().split() if len(w) > 3]
+                    search_term = query_words[0] if query_words else ""
+
+                if search_term:
+                    cypher = f"""
+                    MATCH (n:{label})
+                    WHERE toLower(n.name) CONTAINS $word
+                       OR toLower(coalesce(n.aliases, '')) CONTAINS $word
+                       OR toLower(coalesce(n.keywords, '')) CONTAINS $word
+                       OR toLower(coalesce(n.summary, '')) CONTAINS $word
+                    RETURN n, id(n) as node_id, $word as matched_word
+                    LIMIT {min(top_k, 5)}
+                    """
+                    results = self.neo4j_manager.execute_query(
+                        cypher, {"word": search_term}
+                    )
+
+                    for result in results:
+                        seed_entities.append({
+                            "node": dict(result["n"]),
+                            "node_id": result["node_id"],
+                            "label": label,
+                            "matched_word": result["matched_word"]
+                        })
+
+            # Step 4: Intelligent traversal based on query intent
             for seed in seed_entities[:top_k]:
                 node = seed["node"]
                 label = seed["label"]
                 node_id = seed["node_id"]
 
-                # Get multi-hop paths using Cypher
-                # This finds paths up to max_depth hops
+                # Build relationship pattern based on parsed direction
+                if relationship and direction == "forward":
+                    # anchor -[REL]-> target
+                    rel_pattern = f"-[r:{relationship}*1..{max_depth}]->"
+                elif relationship and direction == "reverse":
+                    # anchor <-[REL]- target
+                    rel_pattern = f"<-[r:{relationship}*1..{max_depth}]-"
+                else:
+                    # Bidirectional or unknown - search both ways
+                    rel_pattern = f"-[r*1..{max_depth}]-"
+
+                # Optional target type filter
+                target_filter = f":{target_type}" if target_type and target_type != "Unknown" else ""
+
+                # Get multi-hop paths using intent-aware Cypher
                 cypher = f"""
-                MATCH path = (start:{label})-[*1..{max_depth}]-(connected)
+                MATCH path = (start:{label}){rel_pattern}(connected{target_filter})
                 WHERE id(start) = $node_id
                 WITH path, connected, start, length(path) as depth
                 ORDER BY depth
