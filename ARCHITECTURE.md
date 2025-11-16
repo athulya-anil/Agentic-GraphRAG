@@ -127,21 +127,103 @@ Each agent is an autonomous component with specific responsibilities:
   - Extracts 22 relationships from 6 documents (3.7 per doc)
 
 #### **OrchestratorAgent** (`src/agents/orchestrator_agent.py`)
-- **Purpose**: Intelligent query routing
-- **Decision Logic**:
-  ```
-  IF query contains "what/who/where" + entity keywords:
-      → GRAPH strategy (relationship traversal)
-  ELIF query is conceptual ("explain", "how"):
-      → VECTOR strategy (semantic similarity)
-  ELSE:
-      → HYBRID strategy (combine both)
-  ```
-- **Key Features**:
-  - Query classification (factual vs conceptual)
-  - Dynamic strategy selection
-  - Adaptive weight tuning for hybrid retrieval
-  - Response synthesis from multiple sources
+- **Purpose**: Intelligent query routing with LLM-powered classification
+- **Architecture**: Two-step decision system
+  1. **LLM Classification**: Analyzes query semantics and structure
+  2. **Rule-Based Routing**: Selects optimal retrieval strategy
+
+**Query Classification Process**:
+
+The agent sends each query to the LLM for semantic analysis:
+```python
+LLM Analyzes Query:
+  - Type: FACTUAL | CONCEPTUAL | RELATIONAL | EXPLORATORY
+  - needs_relationships: true/false  # Multi-hop detection
+  - needs_semantic: true/false       # Requires embeddings
+  - needs_entities: true/false       # Entity-focused query
+  - suggested_strategy: vector/graph/hybrid
+  - confidence: 0.0-1.0
+```
+
+**Decision Tree**:
+```
+                        User Query
+                            |
+                    ┌───────┴────────┐
+                    ▼                ▼
+            LLM Classifies    Extract Features
+            (FACTUAL, etc)    (needs_relationships,
+                              needs_semantic)
+                    |
+        ┌───────────┼──────────┬───────────┬───────────┐
+        ▼           ▼          ▼           ▼           ▼
+   RELATIONAL   FACTUAL    CONCEPTUAL  EXPLORATORY   Error
+        │           │          │           │           │
+        │           │          │           │           │
+        ▼           │          ▼           ▼           ▼
+      GRAPH         │        VECTOR      HYBRID      HYBRID
+        │           │                               (fallback)
+        │     needs_relationships?
+        │           |
+        │    ┌──────┴──────┐
+        │    ▼             ▼
+        │   true          false
+        │    │             │
+        │    ▼             ▼
+        │  GRAPH         VECTOR
+        │ (multi-hop)  (simple fact)
+        │
+        └──→ Multi-hop Examples:
+             • "Where is Tesla headquartered?"
+               → Tesla -HEADQUARTERED_IN-> Austin
+             • "Who founded Apple?"
+               → Apple -FOUNDED_BY-> Steve Jobs
+             • "What treats diabetes and is made by Merck?"
+               → 2-hop: Drug -TREATS-> Diabetes
+                        Drug -MANUFACTURED_BY-> Merck
+```
+
+**Strategy Selection Rules**:
+```python
+if query_type == RELATIONAL:
+    return GRAPH  # e.g., "What drugs treat diabetes?"
+
+elif query_type == FACTUAL:
+    if needs_relationships == true:
+        return GRAPH  # Multi-hop: "Where is X headquartered?"
+    else:
+        return VECTOR  # Simple fact: "What is the capital of France?"
+
+elif query_type == CONCEPTUAL:
+    return VECTOR  # e.g., "Explain how machine learning works"
+
+else:  # EXPLORATORY
+    return HYBRID  # e.g., "Tell me about machine learning"
+```
+
+**Adaptive Learning**:
+- Tracks performance of each strategy (vector/graph/hybrid)
+- Maintains rolling average of last 100 queries
+- Switches strategy if alternative performs >15% better
+- Example: If GRAPH averages 0.85 but HYBRID averages 0.98, switches to HYBRID
+
+**Example Classifications**:
+
+| Query | Type | needs_relationships | Strategy | Reasoning |
+|-------|------|---------------------|----------|-----------|
+| "What medications treat diabetes?" | RELATIONAL | true | GRAPH | Direct TREATS relationship |
+| "Where is Tesla headquartered?" | FACTUAL | true | GRAPH | Multi-hop: Entity→Location |
+| "What is machine learning?" | CONCEPTUAL | false | VECTOR | Semantic similarity needed |
+| "Tell me about AI" | EXPLORATORY | true | HYBRID | Open-ended, needs both |
+| "Who founded the company that makes iPhone?" | FACTUAL | true | GRAPH | 2-hop: Product→Company→Founder |
+
+**Key Features**:
+- LLM-powered semantic understanding (not keyword matching)
+- Multi-hop query detection via relationship analysis
+- Dynamic strategy selection based on query characteristics
+- Adaptive weight tuning for hybrid retrieval (alpha adjustment)
+- Performance-based strategy switching (self-optimization)
+- Response synthesis from multiple sources with citation
 
 #### **ReflectionAgent** (`src/agents/reflection_agent.py`)
 - **Purpose**: Self-evaluation and optimization
