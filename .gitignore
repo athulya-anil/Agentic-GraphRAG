@@ -82,6 +82,7 @@ neo4j_data/
 *.tmp
 *.temp
 .cache/
+data/cache/
 
 # OS
 .DS_Store
