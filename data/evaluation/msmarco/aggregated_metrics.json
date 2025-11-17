@@ -1,0 +1,13 @@
+{
+  "num_queries": 15,
+  "success_rate": 1.0,
+  "avg_faithfulness": 0.8266666666666667,
+  "avg_answer_relevancy": 0.8733333333333333,
+  "avg_context_precision": 0.6933333333333334,
+  "avg_context_recall": 0.9,
+  "avg_overall_score": 0.8233333333333334,
+  "avg_latency_ms": 23467.12212562561,
+  "strategy_distribution": {
+    "vector": 15
+  }
+}
