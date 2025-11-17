@@ -199,6 +199,10 @@ class RetrievalPipeline:
         if self.use_reranking and results:
             results = self._rerank_results(query, results)
 
+        # Filter low-quality results
+        if results:
+            results = self._filter_low_quality_results(query, results)
+
         logger.info(f"Retrieved {len(results)} results for query")
         return results
 
@@ -537,6 +541,62 @@ class RetrievalPipeline:
             logger.error(f"Error in reranking: {e}")
 
         return results
+
+    def _filter_low_quality_results(
+        self,
+        query: str,
+        results: List[Dict[str, Any]],
+        min_score: float = 0.3,
+        max_results: int = 10
+    ) -> List[Dict[str, Any]]:
+        """
+        Filter out low-quality and irrelevant results to improve context precision.
+
+        Args:
+            query: User query
+            results: Retrieved results
+            min_score: Minimum score threshold (default: 0.3)
+            max_results: Maximum number of results to keep (default: 10)
+
+        Returns:
+            Filtered results
+        """
+        if not results:
+            return results
+
+        filtered = []
+        query_lower = query.lower()
+        query_words = set(query_lower.split())
+
+        for result in results:
+            text = result.get("text", "").lower()
+            score = result.get("score", 0.0)
+
+            # Filter 1: Score threshold
+            if score < min_score:
+                continue
+
+            # Filter 2: Minimum length (avoid too short/empty contexts)
+            if len(text) < 20:
+                continue
+
+            # Filter 3: Basic keyword overlap check
+            text_words = set(text.split())
+            overlap = len(query_words & text_words)
+
+            # If score is low and no keyword overlap, likely irrelevant
+            if score < 0.5 and overlap == 0:
+                continue
+
+            filtered.append(result)
+
+        # Limit to top max_results
+        filtered = filtered[:max_results]
+
+        if len(filtered) < len(results):
+            logger.info(f"Filtered {len(results) - len(filtered)} low-quality results")
+
+        return filtered
 
     def _get_default_params(self, strategy: RetrievalStrategy) -> Dict[str, Any]:
         """Get default parameters for a strategy."""
