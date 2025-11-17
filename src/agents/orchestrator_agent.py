@@ -123,21 +123,33 @@ class OrchestratorAgent:
         Returns:
             Tuple of (QueryType, analysis_dict)
         """
-        prompt = f"""Analyze the following user query and classify its type.
+        prompt = f"""Analyze the following user query and classify its type for a knowledge graph retrieval system.
 
 Query: "{query}"
 
 Classify the query into one of these types:
-1. FACTUAL: Asks for specific facts or data points (e.g., "Who is the CEO of Tesla?")
+1. FACTUAL: Asks for specific facts or data points (e.g., "What is the population of Paris?")
 2. CONCEPTUAL: Asks for explanations or broad concepts (e.g., "Explain how neural networks work")
 3. RELATIONAL: Asks about relationships between entities (e.g., "What drugs treat diabetes?")
 4. EXPLORATORY: Open-ended exploration (e.g., "Tell me about machine learning")
 
+IMPORTANT: Determine if the query needs relationships between entities.
+Questions that need relationships include:
+- "Who/What/Where/When" questions involving entities (e.g., "Who founded Apple?" needs PERSON-FOUNDED->COMPANY relationship)
+- Questions about entity attributes that are other entities (e.g., "Where is X located?" needs ENTITY-LOCATED_IN->LOCATION)
+- Questions asking what entities do/cause/treat/produce (e.g., "What treats diabetes?" needs DRUG-TREATS->DISEASE)
+- Multi-hop queries (e.g., "Who founded the company that makes iPhone?" needs two relationships)
+
+Questions that DON'T need relationships:
+- Asking for explanations of concepts (e.g., "What is machine learning?")
+- Asking for definitions (e.g., "Define photosynthesis")
+- Asking how things work conceptually (e.g., "How does gravity work?")
+
 Also determine:
-- Is it asking about relationships between entities? (true/false)
-- Does it need semantic understanding? (true/false)
-- Is it looking for specific entities? (true/false)
-- What retrieval approach would work best? (vector/graph/hybrid)
+- needs_relationships: Does answering this require traversing entity relationships in a graph? (true/false)
+- needs_semantic: Does it need semantic/conceptual understanding beyond facts? (true/false)
+- needs_entities: Is it looking for specific entities? (true/false)
+- suggested_strategy: Best approach (vector=semantic search, graph=relationship traversal, hybrid=both)
 
 Return JSON:
 {{
