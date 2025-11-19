@@ -199,7 +199,7 @@ def evaluate_all_queries(queries: Dict[str, str],
     passage_lookup = {p['id']: p['text'] for p in passages}
 
     pipeline = get_retrieval_pipeline(
-        use_reranking=True,  # Enable cross-encoder reranking for better precision
+        use_reranking=True,  # Enable reranking for better context precision
         use_reflection=True
     )
 

@@ -546,8 +546,8 @@ class RetrievalPipeline:
         self,
         query: str,
         results: List[Dict[str, Any]],
-        min_score: float = 0.3,
-        max_results: int = 10
+        min_score: float = 0.25,  # Balanced threshold
+        max_results: int = 10    # Keep reasonable number of results
     ) -> List[Dict[str, Any]]:
         """
         Filter out low-quality and irrelevant results to improve context precision.
@@ -556,7 +556,7 @@ class RetrievalPipeline:
             query: User query
             results: Retrieved results
             min_score: Minimum score threshold (default: 0.3)
-            max_results: Maximum number of results to keep (default: 10)
+            max_results: Maximum number of results to keep (default: 8)
 
         Returns:
             Filtered results
@@ -566,7 +566,21 @@ class RetrievalPipeline:
 
         filtered = []
         query_lower = query.lower()
-        query_words = set(query_lower.split())
+
+        # Extract meaningful query words (remove stop words)
+        stop_words = {'what', 'is', 'the', 'a', 'an', 'how', 'does', 'do', 'are',
+                      'was', 'were', 'been', 'being', 'have', 'has', 'had', 'having',
+                      'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am',
+                      'be', 'can', 'could', 'would', 'should', 'may', 'might', 'must',
+                      'shall', 'will', 'of', 'in', 'for', 'on', 'with', 'at', 'by',
+                      'from', 'to', 'and', 'or', 'but', 'if', 'then', 'so', 'than',
+                      'too', 'very', 'just', 'about', 'into', 'through', 'during',
+                      'before', 'after', 'above', 'below', 'between', 'under', 'again',
+                      'further', 'once', 'here', 'there', 'when', 'where', 'why',
+                      'all', 'each', 'few', 'more', 'most', 'other', 'some', 'such',
+                      'no', 'nor', 'not', 'only', 'own', 'same', 'any', 'both'}
+
+        query_words = set(w for w in query_lower.split() if w not in stop_words and len(w) > 2)
 
         for result in results:
             text = result.get("text", "").lower()
@@ -580,21 +594,34 @@ class RetrievalPipeline:
             if len(text) < 20:
                 continue
 
-            # Filter 3: Basic keyword overlap check
-            text_words = set(text.split())
+            # Filter 3: Semantic relevance check - require keyword overlap
+            # This is key for context precision
+            text_words = set(w for w in text.split() if len(w) > 2)
             overlap = len(query_words & text_words)
 
-            # If score is low and no keyword overlap, likely irrelevant
-            if score < 0.5 and overlap == 0:
+            # Calculate overlap ratio
+            if query_words:
+                overlap_ratio = overlap / len(query_words)
+            else:
+                overlap_ratio = 0.5  # Default for empty query words
+
+            # Filter based on score and overlap combination
+            # Only filter truly irrelevant results - balance precision with recall
+            if score < 0.4 and overlap_ratio < 0.15:
+                continue
+            elif score < 0.5 and overlap == 0:
                 continue
 
+            # Add relevance boost to score based on overlap
+            result["adjusted_score"] = score * (1 + overlap_ratio * 0.3)
             filtered.append(result)
 
-        # Limit to top max_results
+        # Sort by adjusted score and limit
+        filtered.sort(key=lambda x: x.get("adjusted_score", x["score"]), reverse=True)
         filtered = filtered[:max_results]
 
         if len(filtered) < len(results):
-            logger.info(f"Filtered {len(results) - len(filtered)} low-quality results")
+            logger.info(f"Filtered {len(results) - len(filtered)} low-quality results (kept {len(filtered)})")
 
         return filtered
 
