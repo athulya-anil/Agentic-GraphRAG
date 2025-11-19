@@ -325,6 +325,43 @@ class RetrievalPipeline:
                             "matched_word": result["matched_word"]
                         })
 
+            # FALLBACK: If no entities found with parsed intent, try keyword-based search
+            if not seed_entities:
+                logger.info(f"No entities found with parsed intent, falling back to keyword search")
+                # Extract meaningful keywords from query
+                stop_words = {'what', 'which', 'when', 'where', 'who', 'how', 'does', 'is', 'are', 'the', 'a', 'an', 'and', 'or', 'was', 'were', 'been', 'provide', 'provides', 'providing'}
+                query_words = [w for w in query.lower().split() if len(w) > 3 and w not in stop_words]
+
+                # Search all entity types with each keyword
+                all_labels = schema.get("labels", [])[:15]
+                for keyword in query_words[:3]:  # Use top 3 keywords
+                    for label in all_labels:
+                        cypher = f"""
+                        MATCH (n:{label})
+                        WHERE toLower(n.name) CONTAINS $word
+                           OR toLower(coalesce(n.aliases, '')) CONTAINS $word
+                           OR toLower(coalesce(n.keywords, '')) CONTAINS $word
+                           OR toLower(coalesce(n.summary, '')) CONTAINS $word
+                        RETURN n, id(n) as node_id, $word as matched_word
+                        LIMIT {min(top_k, 3)}
+                        """
+                        fallback_results = self.neo4j_manager.execute_query(
+                            cypher, {"word": keyword}
+                        )
+
+                        for result in fallback_results:
+                            seed_entities.append({
+                                "node": dict(result["n"]),
+                                "node_id": result["node_id"],
+                                "label": label,
+                                "matched_word": result["matched_word"]
+                            })
+
+                        if len(seed_entities) >= top_k:
+                            break
+                    if len(seed_entities) >= top_k:
+                        break
+
             # Step 4: Intelligent traversal based on query intent
             for seed in seed_entities[:top_k]:
                 node = seed["node"]
@@ -370,6 +407,23 @@ class RetrievalPipeline:
 
                     if "summary" in node and node["summary"]:
                         context_parts.append(f"Summary: {node['summary']}")
+
+                    # IMPORTANT: Also retrieve source document text from FAISS
+                    # This ensures we get the rich original content, not just entity names
+                    entity_name = node.get('name', '')
+                    if entity_name:
+                        # Search FAISS for documents mentioning this entity
+                        doc_results = self.faiss_index.search(
+                            query=entity_name,
+                            top_k=2,
+                            return_metadata=True
+                        )
+                        for doc_result in doc_results:
+                            doc_text = doc_result.get("metadata", {}).get("text", "")
+                            if doc_text and len(doc_text) > 50:
+                                # Only include if it mentions the entity
+                                if entity_name.lower() in doc_text.lower():
+                                    context_parts.append(f"Source document: {doc_text}")
 
                     # Add path information for multi-hop reasoning
                     paths_seen = set()
@@ -585,6 +639,7 @@ class RetrievalPipeline:
         for result in results:
             text = result.get("text", "").lower()
             score = result.get("score", 0.0)
+            source = result.get("source", "vector")
 
             # Filter 1: Score threshold
             if score < min_score:
@@ -594,8 +649,7 @@ class RetrievalPipeline:
             if len(text) < 20:
                 continue
 
-            # Filter 3: Semantic relevance check - require keyword overlap
-            # This is key for context precision
+            # Filter 3: Source-aware relevance check
             text_words = set(w for w in text.split() if len(w) > 2)
             overlap = len(query_words & text_words)
 
@@ -605,15 +659,25 @@ class RetrievalPipeline:
             else:
                 overlap_ratio = 0.5  # Default for empty query words
 
-            # Filter based on score and overlap combination
-            # Only filter truly irrelevant results - balance precision with recall
-            if score < 0.4 and overlap_ratio < 0.15:
-                continue
-            elif score < 0.5 and overlap == 0:
-                continue
+            # Different filtering logic based on source
+            if source == "graph":
+                # Graph results already did entity matching in retrieval
+                # Use more lenient filtering - trust the graph traversal
+                # Only filter if score is very low
+                if score < 0.3:
+                    continue
+                # For graph, boost score based on path depth (already encoded in score)
+                result["adjusted_score"] = score * 1.1
+            else:
+                # Vector results: use keyword overlap filtering
+                # Only filter truly irrelevant results - balance precision with recall
+                if score < 0.4 and overlap_ratio < 0.15:
+                    continue
+                elif score < 0.5 and overlap == 0:
+                    continue
+                # Add relevance boost to score based on overlap
+                result["adjusted_score"] = score * (1 + overlap_ratio * 0.3)
 
-            # Add relevance boost to score based on overlap
-            result["adjusted_score"] = score * (1 + overlap_ratio * 0.3)
             filtered.append(result)
 
         # Sort by adjusted score and limit

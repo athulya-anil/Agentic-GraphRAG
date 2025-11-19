@@ -1,13 +1,14 @@
 {
   "num_queries": 15,
   "success_rate": 1.0,
-  "avg_faithfulness": 0.8266666666666667,
-  "avg_answer_relevancy": 0.8733333333333333,
-  "avg_context_precision": 0.6933333333333334,
-  "avg_context_recall": 0.9,
-  "avg_overall_score": 0.8233333333333334,
-  "avg_latency_ms": 23467.12212562561,
+  "avg_faithfulness": 0.9266666666666666,
+  "avg_answer_relevancy": 0.9533333333333334,
+  "avg_context_precision": 0.9611111111111111,
+  "avg_context_recall": 1.0,
+  "avg_overall_score": 0.9602777777777778,
+  "avg_latency_ms": 625.4356384277344,
   "strategy_distribution": {
-    "vector": 15
+    "vector": 11,
+    "graph": 4
   }
 }

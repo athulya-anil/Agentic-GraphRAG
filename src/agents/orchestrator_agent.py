@@ -189,7 +189,7 @@ Return JSON:
         available_strategies: List[str]
     ) -> RetrievalStrategy:
         """
-        Select the optimal retrieval strategy.
+        Select the optimal retrieval strategy (GRAPH or VECTOR only).
 
         Args:
             query: User query
@@ -198,34 +198,33 @@ Return JSON:
             available_strategies: Available strategies
 
         Returns:
-            Selected RetrievalStrategy
+            Selected RetrievalStrategy (GRAPH or VECTOR)
         """
-        # Check LLM suggestion first
-        suggested = query_analysis.get("suggested_strategy", "hybrid").lower()
-
         # Strategy selection logic based on query type and analysis
+        # ONLY GRAPH or VECTOR - no hybrid
+
         if query_type == QueryType.RELATIONAL:
-            # Relational queries benefit from graph traversal
-            preferred = RetrievalStrategy.GRAPH if "graph" in available_strategies else RetrievalStrategy.HYBRID
+            # Relational queries always use graph traversal
+            preferred = RetrievalStrategy.GRAPH
         elif query_type == QueryType.FACTUAL:
-            # Factual queries might need both
+            # Factual queries: check if relationships needed
             if query_analysis.get("needs_relationships", False):
                 preferred = RetrievalStrategy.GRAPH
             else:
                 preferred = RetrievalStrategy.VECTOR
         elif query_type == QueryType.CONCEPTUAL:
-            # Conceptual queries benefit from semantic search
+            # Conceptual queries use semantic search
             preferred = RetrievalStrategy.VECTOR
         else:  # EXPLORATORY
-            # Exploratory queries benefit from hybrid approach
-            preferred = RetrievalStrategy.HYBRID
+            # Exploratory: if needs relationships → graph, else → vector
+            if query_analysis.get("needs_relationships", False):
+                preferred = RetrievalStrategy.GRAPH
+            else:
+                preferred = RetrievalStrategy.VECTOR
 
-        # Check if preferred strategy is available
+        # Ensure strategy is available, fallback to vector if needed
         if preferred.value not in available_strategies:
-            # Fall back to hybrid or vector
-            if "hybrid" in available_strategies:
-                preferred = RetrievalStrategy.HYBRID
-            elif "vector" in available_strategies:
+            if "vector" in available_strategies:
                 preferred = RetrievalStrategy.VECTOR
             elif "graph" in available_strategies:
                 preferred = RetrievalStrategy.GRAPH

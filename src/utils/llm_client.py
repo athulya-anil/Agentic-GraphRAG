@@ -115,10 +115,29 @@ class GeminiProvider(BaseLLMProvider):
                 "max_output_tokens": max_tok,
             }
 
+            # Use proper enum values for safety settings
+            from google.generativeai.types import HarmCategory, HarmBlockThreshold
+
             response = self.client.generate_content(
                 prompt,
-                generation_config=generation_config
+                generation_config=generation_config,
+                safety_settings={
+                    HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
+                    HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
+                    HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
+                    HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
+                }
             )
+
+            # Check if response was blocked by safety filters
+            if not response.candidates or not response.candidates[0].content.parts:
+                finish_reason = response.candidates[0].finish_reason if response.candidates else "unknown"
+                logger.warning(f"Gemini blocked response (finish_reason={finish_reason}). Using fallback.")
+                # Return a simple fallback response instead of crashing
+                content = "{}"  # Empty JSON for safety
+                tokens_used = len(prompt) // 4
+                self.total_tokens_used += tokens_used
+                return content, tokens_used
 
             content = response.text
 
@@ -130,6 +149,10 @@ class GeminiProvider(BaseLLMProvider):
 
             return content, tokens_used
 
+        except AttributeError as e:
+            # Handle case where response.text fails
+            logger.error(f"Gemini response error: {e}. Returning fallback.")
+            return "{}", len(prompt) // 4
         except Exception as e:
             logger.error(f"Gemini API error: {e}")
             raise

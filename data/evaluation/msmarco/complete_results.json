@@ -3,7 +3,7 @@
     {
       "query_id": "q1",
       "query": "What is the Eiffel Tower?",
-      "response": "The Eiffel Tower is a famous iron lattice tower located in Paris, France [2]. It is a wrought-iron lattice tower on the Champ de Mars in Paris, France, named after the engineer Gustave Eiffel, whose company designed and built the tower [3]. It was constructed from 1887 to 1889 as the entrance to the 1889 World's Fair and has become a global cultural icon of France and one of the most recognizable structures in the world [3]. \n\nIn summary, the Eiffel Tower is a notable landmark and tower in Paris, France, with a rich history and cultural significance.",
+      "response": "The Eiffel Tower is a wrought-iron lattice tower located on the Champ de Mars in Paris, France [1]. It is a famous iron lattice tower and a landmark in Paris, France [2]. The tower was constructed from 1887 to 1889 as the entrance to the 1889 World's Fair and was designed and built by the company of French engineer Gustave Eiffel [1]. Today, it has become a global cultural icon of France and one of the most recognizable structures in the world [1].",
       "ground_truth_passages": [
         "p1"
       ],
@@ -19,7 +19,7 @@
       "context_precision": 1.0,
       "context_recall": 1.0,
       "overall_score": 1.0,
-      "latency_ms": 1771.043062210083,
+      "latency_ms": 234.97390747070312,
       "strategy_used": "vector",
       "success": true,
       "error": ""
@@ -27,23 +27,20 @@
     {
       "query_id": "q2",
       "query": "How does photosynthesis work?",
-      "response": "According to the context, photosynthesis is a process used by plants and other organisms to convert light energy into chemical energy [1, 2]. This process involves the synthesis of carbohydrate molecules, such as sugars, from carbon dioxide and water, and in most cases, oxygen is released as a waste product [1]. \n\nThe context doesn't provide a detailed, step-by-step explanation of the photosynthesis process, but it does mention the key components involved, including light energy, chemical energy, plants, organisms, oxygen, and carbon dioxide [1, 2, 3, 4]. \n\nFor a more detailed understanding of how photosynthesis works, additional information beyond the provided context would be necessary. However, based on the given context, it can be summarized that photosynthesis is a process that converts light energy into chemical energy, utilizing carbon dioxide and water, and releasing oxygen as a byproduct [1].",
+      "response": "According to the context, photosynthesis is a process used by plants and other organisms to convert light energy into chemical energy [1, 2]. This process involves the conversion of carbon dioxide and water into carbohydrate molecules, such as sugars, which store the chemical energy [1]. Oxygen is also released as a waste product in most cases [1]. However, the context does not provide a detailed, step-by-step explanation of the photosynthesis process. It only provides a general overview of what photosynthesis is and what it achieves [1, 2]. Therefore, a more detailed explanation of how photosynthesis works cannot be provided based on the given context.",
       "ground_truth_passages": [
         "p2"
       ],
       "retrieved_passages": [
         "vector",
-        "vector",
-        "vector",
-        "vector",
         "vector"
       ],
       "faithfulness": 1.0,
-      "answer_relevancy": 0.9,
+      "answer_relevancy": 0.5,
       "context_precision": 1.0,
       "context_recall": 1.0,
-      "overall_score": 0.975,
-      "latency_ms": 3930.4120540618896,
+      "overall_score": 0.875,
+      "latency_ms": 137.87484169006348,
       "strategy_used": "vector",
       "success": true,
       "error": ""
@@ -51,9 +48,99 @@
     {
       "query_id": "q3",
       "query": "What is machine learning?",
-      "response": "Machine learning is a subset of artificial intelligence that enables systems to learn from experience without explicit programming [1, 2]. It focuses on the development of computer programs that can access data and use it to learn for themselves, looking for patterns in data through observations, examples, direct experience, or instruction [1]. In essence, machine learning allows systems to automatically learn and improve from experience without being explicitly programmed.",
+      "response": "Machine learning is a subset of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed [1, 2]. It involves the development of computer programs that can access data, look for patterns, and learn from it [1]. This allows systems to automatically improve without requiring explicit programming. According to [2], the key aspects of machine learning include artificial intelligence, computer science, and data analysis. \n\nIn the context of computer science, machine learning is closely related to artificial intelligence, which focuses on creating intelligent machines that can think and act like humans [3]. However, machine learning is a specific subset of artificial intelligence that deals with the ability of systems to learn from experience and improve over time [1, 2].",
       "ground_truth_passages": [
         "p3"
+      ],
+      "retrieved_passages": [
+        "vector",
+        "vector",
+        "vector"
+      ],
+      "faithfulness": 0.85,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "overall_score": 0.9625,
+      "latency_ms": 1362.8606796264648,
+      "strategy_used": "vector",
+      "success": true,
+      "error": ""
+    },
+    {
+      "query_id": "q4",
+      "query": "What are COVID-19 symptoms?",
+      "response": "According to the context, common COVID-19 symptoms include fever, cough, fatigue, breathing difficulties, loss of smell, and loss of taste [1]. These symptoms may begin to appear anywhere from one to fourteen days after exposure to the virus [1]. \n\nNote that this information is based on the provided context and may not be a comprehensive list of all possible symptoms. However, based on the available information, the above-mentioned symptoms are associated with COVID-19 [1], [2].",
+      "ground_truth_passages": [
+        "p4"
+      ],
+      "retrieved_passages": [
+        "vector",
+        "vector",
+        "vector",
+        "vector"
+      ],
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 0.75,
+      "context_recall": 1.0,
+      "overall_score": 0.9375,
+      "latency_ms": 142.7299976348877,
+      "strategy_used": "vector",
+      "success": true,
+      "error": ""
+    },
+    {
+      "query_id": "q5",
+      "query": "What services does AWS provide?",
+      "response": "According to the context, AWS provides on-demand cloud computing platforms and APIs to individuals, companies, and governments on a metered pay-as-you-go basis [1]. Additionally, it is mentioned that AWS comprises more than 200 services spanning a wide range including computing, storage, networking, database, analytics, application services, deployment, management, machine learning, and artificial intelligence [1]. \n\nIn summary, AWS provides a broad range of services related to cloud computing, including but not limited to: \n- Computing\n- Storage\n- Networking\n- Database\n- Analytics\n- Application services\n- Deployment\n- Management\n- Machine learning\n- Artificial intelligence\n\nThis information is primarily based on source document [1], which provides a detailed overview of the services offered by AWS. Source [2] also confirms that AWS provides on-demand cloud computing platforms and APIs, but it does not provide as detailed a list of services as [1].",
+      "ground_truth_passages": [
+        "p5"
+      ],
+      "retrieved_passages": [
+        "graph",
+        "graph"
+      ],
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.9,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "overall_score": 0.975,
+      "latency_ms": 1202.5337219238281,
+      "strategy_used": "graph",
+      "success": true,
+      "error": ""
+    },
+    {
+      "query_id": "q6",
+      "query": "Where is the Great Barrier Reef located?",
+      "response": "The Great Barrier Reef is located in the Coral Sea, off the coast of Queensland, Australia [1]. It stretches over an area of approximately 344,400 square kilometres, covering a vast distance of over 2,300 kilometres [1]. Specifically, it is situated in the Australian state of Queensland [2] and is part of the country of Australia [3], within the body of water known as the Coral Sea [4, 5].",
+      "ground_truth_passages": [
+        "p6"
+      ],
+      "retrieved_passages": [
+        "graph",
+        "graph",
+        "graph",
+        "graph",
+        "graph"
+      ],
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "overall_score": 1.0,
+      "latency_ms": 376.9369125366211,
+      "strategy_used": "graph",
+      "success": true,
+      "error": ""
+    },
+    {
+      "query_id": "q7",
+      "query": "What is quantum computing?",
+      "response": "Quantum computing is a type of computation that utilizes the collective properties of quantum states, such as superposition, interference, and entanglement, to perform calculations [1]. It is a type of computation that uses quantum-mechanical phenomena to perform calculations [2]. This allows quantum computers to solve certain computational problems, such as integer factorization, substantially faster than classical computers [1]. \n\nIn summary, quantum computing is a computational method that leverages quantum-mechanical phenomena to perform calculations, making it potentially more efficient than classical computing for specific problems.",
+      "ground_truth_passages": [
+        "p7"
       ],
       "retrieved_passages": [
         "vector",
@@ -67,94 +154,41 @@
       "context_precision": 1.0,
       "context_recall": 1.0,
       "overall_score": 1.0,
-      "latency_ms": 14091.363668441772,
+      "latency_ms": 169.33608055114746,
       "strategy_used": "vector",
       "success": true,
       "error": ""
     },
     {
-      "query_id": "q4",
-      "query": "What are COVID-19 symptoms?",
-      "response": "According to the context, common symptoms of COVID-19 include fever, cough, fatigue, breathing difficulties, loss of smell, and loss of taste [1]. These symptoms may begin to appear anywhere from one to fourteen days after exposure to the virus [1, 2].",
+      "query_id": "q8",
+      "query": "How many neurons are in the human brain?",
+      "response": "The human brain contains approximately 86 billion neurons. This information is supported by two sources: [1] and [2], both of which state that there are approximately 86 billion neurons in the human brain.",
       "ground_truth_passages": [
-        "p4"
+        "p8"
       ],
       "retrieved_passages": [
         "vector",
         "vector",
-        "vector",
-        "vector",
         "vector"
       ],
-      "faithfulness": 1.0,
+      "faithfulness": 0.5,
       "answer_relevancy": 1.0,
-      "context_precision": 0.6,
+      "context_precision": 0.6666666666666666,
       "context_recall": 1.0,
-      "overall_score": 0.9,
-      "latency_ms": 19265.106201171875,
+      "overall_score": 0.7916666666666666,
+      "latency_ms": 165.56382179260254,
       "strategy_used": "vector",
       "success": true,
       "error": ""
     },
     {
-      "query_id": "q5",
-      "query": "What services does AWS provide?",
-      "response": "According to the context, AWS provides a wide range of services, including computing, storage, networking, database, analytics, application services, deployment, management, machine learning, and artificial intelligence [1]. In 2021, AWS comprised more than 200 services [1, 4]. However, the context does not provide an exhaustive list of all the services offered by AWS. For more specific information on the services provided by AWS, it would be necessary to consult additional sources beyond the provided context.",
+      "query_id": "q9",
+      "query": "What causes climate change?",
+      "response": "According to the context, climate change is caused by long-term shifts in temperatures and weather patterns, which may be natural, but since the 1800s, human activities have been the main driver of climate change [1]. The primary cause of human-driven climate change is the burning of fossil fuels like coal, oil, and gas, which produces heat-trapping gases, particularly carbon dioxide (CO2) [1]. \n\nIn summary, human activities, specifically the burning of fossil fuels, are the main cause of climate change. [1] provides more detailed information on this topic, while [2] offers a brief definition of climate change as a process.",
       "ground_truth_passages": [
-        "p5"
+        "p9"
       ],
       "retrieved_passages": [
-        "vector",
-        "vector",
-        "vector",
-        "vector",
-        "vector"
-      ],
-      "faithfulness": 1.0,
-      "answer_relevancy": 0.9,
-      "context_precision": 1.0,
-      "context_recall": 1.0,
-      "overall_score": 0.975,
-      "latency_ms": 22394.936084747314,
-      "strategy_used": "vector",
-      "success": true,
-      "error": ""
-    },
-    {
-      "query_id": "q6",
-      "query": "Where is the Great Barrier Reef located?",
-      "response": "The Great Barrier Reef is located in the Coral Sea, off the coast of Queensland, Australia [2]. Specifically, it is situated in the state of Queensland [5], which is part of the country Australia [3, 4].",
-      "ground_truth_passages": [
-        "p6"
-      ],
-      "retrieved_passages": [
-        "vector",
-        "vector",
-        "vector",
-        "vector",
-        "vector"
-      ],
-      "faithfulness": 1.0,
-      "answer_relevancy": 1.0,
-      "context_precision": 0.8,
-      "context_recall": 1.0,
-      "overall_score": 0.95,
-      "latency_ms": 19759.82618331909,
-      "strategy_used": "vector",
-      "success": true,
-      "error": ""
-    },
-    {
-      "query_id": "q7",
-      "query": "What is quantum computing?",
-      "response": "Quantum computing is a type of computation that utilizes quantum-mechanical phenomena to perform calculations [1]. It harnesses the collective properties of quantum states, such as superposition, interference, and entanglement, to perform calculations [2]. This allows quantum computers to potentially solve certain computational problems, such as integer factorization, substantially faster than classical computers [2]. In essence, quantum computing is a technology that leverages quantum principles to enable more efficient computation.",
-      "ground_truth_passages": [
-        "p7"
-      ],
-      "retrieved_passages": [
-        "vector",
-        "vector",
-        "vector",
         "vector",
         "vector"
       ],
@@ -163,55 +197,7 @@
       "context_precision": 1.0,
       "context_recall": 1.0,
       "overall_score": 0.9625,
-      "latency_ms": 19952.26001739502,
-      "strategy_used": "vector",
-      "success": true,
-      "error": ""
-    },
-    {
-      "query_id": "q8",
-      "query": "How many neurons are in the human brain?",
-      "response": "The human brain contains approximately 86 billion neurons. This information is supported by multiple sources, including [1] and [2].",
-      "ground_truth_passages": [
-        "p8"
-      ],
-      "retrieved_passages": [
-        "vector",
-        "vector",
-        "vector",
-        "vector",
-        "vector"
-      ],
-      "faithfulness": 0.5,
-      "answer_relevancy": 1.0,
-      "context_precision": 0.8,
-      "context_recall": 1.0,
-      "overall_score": 0.825,
-      "latency_ms": 21955.486297607422,
-      "strategy_used": "vector",
-      "success": true,
-      "error": ""
-    },
-    {
-      "query_id": "q9",
-      "query": "What causes climate change?",
-      "response": "According to the context, climate change is caused by long-term shifts in temperatures and weather patterns, which may be natural, but since the 1800s, human activities have been the main driver of climate change [1]. The primary cause of human-driven climate change is the burning of fossil fuels like coal, oil, and gas, which produces heat-trapping gases, particularly carbon dioxide (CO2) [1]. \n\nIn other words, human activities, specifically the burning of fossil fuels, are the main cause of climate change. This information is supported by sources [1] and [2], which both describe climate change as long-term shifts in temperatures and weather patterns, with [1] providing more details on the role of human activities.",
-      "ground_truth_passages": [
-        "p9"
-      ],
-      "retrieved_passages": [
-        "vector",
-        "vector",
-        "vector",
-        "vector",
-        "vector"
-      ],
-      "faithfulness": 0.85,
-      "answer_relevancy": 0.9,
-      "context_precision": 0.6,
-      "context_recall": 1.0,
-      "overall_score": 0.8375,
-      "latency_ms": 22138.84711265564,
+      "latency_ms": 147.1121311187744,
       "strategy_used": "vector",
       "success": true,
       "error": ""
@@ -219,7 +205,7 @@
     {
       "query_id": "q10",
       "query": "What is DNA made of?",
-      "response": "DNA is made up of four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T) [1]. These chemical bases are the fundamental components that store the information in DNA as a code. \n\nAdditionally, adenine [3], cytosine [4], and thymine [5] are individually identified as nucleotide bases that make up DNA, further supporting the information provided in [1].",
+      "response": "DNA is made up of four chemical bases: adenine (A), guanine (G), cytosine (C), and thymine (T) [1]. These chemical bases are the fundamental components that store the information in DNA as a code. \n\nFor more information on each of these bases, see [2] for adenine, [3] for thymine, and [4] for cytosine. Additionally, a general overview of DNA can be found in [1] and [5].",
       "ground_truth_passages": [
         "p10"
       ],
@@ -231,11 +217,11 @@
         "vector"
       ],
       "faithfulness": 1.0,
-      "answer_relevancy": 1.0,
+      "answer_relevancy": 0.9,
       "context_precision": 1.0,
       "context_recall": 1.0,
-      "overall_score": 1.0,
-      "latency_ms": 21697.865962982178,
+      "overall_score": 0.975,
+      "latency_ms": 183.34698677062988,
       "strategy_used": "vector",
       "success": true,
       "error": ""
@@ -243,7 +229,7 @@
     {
       "query_id": "q11",
       "query": "What is the Internet?",
-      "response": "The Internet is a global system of interconnected computer networks that uses the Internet protocol suite (TCP/IP) to communicate between networks and devices [1]. It is a network of networks that consists of private, public, academic, business, and government networks of local to global scope [1]. This definition is also supported by [2], which describes the Internet as \"a global system of interconnected computer networks.\" \n\nIn summary, the Internet is a global network that enables communication and information sharing between various devices and networks using standardized protocols.",
+      "response": "The Internet is a global system of interconnected computer networks that uses the Internet protocol suite (TCP/IP) to communicate between networks and devices [1]. It is a network of networks that consists of private, public, academic, business, and government networks of local to global scope, and it carries a vast range of information resources and services [1]. This definition is also supported by [2], which describes the Internet as \"a global system of interconnected computer networks.\" \n\nIn summary, the Internet is a global network of interconnected computer networks that enables communication and information sharing across the globe.",
       "ground_truth_passages": [
         "p11"
       ],
@@ -251,15 +237,14 @@
         "vector",
         "vector",
         "vector",
-        "vector",
         "vector"
       ],
       "faithfulness": 0.85,
       "answer_relevancy": 1.0,
-      "context_precision": 0.8,
+      "context_precision": 1.0,
       "context_recall": 1.0,
-      "overall_score": 0.9125000000000001,
-      "latency_ms": 22314.019203186035,
+      "overall_score": 0.9625,
+      "latency_ms": 237.35499382019043,
       "strategy_used": "vector",
       "success": true,
       "error": ""
@@ -267,7 +252,7 @@
     {
       "query_id": "q12",
       "query": "How does blockchain work?",
-      "response": "According to the context, blockchain is a distributed ledger technology that maintains a continuously growing list of records, called blocks [1, 2]. Each block contains a cryptographic hash of the previous block, a timestamp, and transaction data [1, 3]. The key aspect of blockchain is that it is resistant to modification of its data, as once recorded, the data in any given block cannot be altered retroactively without alteration of all subsequent blocks [1]. This suggests that blockchain works by creating a chain of blocks, where each block is linked to the previous one through a cryptographic hash, making it difficult to modify the data once it's recorded.\n\nHowever, the context does not provide a detailed explanation of how blockchain works, such as how new blocks are added, how consensus is achieved, or how the network is maintained. Therefore, while we can get a general idea of how blockchain works from the context, a more comprehensive understanding would require additional information not provided in the given context.",
+      "response": "Blockchain works by maintaining a continuously growing list of records, called blocks [1][2]. Each block contains a cryptographic hash of the previous block, a timestamp, and transaction data [1][4]. This creates a chain of blocks, where each block is linked to the previous one through the cryptographic hash [3][4]. \n\nBy design, a blockchain is resistant to modification of its data, as once recorded, the data in any given block cannot be altered retroactively without alteration of all subsequent blocks [1]. This is a key feature of blockchain technology, making it a secure and decentralized way to store and manage data [2]. \n\nOverall, the blockchain's distributed ledger technology and cryptographic links between blocks ensure the integrity and transparency of the data stored on the blockchain [2][3].",
       "ground_truth_passages": [
         "p12"
       ],
@@ -275,15 +260,14 @@
         "vector",
         "vector",
         "vector",
-        "vector",
         "vector"
       ],
       "faithfulness": 0.85,
-      "answer_relevancy": 0.9,
-      "context_precision": 0.6,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0,
       "context_recall": 1.0,
-      "overall_score": 0.8375,
-      "latency_ms": 24265.084981918335,
+      "overall_score": 0.9625,
+      "latency_ms": 1197.7567672729492,
       "strategy_used": "vector",
       "success": true,
       "error": ""
@@ -291,23 +275,20 @@
     {
       "query_id": "q13",
       "query": "What process do plants use to convert light energy and what does it produce?",
-      "response": "Sorry, I encountered an error generating the response.",
+      "response": "According to the context, plants use the process of photosynthesis to convert light energy into chemical energy [1, 2]. This process produces carbohydrate molecules, such as sugars, and in most cases, also releases oxygen as a waste product [1]. \n\nIn summary, photosynthesis is the process used by plants to convert light energy, producing chemical energy stored in sugars and releasing oxygen as a byproduct.",
       "ground_truth_passages": [
         "p2"
       ],
       "retrieved_passages": [
         "vector",
-        "vector",
-        "vector",
-        "vector",
         "vector"
       ],
-      "faithfulness": 0.5,
-      "answer_relevancy": 0.5,
-      "context_precision": 0.0,
-      "context_recall": 0.5,
-      "overall_score": 0.375,
-      "latency_ms": 29202.334880828857,
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "overall_score": 1.0,
+      "latency_ms": 175.25601387023926,
       "strategy_used": "vector",
       "success": true,
       "error": ""
@@ -315,48 +296,41 @@
     {
       "query_id": "q14",
       "query": "Which company provides cloud computing services and when was it launched?",
-      "response": "Sorry, I encountered an error generating the response.",
+      "response": "The company that provides cloud computing services is Amazon Web Services (AWS), which is a subsidiary of Amazon. According to [1], AWS was launched in 2006. This information is also consistent with the general description of AWS in [2], although [2] does not specifically mention the launch year. Therefore, the answer to the query is that Amazon Web Services (AWS) provides cloud computing services and was launched in 2006, as stated in [1].",
       "ground_truth_passages": [
         "p5"
       ],
       "retrieved_passages": [
-        "vector",
-        "vector",
-        "vector",
-        "vector",
-        "vector"
+        "graph",
+        "graph"
       ],
-      "faithfulness": 0.5,
-      "answer_relevancy": 0.5,
-      "context_precision": 0.2,
-      "context_recall": 0.5,
-      "overall_score": 0.425,
-      "latency_ms": 79618.09515953064,
-      "strategy_used": "vector",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "overall_score": 1.0,
+      "latency_ms": 1473.3929634094238,
+      "strategy_used": "graph",
       "success": true,
       "error": ""
     },
     {
       "query_id": "q15",
       "query": "What is the largest structure made by living organisms and where is it?",
-      "response": "Sorry, I encountered an error generating the response.",
+      "response": "The largest structure made by living organisms is the Great Barrier Reef [1]. It is located in the Coral Sea, off the coast of Queensland, Australia [1]. Specifically, it stretches over an area of approximately 344,400 square kilometres in the Coral Sea [1].",
       "ground_truth_passages": [
         "p6"
       ],
       "retrieved_passages": [
-        "vector",
-        "vector",
-        "vector",
-        "vector",
-        "vector"
+        "graph"
       ],
-      "faithfulness": 0.5,
-      "answer_relevancy": 0.5,
-      "context_precision": 0.0,
-      "context_recall": 0.5,
-      "overall_score": 0.375,
-      "latency_ms": 29650.151014328003,
-      "strategy_used": "vector",
+      "faithfulness": 1.0,
+      "answer_relevancy": 1.0,
+      "context_precision": 1.0,
+      "context_recall": 1.0,
+      "overall_score": 1.0,
+      "latency_ms": 2174.5047569274902,
+      "strategy_used": "graph",
       "success": true,
       "error": ""
     }
@@ -364,14 +338,15 @@
   "aggregated": {
     "num_queries": 15,
     "success_rate": 1.0,
-    "avg_faithfulness": 0.8266666666666667,
-    "avg_answer_relevancy": 0.8733333333333333,
-    "avg_context_precision": 0.6933333333333334,
-    "avg_context_recall": 0.9,
-    "avg_overall_score": 0.8233333333333334,
-    "avg_latency_ms": 23467.12212562561,
+    "avg_faithfulness": 0.9266666666666666,
+    "avg_answer_relevancy": 0.9533333333333334,
+    "avg_context_precision": 0.9611111111111111,
+    "avg_context_recall": 1.0,
+    "avg_overall_score": 0.9602777777777778,
+    "avg_latency_ms": 625.4356384277344,
     "strategy_distribution": {
-      "vector": 15
+      "vector": 11,
+      "graph": 4
     }
   }
 }
