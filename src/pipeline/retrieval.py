@@ -3,7 +3,7 @@ Retrieval Pipeline for Agentic GraphRAG
 
 This module handles intelligent query retrieval:
 1. Query analysis and routing (OrchestratorAgent)
-2. Multi-strategy retrieval (vector/graph/hybrid)
+2. Multi-strategy retrieval (vector or graph)
 3. Context reranking (optional cross-encoder)
 4. Response generation
 5. Performance tracking (ReflectionAgent)
@@ -44,7 +44,6 @@ class RetrievalPipeline:
     - Automatic query routing to optimal strategy
     - Vector similarity search
     - Graph traversal queries
-    - Hybrid retrieval with dynamic weighting
     - Optional cross-encoder reranking
     - Response generation and evaluation
     """
@@ -190,8 +189,6 @@ class RetrievalPipeline:
             results = self._retrieve_vector(query, params, return_metadata)
         elif strategy == RetrievalStrategy.GRAPH:
             results = self._retrieve_graph(query, params, return_metadata)
-        elif strategy == RetrievalStrategy.HYBRID:
-            results = self._retrieve_hybrid(query, params, return_metadata)
         else:
             raise ValueError(f"Unknown strategy: {strategy}")
 
@@ -495,63 +492,6 @@ class RetrievalPipeline:
 
         return unique_results
 
-    def _retrieve_hybrid(
-        self,
-        query: str,
-        params: Dict[str, Any],
-        return_metadata: bool
-    ) -> List[Dict[str, Any]]:
-        """
-        Retrieve using hybrid approach (vector + graph).
-
-        Args:
-            query: User query
-            params: Retrieval parameters
-            return_metadata: Whether to include metadata
-
-        Returns:
-            List of combined results
-        """
-        top_k_vector = params.get("top_k_vector", self.config.retrieval.top_k_vector)
-        top_k_graph = params.get("top_k_graph", self.config.retrieval.top_k_graph)
-        alpha = params.get("alpha", self.config.retrieval.hybrid_alpha)
-
-        # Get results from both sources
-        vector_results = self._retrieve_vector(
-            query, {"top_k": top_k_vector}, return_metadata
-        )
-        graph_results = self._retrieve_graph(
-            query, {"top_k": top_k_graph}, return_metadata
-        )
-
-        # Combine and reweight scores
-        # alpha = 0: all graph, alpha = 1: all vector
-        combined = []
-
-        for result in vector_results:
-            result["score"] = result["score"] * alpha
-            combined.append(result)
-
-        for result in graph_results:
-            result["score"] = result["score"] * (1 - alpha)
-            combined.append(result)
-
-        # Sort by combined score
-        combined.sort(key=lambda x: x["score"], reverse=True)
-
-        # Deduplicate by text
-        seen_texts = set()
-        unique_combined = []
-        for result in combined:
-            text = result["text"]
-            if text and text not in seen_texts:
-                seen_texts.add(text)
-                unique_combined.append(result)
-
-        # Return top results
-        top_k_total = max(top_k_vector, top_k_graph)
-        return unique_combined[:top_k_total]
-
     def _rerank_results(
         self,
         query: str,
@@ -695,12 +635,6 @@ class RetrievalPipeline:
             return {"top_k": self.config.retrieval.top_k_vector}
         elif strategy == RetrievalStrategy.GRAPH:
             return {"top_k": self.config.retrieval.top_k_graph, "max_depth": 2}
-        elif strategy == RetrievalStrategy.HYBRID:
-            return {
-                "top_k_vector": self.config.retrieval.top_k_vector,
-                "top_k_graph": self.config.retrieval.top_k_graph,
-                "alpha": self.config.retrieval.hybrid_alpha
-            }
         return {}
 
     def query(
@@ -745,7 +679,7 @@ class RetrievalPipeline:
 
         # Generate response
         response = self.orchestrator.synthesize_response(
-            query, context, strategy or RetrievalStrategy.HYBRID
+            query, context, strategy or RetrievalStrategy.VECTOR
         )
 
         result = {

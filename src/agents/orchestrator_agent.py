@@ -3,9 +3,9 @@ OrchestratorAgent for Agentic GraphRAG
 
 This agent intelligently routes queries to the optimal retrieval strategy:
 - Classifies queries (factual vs. conceptual, relational vs. semantic)
-- Selects retrieval strategy (vector/graph/hybrid)
-- Dynamically adjusts weights for hybrid retrieval
-- Synthesizes responses from multiple sources
+- Selects retrieval strategy (vector or graph)
+- Routes based on failure prediction
+- Synthesizes responses from retrieved context
 
 Author: Agentic GraphRAG Team
 """
@@ -32,7 +32,6 @@ class RetrievalStrategy(Enum):
     """Enumeration of retrieval strategies."""
     VECTOR = "vector"       # Semantic similarity search
     GRAPH = "graph"         # Graph traversal/relational queries
-    HYBRID = "hybrid"       # Combination of both
 
 
 class QueryType(Enum):
@@ -49,8 +48,8 @@ class OrchestratorAgent:
 
     Analyzes queries to determine:
     1. Query type (factual, conceptual, relational, exploratory)
-    2. Optimal retrieval strategy (vector, graph, hybrid)
-    3. Hybrid weights (if hybrid strategy chosen)
+    2. Optimal retrieval strategy (vector or graph)
+    3. Failure risk assessment
     4. Response synthesis approach
     """
 
@@ -63,8 +62,7 @@ class OrchestratorAgent:
         # Performance tracking for adaptive learning
         self.strategy_performance: Dict[str, List[float]] = {
             "vector": [],
-            "graph": [],
-            "hybrid": []
+            "graph": []
         }
 
         logger.info("Initialized OrchestratorAgent with failure-aware routing")
@@ -89,7 +87,7 @@ class OrchestratorAgent:
                 - params: Dict with strategy-specific parameters
         """
         if available_strategies is None:
-            available_strategies = ["vector", "graph", "hybrid"]
+            available_strategies = ["vector", "graph"]
 
         # Classify query
         query_type, query_analysis = self._classify_query(query)
@@ -151,7 +149,7 @@ Also determine:
 - needs_relationships: Does answering this require traversing entity relationships in a graph? (true/false)
 - needs_semantic: Does it need semantic/conceptual understanding beyond facts? (true/false)
 - needs_entities: Is it looking for specific entities? (true/false)
-- suggested_strategy: Best approach (vector=semantic search, graph=relationship traversal, hybrid=both)
+- suggested_strategy: Best approach (vector=semantic search, graph=relationship traversal)
 
 Return JSON:
 {{
@@ -175,11 +173,11 @@ Return JSON:
 
         except Exception as e:
             logger.error(f"Error classifying query: {e}")
-            # Default to exploratory + hybrid
+            # Default to exploratory + vector search
             return QueryType.EXPLORATORY, {
                 "needs_relationships": True,
                 "needs_semantic": True,
-                "suggested_strategy": "hybrid",
+                "suggested_strategy": "vector",
                 "confidence": 0.5
             }
 
@@ -275,21 +273,6 @@ Return JSON:
             params["top_k"] = self.config.retrieval.top_k_graph
             params["max_depth"] = 2
             params["method"] = "traversal"
-
-        elif strategy == RetrievalStrategy.HYBRID:
-            params["top_k_vector"] = self.config.retrieval.top_k_vector
-            params["top_k_graph"] = self.config.retrieval.top_k_graph
-
-            # Adjust alpha based on query needs
-            if query_analysis.get("needs_relationships", False):
-                # More weight on graph
-                params["alpha"] = 0.3  # 0 = all graph, 1 = all vector
-            elif query_analysis.get("needs_semantic", True):
-                # More weight on vector
-                params["alpha"] = 0.7
-            else:
-                # Balanced
-                params["alpha"] = self.config.retrieval.hybrid_alpha
 
         return params
 

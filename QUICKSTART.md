@@ -84,7 +84,7 @@ python query.py
 
 This opens an interactive prompt where you can:
 - Ask questions naturally
-- See intelligent routing (vector/graph/hybrid)
+- See intelligent routing (vector or graph)
 - View RAGAS evaluation metrics
 - Type `help` for tips
 - Type `exit` or press Ctrl+C to quit
@@ -156,7 +156,7 @@ python query.py
 #
 # 📊 Retrieval Stats:
 #    • Contexts retrieved: 5
-#    • Strategy used: hybrid
+#    • Strategy used: graph
 #
 # 📈 RAGAS Metrics:
 #    • Faithfulness:      0.927

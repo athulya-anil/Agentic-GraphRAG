@@ -99,12 +99,7 @@ class RetrievalConfig(BaseModel):
 
     top_k_vector: int = Field(default=5, ge=1, le=20, description="Top K for vector search")
     top_k_graph: int = Field(default=10, ge=1, le=50, description="Top K for graph search")
-    hybrid_alpha: float = Field(
-        default=0.5,
-        ge=0.0,
-        le=1.0,
-        description="Weight for hybrid search (0=graph only, 1=vector only)"
-    )
+    # hybrid_alpha removed - system uses either VECTOR or GRAPH, not hybrid
 
 
 class ApplicationConfig(BaseModel):
@@ -185,7 +180,6 @@ class Config(BaseModel):
             retrieval=RetrievalConfig(
                 top_k_vector=int(os.getenv("TOP_K_VECTOR", "5")),
                 top_k_graph=int(os.getenv("TOP_K_GRAPH", "10")),
-                hybrid_alpha=float(os.getenv("HYBRID_ALPHA", "0.5")),
             ),
             app=ApplicationConfig(
                 log_level=os.getenv("LOG_LEVEL", "INFO"),  # type: ignore

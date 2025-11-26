@@ -61,14 +61,14 @@
                              │
         ┌────────────────────┼────────────────────┐
         │                    │                    │
-┌───────▼────────┐  ┌────────▼────────┐  ┌───────▼────────┐
-│ VECTOR SEARCH  │  │ GRAPH TRAVERSAL │  │  HYBRID SEARCH │
-│ (Semantic)     │  │  (Multi-hop)    │  │  (Combined)    │
-│                │  │                 │  │                │
-│ - Embedding    │  │ - Cypher Queries│  │ - Weighted Sum │
-│ - FAISS Search │  │ - 2-hop Paths   │  │ - Reranking    │
-│ - Top-k=5      │  │ - Depth Scoring │  │ - Alpha=0.5    │
-└───────┬────────┘  └────────┬────────┘  └───────┬────────┘
+┌───────▼────────┐          ┌────────▼────────┐
+│ VECTOR SEARCH  │          │ GRAPH TRAVERSAL │
+│ (Semantic)     │          │  (Multi-hop)    │
+│                │          │                 │
+│ - FAISS Search │          │ - Cypher Queries│
+│ - Top-k=5      │          │ - 2-hop Paths   │
+│ - 85.2% Acc    │          │ - 52.0% Acc     │
+└───────┬────────┘          └────────┬────────┘
         └────────────────────┼────────────────────┘
                              │
                 ┌────────────▼─────────────┐
@@ -810,7 +810,6 @@ EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 # Retrieval
 TOP_K_VECTOR=5
 TOP_K_GRAPH=10
-HYBRID_ALPHA=0.5
 ```
 
 ---

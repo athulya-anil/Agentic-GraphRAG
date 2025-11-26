@@ -13,7 +13,7 @@ This project presents a novel self-adaptive multi-agent system for autonomous kn
 **Solution**: Agentic GraphRAG uses autonomous AI agents that:
 1. **Auto-infer schemas** from documents (no manual schema needed)
 2. **Extract entities and relationships** using hybrid NER + LLM approach
-3. **Intelligently route queries** to optimal retrieval strategy (vector/graph/hybrid)
+3. **Intelligently route queries** to optimal retrieval strategy (vector or graph)
 4. **Self-optimize** through continuous performance evaluation
 
 ## Architecture
@@ -23,7 +23,7 @@ Documents → SchemaAgent → EntityAgent → RelationAgent → Knowledge Graph
                                                               ↓
                                                      Vector Store (FAISS)
                                                               ↓
-            Query → OrchestratorAgent → [Vector | Graph | Hybrid] Retrieval
+            Query → OrchestratorAgent → [Vector | Graph] Retrieval
                                                               ↓
                                                      ReflectionAgent
                                                      (Self-Optimization)
@@ -66,7 +66,7 @@ Successfully processed documents from:
 The OrchestratorAgent automatically selects optimal retrieval:
 - **Factual queries** (e.g., "Who is the CEO of Tesla?") → Graph traversal
 - **Conceptual queries** (e.g., "Explain machine learning") → Vector search
-- **Complex queries** → Hybrid approach with learned weights
+- **Complex queries** → Adaptive routing based on failure prediction
 
 ### 4. **Performance Metrics**
 
@@ -88,12 +88,12 @@ Based on initial testing with the demo system:
 First system to fully automate both schema inference AND entity/relation extraction using multi-agent collaboration. Prior work requires either manual schemas or domain-specific rules.
 
 ### 2. **Adaptive Multi-Strategy Retrieval**
-Novel query routing mechanism that learns when to use:
+Novel query routing mechanism with failure-aware prediction:
 - Vector search (semantic similarity)
 - Graph traversal (structured relationships)
-- Hybrid retrieval (combined approach)
+- Adaptive routing based on failure risk assessment
 
-Most RAG systems use fixed retrieval strategies.
+Most RAG systems use fixed retrieval strategies without failure prediction.
 
 ### 3. **Self-Improving Architecture**
 ReflectionAgent creates feedback loop for continuous optimization using RAGAS metrics:
@@ -121,9 +121,8 @@ Works on ANY document corpus without modification:
 ### Comparison Baselines
 1. **Pure Vector Search** (vanilla RAG)
 2. **Pure Graph Traversal** (knowledge graph only)
-3. **Naive Hybrid** (simple combination)
-4. **Static Schema KG** (manual schema)
-5. **Agentic GraphRAG** (our method)
+3. **Static Schema KG** (manual schema)
+4. **Agentic GraphRAG** (our method)
 
 ### Metrics
 - **RAGAS scores** (faithfulness, relevancy, precision, recall)
@@ -280,7 +279,7 @@ Works on ANY document corpus without modification:
 | Concern | Mitigation |
 |---------|------------|
 | "Small-scale evaluation" | Expand to 100-1000 documents across multiple domains |
-| "No baseline comparison" | Implement pure vector, pure graph, and naive hybrid baselines |
+| "No baseline comparison" | Implement pure vector and pure graph baselines |
 | "LLM dependency" | Show results with different LLMs (Groq, OpenAI, local models) |
 | "Evaluation metrics" | Use standard RAGAS + human evaluation |
 | "Scalability" | Benchmark on large corpora, measure graph size vs. performance |

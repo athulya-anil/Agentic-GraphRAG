@@ -74,7 +74,7 @@ result = {
 }
 ```
 
-**Benefit:** Can now analyze which retrieval strategy (vector/graph/hybrid) performs best.
+**Benefit:** Can now analyze which retrieval strategy (vector or graph) performs best.
 
 ---
 
