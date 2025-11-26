@@ -1,1 +1,0 @@
-{"response": "{\n  \"type\": \"FACTUAL\",\n  \"needs_relationships\": false,\n  \"needs_semantic\": false,\n  \"needs_entities\": true,\n  \"suggested_strategy\": \"vector\",\n  \"confidence\": 0.9,\n  \"reasoning\": \"The query asks for a specific fact about the CEO of Tesla, which is a straightforward entity-based question.\"\n}"}

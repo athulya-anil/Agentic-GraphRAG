@@ -1,1 +1,0 @@
-{"response": "[\n  {\n    \"source\": \"Metformin\",\n    \"target\": \"type 2 diabetes\",\n    \"type\": \"TREATS\",\n    \"directed\": true,\n    \"properties\": {\"effectiveness\": \"commonly prescribed\", \"disease\": \"type 2 diabetes\", \"drug\": \"Metformin\"},\n    \"confidence\": 0.9\n  }\n]"}

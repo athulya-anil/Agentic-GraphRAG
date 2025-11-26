@@ -1,0 +1,1416 @@
+{
+  "results": [
+    {
+      "query_id": "259417",
+      "query": "how long does respite last",
+      "score": 0.975,
+      "latency_ms": 232.5918674468994,
+      "strategy": "vector",
+      "metrics": {
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "answer_relevancy": 0.9,
+        "context_recall": 1.0,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "1088512",
+      "query": "weather in greek isles may",
+      "score": 0.0,
+      "latency_ms": 767.1518325805664,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "1088347",
+      "query": "weather in new york city ny",
+      "score": 0.0,
+      "latency_ms": 1272.5269794464111,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "1087858",
+      "query": "what airport is in wilder ky",
+      "score": 0.5,
+      "latency_ms": 640.7809257507324,
+      "strategy": "graph",
+      "metrics": {
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 1.0,
+        "context_recall": 0.0,
+        "overall": 0.5
+      }
+    },
+    {
+      "query_id": "1087680",
+      "query": "what are current refinance mortgage rates",
+      "score": 0.8375,
+      "latency_ms": 531.2879085540771,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 0.5,
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "faithfulness": 0.85,
+        "overall": 0.8375
+      }
+    },
+    {
+      "query_id": "1086477",
+      "query": "what belongs in an affirmative action plan?",
+      "score": 1.0,
+      "latency_ms": 1679.9771785736084,
+      "strategy": "graph",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "context_precision": 1.0,
+        "faithfulness": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1086241",
+      "query": "what causes allergic reaction on lips?",
+      "score": 0.825,
+      "latency_ms": 863.0499839782715,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 1.0,
+        "context_recall": 0.8,
+        "answer_relevancy": 0.5,
+        "faithfulness": 1.0,
+        "overall": 0.825
+      }
+    },
+    {
+      "query_id": "1083502",
+      "query": "what does led lcd tv",
+      "score": 0.9625,
+      "latency_ms": 710.6380462646484,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_recall": 1.0,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.9625
+      }
+    },
+    {
+      "query_id": "1083340",
+      "query": "against what part of the electromagnetic spectrum does sunscreen protect?",
+      "score": 0.7125,
+      "latency_ms": 1560.1458549499512,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_recall": 0.0,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.7125
+      }
+    },
+    {
+      "query_id": "1082455",
+      "query": "what does uncharted mean",
+      "score": 1.0,
+      "latency_ms": 823.1837749481201,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1082339",
+      "query": "what drugs treat uti in dogs",
+      "score": 0.0,
+      "latency_ms": 529.4981002807617,
+      "strategy": "graph",
+      "metrics": {
+        "faithfulness": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "1075591",
+      "query": "what is a chromosomes function and purpose",
+      "score": 0.8375,
+      "latency_ms": 973.7977981567383,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 0.5,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "faithfulness": 0.85,
+        "overall": 0.8375
+      }
+    },
+    {
+      "query_id": "1069983",
+      "query": "what is a muscle infection called",
+      "score": 0.9625,
+      "latency_ms": 437.1600151062012,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_recall": 1.0,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.9625
+      }
+    },
+    {
+      "query_id": "1069222",
+      "query": "what is a pmi id",
+      "score": 0.9375,
+      "latency_ms": 722.6109504699707,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 0.9,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "faithfulness": 0.85,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "1100403",
+      "query": "arcadis phone number",
+      "score": 0.0,
+      "latency_ms": 856.3299179077148,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "1062609",
+      "query": "what is an nm hida scan",
+      "score": 0.0,
+      "latency_ms": 211.06290817260742,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "1061472",
+      "query": "what is aripiprazole used for?",
+      "score": 1.0,
+      "latency_ms": 1111.9060516357422,
+      "strategy": "graph",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1061324",
+      "query": "what is arts integration",
+      "score": 1.0,
+      "latency_ms": 698.3742713928223,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1054999",
+      "query": "what is framework in information",
+      "score": 0.9375,
+      "latency_ms": 568.7899589538574,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 0.9,
+        "context_recall": 1.0,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "1100134",
+      "query": "are life insurance policies protected information?",
+      "score": 0.625,
+      "latency_ms": 614.2330169677734,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "faithfulness": 0.0,
+        "answer_relevancy": 0.5,
+        "overall": 0.625
+      }
+    },
+    {
+      "query_id": "1036782",
+      "query": "crm finance definition",
+      "score": 0.625,
+      "latency_ms": 624.401330947876,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 0.5,
+        "faithfulness": 1.0,
+        "context_precision": 0.0,
+        "overall": 0.625
+      }
+    },
+    {
+      "query_id": "1027919",
+      "query": "what kind idea had wovoka",
+      "score": 0.9375,
+      "latency_ms": 604.766845703125,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "1024288",
+      "query": "what nationality is sanders",
+      "score": 0.5,
+      "latency_ms": 1022.2909450531006,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 1.0,
+        "context_recall": 0.5,
+        "answer_relevancy": 0.5,
+        "overall": 0.5
+      }
+    },
+    {
+      "query_id": "1022178",
+      "query": "what prevents wound healing",
+      "score": 0.8375,
+      "latency_ms": 1939.8069381713867,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "answer_relevancy": 0.5,
+        "faithfulness": 0.85,
+        "overall": 0.8375
+      }
+    },
+    {
+      "query_id": "1001999",
+      "query": "when would you use a fathom measurement",
+      "score": 0.9625,
+      "latency_ms": 527.6322364807129,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.9625
+      }
+    },
+    {
+      "query_id": "999192",
+      "query": "where is corner brook",
+      "score": 0.8375,
+      "latency_ms": 877.7878284454346,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_recall": 0.5,
+        "context_precision": 1.0,
+        "faithfulness": 0.85,
+        "overall": 0.8375
+      }
+    },
+    {
+      "query_id": "994338",
+      "query": "which is a vascular tissue in plants?",
+      "score": 0.8875,
+      "latency_ms": 1508.3870887756348,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 0.9,
+        "faithfulness": 0.85,
+        "context_recall": 0.8,
+        "context_precision": 1.0,
+        "overall": 0.8875
+      }
+    },
+    {
+      "query_id": "992257",
+      "query": "who authored desperation",
+      "score": 0.0,
+      "latency_ms": 1226.1638641357422,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "990852",
+      "query": "who is dr ari brown",
+      "score": 0.75,
+      "latency_ms": 1226.2487411499023,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 1.0,
+        "answer_relevancy": 0.0,
+        "context_recall": 1.0,
+        "faithfulness": 1.0,
+        "overall": 0.75
+      }
+    },
+    {
+      "query_id": "989894",
+      "query": "who is mark davis",
+      "score": 0.8375,
+      "latency_ms": 1665.5957698822021,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 0.5,
+        "context_recall": 1.0,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.8375
+      }
+    },
+    {
+      "query_id": "988653",
+      "query": "who is the president of the republic of texas right now mark smith",
+      "score": 0.0,
+      "latency_ms": 696.1321830749512,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "986935",
+      "query": "who was catherine ii russia",
+      "score": 0.0,
+      "latency_ms": 896.6000080108643,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "122639",
+      "query": "define incision and drainage",
+      "score": 1.0,
+      "latency_ms": 614.6807670593262,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_recall": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "224626",
+      "query": "how does Electroconvulsive therapy treat ocd",
+      "score": 0.0,
+      "latency_ms": 900.6681442260742,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "1098804",
+      "query": "at what temperature does hypothermia set in fahrenheit",
+      "score": 1.0,
+      "latency_ms": 494.5511817932129,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "59217",
+      "query": "calorie sweet potatoes",
+      "score": 1.0,
+      "latency_ms": 598.862886428833,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "347491",
+      "query": "how to calculate va pension amount",
+      "score": 0.9375,
+      "latency_ms": 995.6448078155518,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "1102028",
+      "query": "why is the branch of astronomy important",
+      "score": 0.9375,
+      "latency_ms": 502.3620128631592,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9,
+        "faithfulness": 0.85,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "357664",
+      "query": "how to extract month from date",
+      "score": 0.975,
+      "latency_ms": 513.5269165039062,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9,
+        "faithfulness": 1.0,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "259128",
+      "query": "how long does oxy last",
+      "score": 0.975,
+      "latency_ms": 675.4441261291504,
+      "strategy": "vector",
+      "metrics": {
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9,
+        "context_precision": 1.0,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "1098180",
+      "query": "how long does it take to get an mri result",
+      "score": 0.9375,
+      "latency_ms": 816.8177604675293,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 1.0,
+        "answer_relevancy": 0.9,
+        "context_recall": 1.0,
+        "faithfulness": 0.85,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "100046",
+      "query": "cortana what is the weather in whitefish montana",
+      "score": 0.0,
+      "latency_ms": 958.5840702056885,
+      "strategy": "graph",
+      "metrics": {
+        "faithfulness": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "146244",
+      "query": "difference between a spruce and a fir tree",
+      "score": 0.9125000000000001,
+      "latency_ms": 882.8370571136475,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_recall": 0.8,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.9125
+      }
+    },
+    {
+      "query_id": "455659",
+      "query": "moneygram toll free number",
+      "score": 1.0,
+      "latency_ms": 408.62584114074707,
+      "strategy": "vector",
+      "metrics": {
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1097236",
+      "query": "how many died in vegas shooting",
+      "score": 1.0,
+      "latency_ms": 265.7039165496826,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1097195",
+      "query": "how many electrons and protons and neutrons in gold?",
+      "score": 0.8125,
+      "latency_ms": 665.3392314910889,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 0.5,
+        "context_recall": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 0.75,
+        "overall": 0.8125
+      }
+    },
+    {
+      "query_id": "601624",
+      "query": "what countries does the us export wheat to",
+      "score": 0.0,
+      "latency_ms": 700.0072002410889,
+      "strategy": "graph",
+      "metrics": {
+        "faithfulness": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "507381",
+      "query": "symptoms of congenital heart defects",
+      "score": 0.975,
+      "latency_ms": 1221.7669486999512,
+      "strategy": "graph",
+      "metrics": {
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "1096911",
+      "query": "average income for a flight engineer",
+      "score": 0.875,
+      "latency_ms": 1182.697057723999,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 1.0,
+        "answer_relevancy": 0.5,
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "overall": 0.875
+      }
+    },
+    {
+      "query_id": "474873",
+      "query": "phone number to cancel sirius xm",
+      "score": 0.0,
+      "latency_ms": 1072.5312232971191,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "724410",
+      "query": "what is bitcoins used for",
+      "score": 1.0,
+      "latency_ms": 411.8368625640869,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1096712",
+      "query": "how many reps does missouri have",
+      "score": 0.0,
+      "latency_ms": 569.8256492614746,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "759503",
+      "query": "what is instamed",
+      "score": 0.975,
+      "latency_ms": 683.7770938873291,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9,
+        "context_precision": 1.0,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "1096694",
+      "query": "average lifespan of crocodiles in captivity",
+      "score": 0.7125,
+      "latency_ms": 521.4340686798096,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 0.0,
+        "context_recall": 1.0,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.7125
+      }
+    },
+    {
+      "query_id": "579133",
+      "query": "what blood stream messenger",
+      "score": 0.0,
+      "latency_ms": 1380.708932876587,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "466335",
+      "query": "number bingo cards",
+      "score": 0.975,
+      "latency_ms": 429.5032024383545,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 0.9,
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "418926",
+      "query": "is narcotics anonymous effective",
+      "score": 0.75,
+      "latency_ms": 565.3078556060791,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.5,
+        "context_precision": 0.5,
+        "overall": 0.75
+      }
+    },
+    {
+      "query_id": "140216",
+      "query": "definition: classical",
+      "score": 0.9375,
+      "latency_ms": 432.0800304412842,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9,
+        "faithfulness": 0.85,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "483178",
+      "query": "prostate cancer what to look for",
+      "score": 0.0,
+      "latency_ms": 263.4286880493164,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "59392",
+      "query": "calories burned using elliptical",
+      "score": 0.9375,
+      "latency_ms": 659.2481136322021,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 1.0,
+        "answer_relevancy": 0.9,
+        "faithfulness": 0.85,
+        "context_recall": 1.0,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "129517",
+      "query": "define: entity's",
+      "score": 0.8375,
+      "latency_ms": 773.0398178100586,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 0.5,
+        "context_recall": 1.0,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.8375
+      }
+    },
+    {
+      "query_id": "1094693",
+      "query": "idaho definition of signed",
+      "score": 0.0,
+      "latency_ms": 87.29887008666992,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "686739",
+      "query": "what is a heritage oak",
+      "score": 0.9375,
+      "latency_ms": 600.1691818237305,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 0.9,
+        "context_recall": 1.0,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "411953",
+      "query": "is hctz safe for kidneys",
+      "score": 0.0,
+      "latency_ms": 704.3142318725586,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "626318",
+      "query": "what do you call the components present in cytoplasm",
+      "score": 1.0,
+      "latency_ms": 639.3866539001465,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "context_recall": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1094316",
+      "query": "inverse of natural log function",
+      "score": 1.0,
+      "latency_ms": 433.12525749206543,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "725047",
+      "query": "what is bobtail?",
+      "score": 0.9375,
+      "latency_ms": 949.1672515869141,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9,
+        "faithfulness": 0.85,
+        "context_precision": 1.0,
+        "overall": 0.9375
+      }
+    },
+    {
+      "query_id": "22479",
+      "query": "are florida mangroves protected",
+      "score": 0.0,
+      "latency_ms": 1063.9138221740723,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "690705",
+      "query": "what is a merchant's mark",
+      "score": 0.9625,
+      "latency_ms": 502.3159980773926,
+      "strategy": "vector",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "faithfulness": 0.85,
+        "overall": 0.9625
+      }
+    },
+    {
+      "query_id": "961950",
+      "query": "when was the northridge california earthquake",
+      "score": 0.75,
+      "latency_ms": 1153.3329486846924,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_recall": 0.0,
+        "context_precision": 1.0,
+        "overall": 0.75
+      }
+    },
+    {
+      "query_id": "1041473",
+      "query": "who is the president of switzerland?",
+      "score": 0.0,
+      "latency_ms": 551.8128871917725,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "887906",
+      "query": "what position does james rodriguez play",
+      "score": 0.875,
+      "latency_ms": 871.3259696960449,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "context_recall": 0.5,
+        "overall": 0.875
+      }
+    },
+    {
+      "query_id": "1093556",
+      "query": "largest onion producers",
+      "score": 0.0,
+      "latency_ms": 875.8220672607422,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "800792",
+      "query": "what is sucrose used for",
+      "score": 0.575,
+      "latency_ms": 1320.467233657837,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 0.0,
+        "context_recall": 0.8,
+        "faithfulness": 1.0,
+        "context_precision": 0.5,
+        "overall": 0.575
+      }
+    },
+    {
+      "query_id": "1093312",
+      "query": "loperamide effects",
+      "score": 0.975,
+      "latency_ms": 1201.3940811157227,
+      "strategy": "graph",
+      "metrics": {
+        "context_recall": 1.0,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9,
+        "context_precision": 1.0,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "1033703",
+      "query": "who is ice p",
+      "score": 0.75,
+      "latency_ms": 872.4489212036133,
+      "strategy": "graph",
+      "metrics": {
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "context_precision": 1.0,
+        "context_recall": 0.0,
+        "overall": 0.75
+      }
+    },
+    {
+      "query_id": "1093128",
+      "query": "meaning district",
+      "score": 1.0,
+      "latency_ms": 566.382884979248,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1093104",
+      "query": "meaning of black flag",
+      "score": 0.975,
+      "latency_ms": 828.5489082336426,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "762652",
+      "query": "what is jupiter's core composition",
+      "score": 0.875,
+      "latency_ms": 533.7331295013428,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 1.0,
+        "answer_relevancy": 0.5,
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "overall": 0.875
+      }
+    },
+    {
+      "query_id": "766272",
+      "query": "what is lispro",
+      "score": 1.0,
+      "latency_ms": 621.0157871246338,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "915544",
+      "query": "what types of earthquake waves usually cause the most destruction?",
+      "score": 0.8875,
+      "latency_ms": 735.6202602386475,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 1.0,
+        "context_recall": 0.8,
+        "answer_relevancy": 0.9,
+        "faithfulness": 0.85,
+        "overall": 0.8875000000000001
+      }
+    },
+    {
+      "query_id": "885153",
+      "query": "what part of the eye allows light to enter",
+      "score": 1.0,
+      "latency_ms": 1140.881061553955,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_recall": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "99805",
+      "query": "corpsman definition",
+      "score": 1.0,
+      "latency_ms": 677.8669357299805,
+      "strategy": "vector",
+      "metrics": {
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "999261",
+      "query": "where is university of bridgeport located",
+      "score": 0.95,
+      "latency_ms": 907.163143157959,
+      "strategy": "graph",
+      "metrics": {
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "context_recall": 0.8,
+        "context_precision": 1.0,
+        "overall": 0.95
+      }
+    },
+    {
+      "query_id": "1092348",
+      "query": "naegleria symptoms",
+      "score": 0.5,
+      "latency_ms": 1268.5930728912354,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 0.0,
+        "context_precision": 1.0,
+        "faithfulness": 1.0,
+        "context_recall": 0.0,
+        "overall": 0.5
+      }
+    },
+    {
+      "query_id": "762761",
+      "query": "what is kalel",
+      "score": 0.85,
+      "latency_ms": 554.2171001434326,
+      "strategy": "vector",
+      "metrics": {
+        "faithfulness": 1.0,
+        "context_precision": 1.0,
+        "context_recall": 0.5,
+        "answer_relevancy": 0.9,
+        "overall": 0.85
+      }
+    },
+    {
+      "query_id": "83458",
+      "query": "cast of movie cowboys",
+      "score": 1.0,
+      "latency_ms": 1428.8320541381836,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 1.0,
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "763619",
+      "query": "what is kodak real name",
+      "score": 0.95,
+      "latency_ms": 978.4071445465088,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_recall": 0.8,
+        "context_precision": 1.0,
+        "overall": 0.95
+      }
+    },
+    {
+      "query_id": "989099",
+      "query": "where is new columbia pa",
+      "score": 0.95,
+      "latency_ms": 920.0088977813721,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 1.0,
+        "answer_relevancy": 1.0,
+        "context_recall": 0.8,
+        "faithfulness": 1.0,
+        "overall": 0.95
+      }
+    },
+    {
+      "query_id": "885433",
+      "query": "what parts of the body do you get shingles on?",
+      "score": 0.9625,
+      "latency_ms": 1014.1251087188721,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "faithfulness": 0.85,
+        "overall": 0.9625
+      }
+    },
+    {
+      "query_id": "900599",
+      "query": "what team does will johnson play for",
+      "score": 1.0,
+      "latency_ms": 1005.3970813751221,
+      "strategy": "graph",
+      "metrics": {
+        "context_recall": 1.0,
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "1024950",
+      "query": "who came up with punctuated equilibrium",
+      "score": 1.0,
+      "latency_ms": 898.5328674316406,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 1.0
+      }
+    },
+    {
+      "query_id": "900164",
+      "query": "what system does straight talk use?",
+      "score": 0.975,
+      "latency_ms": 821.7501640319824,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 0.9,
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "context_precision": 1.0,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "868953",
+      "query": "what kind of joint is your thumb",
+      "score": 0.975,
+      "latency_ms": 711.8799686431885,
+      "strategy": "vector",
+      "metrics": {
+        "faithfulness": 1.0,
+        "context_recall": 1.0,
+        "answer_relevancy": 0.9,
+        "context_precision": 1.0,
+        "overall": 0.975
+      }
+    },
+    {
+      "query_id": "21603",
+      "query": "are chia seeds safe to eat pregnant",
+      "score": 0.7125,
+      "latency_ms": 1172.9340553283691,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 1.0,
+        "answer_relevancy": 0.5,
+        "context_recall": 0.5,
+        "faithfulness": 0.85,
+        "overall": 0.7125
+      }
+    },
+    {
+      "query_id": "1101341",
+      "query": "disease caused by blood worms",
+      "score": 0.9625,
+      "latency_ms": 1221.543312072754,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 1.0,
+        "faithfulness": 0.85,
+        "context_recall": 1.0,
+        "answer_relevancy": 1.0,
+        "overall": 0.9625
+      }
+    },
+    {
+      "query_id": "980811",
+      "query": "where is csf reabsorbed into the blood",
+      "score": 0.0,
+      "latency_ms": 681.9169521331787,
+      "strategy": "graph",
+      "metrics": {
+        "faithfulness": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "62411",
+      "query": "can a grandparent open a 529 plan for a grandchild",
+      "score": 0.875,
+      "latency_ms": 1047.9679107666016,
+      "strategy": "graph",
+      "metrics": {
+        "answer_relevancy": 1.0,
+        "context_precision": 1.0,
+        "context_recall": 0.5,
+        "faithfulness": 1.0,
+        "overall": 0.875
+      }
+    },
+    {
+      "query_id": "128158",
+      "query": "define the role of an entrepreneur",
+      "score": 0.0,
+      "latency_ms": 158.7381362915039,
+      "strategy": "vector",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    },
+    {
+      "query_id": "55682",
+      "query": "botulism symptoms diagnosis and treatment",
+      "score": 0.0,
+      "latency_ms": 630.9537887573242,
+      "strategy": "graph",
+      "metrics": {
+        "context_precision": 0.0,
+        "faithfulness": 0.0,
+        "context_recall": 0.0,
+        "answer_relevancy": 0.0,
+        "overall": 0.0
+      }
+    }
+  ],
+  "summary": {
+    "avg_score": 0.6891250000000002,
+    "avg_latency": 811.350576877594,
+    "metrics": {
+      "faithfulness": 0.7180000000000001,
+      "answer_relevancy": 0.6269999999999998,
+      "context_precision": 0.7375,
+      "context_recall": 0.6739999999999999
+    },
+    "num_queries": 100,
+    "num_passages": 108
+  }
+}

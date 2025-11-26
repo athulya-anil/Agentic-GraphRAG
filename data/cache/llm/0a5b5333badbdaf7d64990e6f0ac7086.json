@@ -1,1 +1,0 @@
-{"response": "{\n  \"type\": \"CONCEPTUAL\",\n  \"needs_relationships\": false,\n  \"needs_semantic\": true,\n  \"needs_entities\": false,\n  \"suggested_strategy\": \"vector\",\n  \"confidence\": 0.8,\n  \"reasoning\": \"The query asks for an explanation of a broad concept, which requires semantic understanding and is best suited for vector-based retrieval approaches.\"\n}"}

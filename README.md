@@ -236,6 +236,59 @@ This project advances the state-of-the-art in several areas:
 
 5. **End-to-End Agentic System**: Goes beyond KG construction to include intelligent retrieval and query answering—a complete pipeline from documents to answers.
 
+6. **Failure-Aware Routing**: First system to predict graph retrieval failures before execution using empirical failure analysis and rule-based risk scoring.
+
+## 📈 Evaluation Results
+
+We evaluated the system on the **MS MARCO dataset** (100 real-world queries, 108 passages) using RAGAS metrics.
+
+### Baseline Performance (Before Improvements)
+
+```
+Overall Score: 0.689 (68.9%)
+Average Latency: 811ms per query
+Queries Evaluated: 100
+
+RAGAS Metrics:
+├─ Faithfulness:       0.718
+├─ Answer Relevancy:   0.627
+├─ Context Precision:  0.738
+└─ Context Recall:     0.674
+```
+
+### Strategy Performance Comparison
+
+**Vector Search Strategy:**
+- Queries: 51
+- Average Score: **0.852**
+- Failures: 4 (7.8% failure rate)
+- Strengths: Reliable for conceptual questions
+
+**Graph Traversal Strategy:**
+- Queries: 49
+- Average Score: **0.520**
+- Failures: 19 (38.7% failure rate)
+- Challenges: Temporal queries, missing entities, coverage gaps
+
+### Failure Analysis
+
+Analysis of 19 graph retrieval failures identified systematic patterns:
+
+| Failure Type | Count | Root Cause |
+|--------------|-------|------------|
+| Temporal queries | 4 | Static KG cannot answer time-dependent questions |
+| Contact information | 2 | Phone numbers/addresses not in knowledge graph |
+| Missing entities | 9 | Queried entities not present in graph |
+| Relationship gaps | 4 | Required relationships not extracted |
+
+### Recent Improvements (Under Evaluation)
+
+1. **GraphFailurePredictor**: Rule-based risk scoring to detect high-risk queries before execution
+2. **ConflictResolutionAgent**: Entity deduplication and relationship validation
+3. **Multi-stage Validation**: 8-stage ingestion pipeline with quality checks
+
+These improvements are designed to address the identified failure patterns. Full evaluation in progress.
+
 ## 💡 Use Cases
 
 - **Medical Research**: Automatically build knowledge graphs from PubMed papers linking diseases, drugs, symptoms, and treatments
