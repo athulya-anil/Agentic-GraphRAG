@@ -22,6 +22,7 @@ from ..agents import (
     get_entity_agent,
     get_relation_agent
 )
+from ..agents.conflict_resolution_agent import get_conflict_resolution_agent
 from ..graph import get_neo4j_manager
 from ..vector import get_faiss_index
 from ..utils.config import get_config
@@ -37,14 +38,16 @@ logger = logging.getLogger(__name__)
 
 class IngestionPipeline:
     """
-    End-to-end document ingestion pipeline.
+    End-to-end document ingestion pipeline with multi-stage validation.
 
     Stages:
     1. Schema Inference: Analyze documents to discover graph structure
     2. Entity Extraction: Extract entities with metadata enrichment
     3. Relationship Extraction: Identify connections between entities
-    4. Graph Construction: Build Neo4j knowledge graph
-    5. Vector Indexing: Create FAISS embeddings for retrieval
+    4. Conflict Resolution: Deduplicate entities and resolve contradictions
+    5. Schema Validation: Validate against inferred schema
+    6. Graph Construction: Build Neo4j knowledge graph
+    7. Vector Indexing: Create FAISS embeddings for retrieval
     """
 
     def __init__(
@@ -67,6 +70,7 @@ class IngestionPipeline:
         self.schema_agent = get_schema_agent()
         self.entity_agent = None  # Created after schema inference
         self.relation_agent = None  # Created after schema inference
+        self.conflict_resolver = None  # Created after schema inference
 
         # Initialize storage
         self.neo4j_manager = get_neo4j_manager()
@@ -77,9 +81,12 @@ class IngestionPipeline:
         self.ingestion_stats = {
             "documents_processed": 0,
             "entities_extracted": 0,
+            "entities_after_dedup": 0,
             "relations_extracted": 0,
+            "relations_after_resolution": 0,
             "nodes_created": 0,
-            "edges_created": 0
+            "edges_created": 0,
+            "conflicts_resolved": 0
         }
 
         # Load existing schema if available
@@ -124,6 +131,7 @@ class IngestionPipeline:
         # Initialize agents with schema
         self.entity_agent = get_entity_agent(schema=self.schema)
         self.relation_agent = get_relation_agent(schema=self.schema)
+        self.conflict_resolver = get_conflict_resolution_agent(schema=self.schema)
 
         # Stage 2: Entity Extraction
         logger.info("Extracting entities...")
@@ -149,20 +157,49 @@ class IngestionPipeline:
         )
         logger.info(f"✓ Extracted {len(all_relations)} relationships")
 
-        # Stage 4: Graph Construction
+        # Stage 4: Conflict Resolution (Entity Deduplication)
+        logger.info("Deduplicating entities...")
+        original_entity_count = len(all_entities)
+        all_entities = self.conflict_resolver.deduplicate_entities(
+            all_entities, use_llm=False  # Use string matching only for speed
+        )
+        duplicates_merged = original_entity_count - len(all_entities)
+        logger.info(f"✓ Deduplicated {original_entity_count} → {len(all_entities)} entities ({duplicates_merged} merged)")
+
+        # Stage 5: Conflict Resolution (Relationship Conflicts)
+        logger.info("Resolving relationship conflicts...")
+        original_rel_count = len(all_relations)
+        all_relations = self.conflict_resolver.resolve_relationship_conflicts(all_relations)
+        conflicts_resolved = original_rel_count - len(all_relations)
+        logger.info(f"✓ Resolved {original_rel_count} → {len(all_relations)} relationships ({conflicts_resolved} conflicts)")
+
+        # Stage 6: Schema Validation
+        logger.info("Validating against schema...")
+        all_entities, invalid_entities = self.conflict_resolver.validate_against_schema(
+            all_entities, strict=False  # Allow entities not in schema with warning
+        )
+        if invalid_entities:
+            logger.warning(f"Found {len(invalid_entities)} entities not matching schema")
+
+        # Update conflict resolution stats
+        self.ingestion_stats["conflicts_resolved"] = duplicates_merged + conflicts_resolved
+
+        # Stage 7: Graph Construction
         logger.info("Building knowledge graph...")
         nodes_created, edges_created = self._build_knowledge_graph(all_entities, all_relations)
         logger.info(f"✓ Created {nodes_created} nodes and {edges_created} edges")
 
-        # Stage 5: Vector Indexing
+        # Stage 8: Vector Indexing
         logger.info("Building vector index...")
         vectors_created = self._build_vector_index(documents, all_entities, document_metadata)
         logger.info(f"✓ Indexed {vectors_created} vectors")
 
         # Update stats
         self.ingestion_stats["documents_processed"] += len(documents)
-        self.ingestion_stats["entities_extracted"] += len(all_entities)
-        self.ingestion_stats["relations_extracted"] += len(all_relations)
+        self.ingestion_stats["entities_extracted"] += original_entity_count
+        self.ingestion_stats["entities_after_dedup"] += len(all_entities)
+        self.ingestion_stats["relations_extracted"] += original_rel_count
+        self.ingestion_stats["relations_after_resolution"] += len(all_relations)
         self.ingestion_stats["nodes_created"] += nodes_created
         self.ingestion_stats["edges_created"] += edges_created
 

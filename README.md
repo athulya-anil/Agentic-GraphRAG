@@ -15,7 +15,9 @@ Instead of hard-coding schemas and extraction rules, **AI agents do all the work
 - **SchemaAgent** analyzes your documents and infers the optimal graph structure
 - **EntityAgent** extracts entities using hybrid NER (spaCy) + LLM reasoning
 - **RelationAgent** identifies meaningful relationships between entities
-- **OrchestratorAgent** intelligently routes queries to the best retrieval strategy
+- **ConflictResolutionAgent** deduplicates entities and validates relationships
+- **OrchestratorAgent** intelligently routes queries with failure-aware logic
+- **GraphFailurePredictor** predicts when graph retrieval will fail
 - **ReflectionAgent** continuously evaluates and improves system performance
 
 This creates a **schema-agnostic, self-improving knowledge graph system** that works on any domain—medical literature, legal documents, technical manuals, research papers, and more.
@@ -28,20 +30,42 @@ No need to predefine node types or relationship types. The SchemaAgent analyzes 
 - Relationship types (e.g., TREATS, CAUSES, DIAGNOSED_BY)
 - Property schemas for each entity type
 
-### 2. **Intelligent Multi-Strategy Retrieval**
+### 2. **Intelligent Query Routing with Failure Prediction**
 The OrchestratorAgent dynamically chooses between:
 - **Vector Search**: Semantic similarity for conceptual questions
 - **Graph Traversal**: Relational queries leveraging knowledge structure
-- **Hybrid Retrieval**: Combines both approaches with learned weights
 
-### 3. **Self-Optimization Loop**
-The ReflectionAgent uses RAGAS metrics to:
-- Evaluate answer quality (faithfulness, relevancy)
-- Assess context precision and recall
-- Adjust retrieval strategies based on performance
-- Suggest schema improvements
+The system uses **failure-aware routing** to avoid graph retrieval for high-risk queries:
+- Temporal queries (weather, "now", "current") → vector search
+- Contact info (phone numbers, addresses) → vector search
+- Unknown entity relationships → entity validation first
 
-### 4. **Production-Ready Architecture**
+The routing decision adapts based on historical performance—if one strategy consistently outperforms another for similar queries, the system learns to prefer it.
+
+### 3. **Performance-Aware Adaptive System**
+The ReflectionAgent evaluates every response using RAGAS metrics:
+- **Faithfulness**: Is the answer grounded in retrieved context?
+- **Answer Relevancy**: Does it address the query?
+- **Context Precision**: Was the retrieved context relevant?
+- **Context Recall**: Was all necessary context retrieved?
+
+This creates a feedback loop where:
+- Performance scores are recorded per retrieval strategy
+- OrchestratorAgent adjusts routing based on historical success rates
+- Failure patterns are analyzed to identify systemic issues
+- Schema refinements and parameter adjustments are suggested for human review
+
+### 4. **Multi-Stage Ingestion Pipeline**
+8-stage ingestion with validation and conflict resolution:
+- Parse → Extract entities → Extract relations → Validate entities
+- Validate relations → Resolve conflicts → Store graph → Store vectors
+
+The ConflictResolutionAgent handles:
+- Entity deduplication (same entity, different names)
+- Relationship conflict resolution (contradictory facts)
+- Property normalization and cleaning
+
+### 5. **Production-Ready Architecture**
 - Robust error handling with automatic retry logic
 - Batch operations for efficient large-scale processing
 - Type-safe configuration with Pydantic validation
@@ -83,12 +107,12 @@ The ReflectionAgent uses RAGAS metrics to:
                 │  (Query Router)        │
                 └───────────┬────────────┘
                             │
-        ┌───────────────────┼───────────────────┐
-        │                   │                   │
-┌───────▼────────┐  ┌───────▼────────┐  ┌──────▼──────┐
-│ Vector Search  │  │ Graph Traversal│  │   Hybrid    │
-└───────┬────────┘  └───────┬────────┘  └──────┬──────┘
-        └───────────────────┼───────────────────┘
+              ┌─────────────┴─────────────┐
+              │                           │
+      ┌───────▼────────┐         ┌───────▼────────┐
+      │ Vector Search  │         │ Graph Traversal│
+      └───────┬────────┘         └───────┬────────┘
+              └─────────────┬─────────────┘
                             │
                 ┌───────────▼────────────┐
                 │   ReflectionAgent      │
@@ -112,11 +136,13 @@ The ReflectionAgent uses RAGAS metrics to:
 agentic-graphrag/
 ├── src/
 │   ├── agents/           # Multi-agent implementations
-│   │   ├── schema_agent.py       # Schema inference from documents
-│   │   ├── entity_agent.py       # Entity extraction (NER + LLM)
-│   │   ├── relation_agent.py     # Relationship extraction
-│   │   ├── orchestrator_agent.py # Query routing logic
-│   │   └── reflection_agent.py   # Performance evaluation
+│   │   ├── schema_agent.py             # Schema inference from documents
+│   │   ├── entity_agent.py             # Entity extraction (NER + LLM)
+│   │   ├── relation_agent.py           # Relationship extraction
+│   │   ├── conflict_resolution_agent.py # Entity deduplication & validation
+│   │   ├── orchestrator_agent.py       # Query routing with failure-aware logic
+│   │   ├── failure_predictor.py        # Graph failure risk prediction
+│   │   └── reflection_agent.py         # Performance evaluation
 │   ├── graph/            # Neo4j graph database layer
 │   │   └── neo4j_manager.py      # CRUD operations, schema management
 │   ├── vector/           # Vector store implementation
@@ -162,31 +188,53 @@ Identifies and extracts relationships:
 - Confidence scoring for each relationship
 - Temporal and conditional relationship handling
 
+### **ConflictResolutionAgent**
+Ensures knowledge graph consistency and quality:
+- Entity deduplication using semantic similarity + LLM reasoning
+- Detects entities that are the same despite different names
+- Relationship conflict resolution (handles contradictory facts)
+- Property normalization and type validation
+- Maintains entity merge history for transparency
+
 ### **OrchestratorAgent**
-Routes queries to optimal retrieval strategy:
-- Query classification (factual vs. conceptual)
-- Strategy selection (vector/graph/hybrid)
-- Dynamic weight adjustment for hybrid retrieval
-- Response synthesis from multiple sources
+Routes queries to optimal retrieval strategy with adaptive learning:
+- Query classification (factual, conceptual, relational, exploratory)
+- Failure-aware routing (avoids graph for temporal/contact queries)
+- Strategy selection (vector or graph) based on query type + risk
+- Performance tracking per strategy (rolling window of last 100 queries)
+- Automatic strategy switching when one outperforms another by >15%
+- Response synthesis from retrieved context
+
+### **GraphFailurePredictor**
+Predicts when graph retrieval is likely to fail:
+- Rule-based risk scoring for temporal queries (weather, "now", "current")
+- Contact info detection (phone numbers, addresses)
+- Relationship queries with unknown entities
+- Risk levels: HIGH (avoid graph), MODERATE (validate first), LOW (use graph)
 
 ### **ReflectionAgent**
-Evaluates and improves system performance:
+Evaluates system performance and provides actionable feedback:
 - RAGAS metric computation (faithfulness, relevancy, precision, recall)
-- Identifies failure patterns
-- Suggests schema refinements
-- Triggers retraining or parameter adjustment
+- Failure pattern analysis (which queries/metrics are failing)
+- Performance trend monitoring (recent vs. historical)
+- Schema refinement suggestions via LLM
+- Improvement recommendations based on metric patterns
+
+*Note: The ReflectionAgent identifies issues and suggests improvements for human review—it does not automatically retrain models or modify parameters.*
 
 ## 🎓 Research Contributions
 
 This project advances the state-of-the-art in several areas:
 
-1. **Autonomous Knowledge Graph Construction**: Traditional KG construction requires domain experts to define schemas. Our approach automates this using LLM-powered agents.
+1. **Autonomous Knowledge Graph Construction**: Traditional KG construction requires domain experts to define schemas. Our approach automates this using LLM-powered agents that infer structure from documents.
 
-2. **Adaptive Multi-Strategy Retrieval**: Most RAG systems use fixed retrieval strategies. Our OrchestratorAgent learns when to use vector search vs. graph traversal vs. hybrid approaches.
+2. **Adaptive Query Routing**: Most RAG systems use fixed retrieval strategies. Our OrchestratorAgent learns when to use vector search vs. graph traversal based on historical performance data.
 
-3. **Self-Improving RAG Systems**: The ReflectionAgent creates a feedback loop for continuous improvement, making the system more accurate over time without human intervention.
+3. **RAGAS-Based Performance Feedback**: The ReflectionAgent creates a feedback loop where performance metrics inform routing decisions and surface actionable improvement suggestions.
 
-4. **Domain-Agnostic Design**: Unlike domain-specific solutions, this architecture works across any document corpus—from medical research to legal documents to technical manuals.
+4. **Domain-Agnostic Design**: Unlike domain-specific solutions (e.g., biomedical KG systems requiring UMLS/MeSH), this architecture works across any document corpus without predefined ontologies.
+
+5. **End-to-End Agentic System**: Goes beyond KG construction to include intelligent retrieval and query answering—a complete pipeline from documents to answers.
 
 ## 💡 Use Cases
 

@@ -17,6 +17,7 @@ from enum import Enum
 
 from ..utils.llm_client import get_llm_client
 from ..utils.config import get_config
+from .failure_predictor import get_failure_predictor
 
 
 # Configure logging
@@ -57,6 +58,7 @@ class OrchestratorAgent:
         """Initialize the OrchestratorAgent."""
         self.llm_client = get_llm_client()
         self.config = get_config()
+        self.failure_predictor = get_failure_predictor()
 
         # Performance tracking for adaptive learning
         self.strategy_performance: Dict[str, List[float]] = {
@@ -65,7 +67,7 @@ class OrchestratorAgent:
             "hybrid": []
         }
 
-        logger.info("Initialized OrchestratorAgent")
+        logger.info("Initialized OrchestratorAgent with failure-aware routing")
 
     def route_query(
         self,
@@ -189,7 +191,7 @@ Return JSON:
         available_strategies: List[str]
     ) -> RetrievalStrategy:
         """
-        Select the optimal retrieval strategy (GRAPH or VECTOR only).
+        Select the optimal retrieval strategy with failure-aware routing.
 
         Args:
             query: User query
@@ -200,11 +202,21 @@ Return JSON:
         Returns:
             Selected RetrievalStrategy (GRAPH or VECTOR)
         """
-        # Strategy selection logic based on query type and analysis
-        # ONLY GRAPH or VECTOR - no hybrid
+        # STEP 1: Check for high failure risk (temporal, contact info, etc.)
+        should_avoid_graph, failure_reasoning = self.failure_predictor.should_avoid_graph(
+            query, threshold=0.6
+        )
 
+        if should_avoid_graph:
+            logger.info(
+                f"Avoiding graph for query (risk: {failure_reasoning['risk_level']}): "
+                f"{', '.join(failure_reasoning['risk_factors'])}"
+            )
+            return RetrievalStrategy.VECTOR
+
+        # STEP 2: Standard strategy selection based on query type
         if query_type == QueryType.RELATIONAL:
-            # Relational queries always use graph traversal
+            # Relational queries use graph traversal
             preferred = RetrievalStrategy.GRAPH
         elif query_type == QueryType.FACTUAL:
             # Factual queries: check if relationships needed
@@ -222,17 +234,18 @@ Return JSON:
             else:
                 preferred = RetrievalStrategy.VECTOR
 
-        # Ensure strategy is available, fallback to vector if needed
+        # STEP 3: Ensure strategy is available
         if preferred.value not in available_strategies:
             if "vector" in available_strategies:
                 preferred = RetrievalStrategy.VECTOR
             elif "graph" in available_strategies:
                 preferred = RetrievalStrategy.GRAPH
 
-        # Consider historical performance (adaptive learning)
+        # STEP 4: Consider historical performance (adaptive learning)
         if self._has_performance_data():
             adjusted_strategy = self._adjust_based_on_performance(preferred, available_strategies)
             if adjusted_strategy:
+                logger.info(f"Adjusted strategy based on performance: {preferred.value} → {adjusted_strategy.value}")
                 preferred = adjusted_strategy
 
         return preferred

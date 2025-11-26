@@ -1,0 +1,265 @@
+{
+  "analysis": {
+    "total_failures": 19,
+    "categorized": [
+      {
+        "query": "arcadis phone number",
+        "query_id": "1100403",
+        "category": "contact_info",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": [
+          "contact"
+        ]
+      },
+      {
+        "query": "phone number to cancel sirius xm",
+        "query_id": "474873",
+        "category": "contact_info",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": [
+          "contact"
+        ]
+      },
+      {
+        "query": "where is csf reabsorbed into the blood",
+        "query_id": "980811",
+        "category": "location_lookup",
+        "has_temporal": false,
+        "has_location": true,
+        "has_relationship": false,
+        "has_entity_lookup": true,
+        "keywords": [
+          "location",
+          "entity_lookup"
+        ]
+      },
+      {
+        "query": "how does Electroconvulsive therapy treat ocd",
+        "query_id": "224626",
+        "category": "other",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": []
+      },
+      {
+        "query": "what countries does the us export wheat to",
+        "query_id": "601624",
+        "category": "other",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": []
+      },
+      {
+        "query": "how many reps does missouri have",
+        "query_id": "1096712",
+        "category": "other",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": []
+      },
+      {
+        "query": "what blood stream messenger",
+        "query_id": "579133",
+        "category": "other",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": []
+      },
+      {
+        "query": "is hctz safe for kidneys",
+        "query_id": "411953",
+        "category": "other",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": []
+      },
+      {
+        "query": "are florida mangroves protected",
+        "query_id": "22479",
+        "category": "other",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": []
+      },
+      {
+        "query": "largest onion producers",
+        "query_id": "1093556",
+        "category": "other",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": []
+      },
+      {
+        "query": "botulism symptoms diagnosis and treatment",
+        "query_id": "55682",
+        "category": "other",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": []
+      },
+      {
+        "query": "what drugs treat uti in dogs",
+        "query_id": "1082339",
+        "category": "relationship",
+        "has_temporal": false,
+        "has_location": true,
+        "has_relationship": true,
+        "has_entity_lookup": false,
+        "keywords": [
+          "location",
+          "relationship"
+        ]
+      },
+      {
+        "query": "who authored desperation",
+        "query_id": "992257",
+        "category": "relationship",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": true,
+        "has_entity_lookup": false,
+        "keywords": [
+          "relationship"
+        ]
+      },
+      {
+        "query": "who was catherine ii russia",
+        "query_id": "986935",
+        "category": "relationship",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": true,
+        "has_entity_lookup": false,
+        "keywords": [
+          "relationship"
+        ]
+      },
+      {
+        "query": "who is the president of switzerland?",
+        "query_id": "1041473",
+        "category": "relationship",
+        "has_temporal": false,
+        "has_location": false,
+        "has_relationship": true,
+        "has_entity_lookup": true,
+        "keywords": [
+          "relationship",
+          "entity_lookup"
+        ]
+      },
+      {
+        "query": "weather in greek isles may",
+        "query_id": "1088512",
+        "category": "temporal",
+        "has_temporal": true,
+        "has_location": true,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": [
+          "weather",
+          "location"
+        ]
+      },
+      {
+        "query": "weather in new york city ny",
+        "query_id": "1088347",
+        "category": "temporal",
+        "has_temporal": true,
+        "has_location": true,
+        "has_relationship": false,
+        "has_entity_lookup": false,
+        "keywords": [
+          "weather",
+          "location"
+        ]
+      },
+      {
+        "query": "who is the president of the republic of texas right now mark smith",
+        "query_id": "988653",
+        "category": "temporal",
+        "has_temporal": true,
+        "has_location": false,
+        "has_relationship": true,
+        "has_entity_lookup": true,
+        "keywords": [
+          "now",
+          "relationship",
+          "entity_lookup"
+        ]
+      },
+      {
+        "query": "cortana what is the weather in whitefish montana",
+        "query_id": "100046",
+        "category": "temporal",
+        "has_temporal": true,
+        "has_location": true,
+        "has_relationship": false,
+        "has_entity_lookup": true,
+        "keywords": [
+          "weather",
+          "location",
+          "entity_lookup"
+        ]
+      }
+    ],
+    "category_counts": {
+      "temporal": 4,
+      "relationship": 4,
+      "contact_info": 2,
+      "other": 8,
+      "location_lookup": 1
+    }
+  },
+  "rules": [
+    {
+      "name": "temporal_query",
+      "condition": "has_temporal",
+      "confidence": 0.21052631578947367,
+      "action": "avoid_graph",
+      "reason": "Temporal queries require real-time data, static KG will fail"
+    },
+    {
+      "name": "contact_info",
+      "condition": "contains phone/number/address",
+      "confidence": 0.10526315789473684,
+      "action": "avoid_graph",
+      "reason": "Contact info rarely in KG, use vector for document search"
+    },
+    {
+      "name": "relationship_with_risk",
+      "condition": "relationship query but unknown entity",
+      "confidence": 0.21052631578947367,
+      "action": "check_entity_exists",
+      "reason": "Relationship queries good for graph, but only if entities exist"
+    },
+    {
+      "name": "entity_lookup",
+      "condition": "asks about entity attribute",
+      "confidence": 0.05263157894736842,
+      "action": "check_entity_coverage",
+      "reason": "Entity lookups fail if entity not in KG"
+    }
+  ]
+}
