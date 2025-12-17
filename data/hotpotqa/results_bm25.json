@@ -1,0 +1,1502 @@
+[
+  {
+    "query_id": "5ae705725542995703ce8bbc",
+    "question": "Come from the Heart:was first recorded by an artist that sang what genre of music?",
+    "gold_answer": "country",
+    "predicted_answer": "Country music.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Siti binti Saad",
+      "Collins &amp; Harlan",
+      "Making Memories of Us",
+      "Statue of a Fool",
+      "The Strictly"
+    ]
+  },
+  {
+    "query_id": "5a75321555429916b0164290",
+    "question": "What is the title of the person who is Head of the Department of Biological Sciences at the University of Lincoln",
+    "gold_answer": "Doctor",
+    "predicted_answer": "Not mentioned in context.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Animal Demography Unit",
+      "David M. Sever",
+      "William McGinnis",
+      "Richard W. Aldrich",
+      "Eric Sundquist"
+    ]
+  },
+  {
+    "query_id": "5ab85b1755429916710eb041",
+    "question": "Which mathematician worked with algebraic geometry instead of probability theory, Askold Khovanskii or Andrey Kolmogorov?",
+    "gold_answer": "Askold Georgievich Khovanskii",
+    "predicted_answer": "Askold Khovanskii.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Askold Khovanskii",
+      "Probability axioms",
+      "Chapman\u2013Kolmogorov equation",
+      "Kolmogorov's inequality",
+      "Andrey Kolmogorov"
+    ]
+  },
+  {
+    "query_id": "5a88b3b4554299206df2b336",
+    "question": "What type of art does The Consul and Arlecchino have in common?",
+    "gold_answer": "music",
+    "predicted_answer": "Street art",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Ekaterina Semenikhin",
+      "Vladimir Semenikhin",
+      "Street art",
+      "Herding Group",
+      "Trial of Trebonius"
+    ]
+  },
+  {
+    "query_id": "5ab85a1155429934fafe6d7c",
+    "question": "Are both Rutgers University and Carnegie Mellon University located in America?",
+    "gold_answer": "yes",
+    "predicted_answer": "Yes, both are.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Carnegie Mellon University in Qatar",
+      "David S. Touretzky",
+      "Jeff Friedman",
+      "Mellon College of Science",
+      "Carnegie Mellon University"
+    ]
+  },
+  {
+    "query_id": "5a8de5d55542995085b3734d",
+    "question": "Are Even and Incubus known for their skill in classical music?",
+    "gold_answer": "no",
+    "predicted_answer": "No, they are not.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Holdout (gambling)",
+      "Time Lapse Consortium",
+      "Classical music in Kosovo",
+      "Miss May I",
+      "Ali Akbar Khan"
+    ]
+  },
+  {
+    "query_id": "5addffff5542992200553bdd",
+    "question": "How many Academy Awards did the film, in which Jimmy Bryant provided the singing voice for the character Tony, win ?",
+    "gold_answer": "10",
+    "predicted_answer": "There is no information about this.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Scar (Disney)",
+      "David Acord",
+      "2-D (character)",
+      "Hubert Gagnon",
+      "Togusa"
+    ]
+  },
+  {
+    "query_id": "5a7555215542996c70cfaee1",
+    "question": "Which came to market first, \"Hey Pa! There's a Goat on the Roof\" or \"Poleconomy\"",
+    "gold_answer": "Hey Pa! There's a Goat on the Roof",
+    "predicted_answer": "There's no \"Poleconomy\".",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Hey Pa! There's a Goat on the Roof",
+      "Vetigel",
+      "The Goat and Her Three Kids",
+      "1992 DFB-Pokal Final",
+      "Bukkehorn"
+    ]
+  },
+  {
+    "query_id": "5abf12f25542997719eab667",
+    "question": "Are McFarland, USA and The Black Hole both sports films?",
+    "gold_answer": "no",
+    "predicted_answer": "No, only McFarland.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "McFarland, USA",
+      "Team Hole in the Wall",
+      "Jon Prusmack",
+      "Mos Def &amp; Talib Kweli Are Black Star",
+      "Black Star (rap duo)"
+    ]
+  },
+  {
+    "query_id": "5a8fae205542997ba9cb32ec",
+    "question": " What type of television show did Dylan Everett star in, in 2015?",
+    "gold_answer": "American-Canadian mystery-drama",
+    "predicted_answer": "Drama, \"Open Heart\"",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Dean Winchester",
+      "Jonathan Routh",
+      "Dylan Kussman",
+      "The Paul Hogan Show",
+      "Dylan Everett"
+    ]
+  },
+  {
+    "query_id": "5ab6d9b25542995eadef00c8",
+    "question": "Which opera has more acts, Don Quichotte or Tosca?",
+    "gold_answer": "Don Quichotte",
+    "predicted_answer": "Don Quichotte has five acts.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Don Quichotte",
+      "Don Quichotte auf der Hochzeit des Comacho",
+      "The Midsummer Marriage",
+      "Der Schatzgr\u00e4ber",
+      "Armida (Dvo\u0159\u00e1k)"
+    ]
+  },
+  {
+    "query_id": "5ae3790f5542992e3233c415",
+    "question": "Are Leopold Lummerstorfer and Valeria Sarmiento both authors?",
+    "gold_answer": "no",
+    "predicted_answer": "Only Leopold is mentioned as author.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Leopold Lummerstorfer",
+      "Valeria Sarmiento",
+      "Ernst Ludwig von Gerlach",
+      "Cash (2008 film)",
+      "Archduke Friedrich of Austria (1821\u20131847)"
+    ]
+  },
+  {
+    "query_id": "5a81028b55429938b614228a",
+    "question": "For which film did the Director team with NASA scientists, Aliens of the Deep or Poetry in Motion?",
+    "gold_answer": "Aliens of the Deep",
+    "predicted_answer": "Aliens of the Deep.",
+    "em": 1,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Aliens of the Deep",
+      "Pat Boran",
+      "John M. Grunsfeld",
+      "The Poetry Collection",
+      "As One (film)"
+    ]
+  },
+  {
+    "query_id": "5ac170af5542994d76dcce20",
+    "question": "Which of the singers has more things to be known for, Greg Puciato or Syd Barrett?",
+    "gold_answer": "Gregory John \"Greg\" Puciato",
+    "predicted_answer": "Syd Barrett.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Obsessive\u2013compulsive disorder",
+      "Pen name",
+      "Handicraft",
+      "Vernacular photography",
+      "An Introduction to Syd Barrett"
+    ]
+  },
+  {
+    "query_id": "5ac2a3c7554299218029dadb",
+    "question": "Which genus has more species in it, Othonna or Stangeria?",
+    "gold_answer": "Othonna",
+    "predicted_answer": "Psychotria has, but not among options.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Othonna",
+      "Othonna capensis",
+      "Dactylis",
+      "Pison",
+      "Psychotria"
+    ]
+  },
+  {
+    "query_id": "5a7a633a55429941d65f2609",
+    "question": "Who was born last, Dave Peverett or Jang Hyun-seung?",
+    "gold_answer": "Jang Hyun-seung",
+    "predicted_answer": "Jang Hyuk.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Family Joules",
+      "Rivers Jobe",
+      "Dave Peverett",
+      "Windstruck",
+      "Dreamland (amusement park)"
+    ]
+  },
+  {
+    "query_id": "5abb8afe5542993f40c73b1e",
+    "question": "Were both Roger Donaldson and Andr\u00e9 Cayatte french filmmakers?",
+    "gold_answer": "no",
+    "predicted_answer": "No, only Andr\u00e9 Cayatte.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "The Revenge of Roger",
+      "Stormy Waters (film)",
+      "Roger la Honte (1946 film)",
+      "Andr\u00e9 Cayatte",
+      "Roger Donaldson"
+    ]
+  },
+  {
+    "query_id": "5a8af1e255429950cd6afc28",
+    "question": "Who is the English Professional Footballer that is the niece of a former footballer born in the same place as where he plays? ",
+    "gold_answer": "Trent Alexander-Arnold",
+    "predicted_answer": "There is no information about that.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Place of birth",
+      "Steven Gerrard",
+      "Theo Janssen",
+      "Allan Simonsen",
+      "Rub\u00e9n Paz"
+    ]
+  },
+  {
+    "query_id": "5a7ae38c5542992d025e6721",
+    "question": "Who was older when they died, Teinosuke Kinugasa or Don O. Newland",
+    "gold_answer": "Teinosuke Kinugasa",
+    "predicted_answer": "Teinosuke Kinugasa.",
+    "em": 1,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Teinosuke Kinugasa",
+      "A Page of Madness",
+      "Don O. Newland",
+      "O. C. Hackett",
+      "There Was an Old Lady Who Swallowed a Fly"
+    ]
+  },
+  {
+    "query_id": "5a82a1ae55429954d2e2eb89",
+    "question": "Between Aspidistra and Cyrtanthus, which genus of plant belongs to the Subfamily Amaryllidoideae?",
+    "gold_answer": "Cyrtanthus",
+    "predicted_answer": "Neither, Ipheion does.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Aspidistra",
+      "Aspidistra nikolaii",
+      "Sarracenia",
+      "Ipheion",
+      "Nepenthes chaniana"
+    ]
+  },
+  {
+    "query_id": "5ae383e15542992f92d822fb",
+    "question": "Which film is newer, The Apple Dumpling Gang or Heavyweights?",
+    "gold_answer": "Heavyweights",
+    "predicted_answer": "Heavyweights (1995) is newer.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Gun Shy (TV series)",
+      "The Apple Dumpling Gang (film)",
+      "The Apple Dumpling Gang Rides Again",
+      "The Apple Dumpling Gang",
+      "The Sasquatch Gang"
+    ]
+  },
+  {
+    "query_id": "5a76c98855429972597f13d0",
+    "question": "Near what ocean does the highway carried by the Long-Allen bridge terminate near?",
+    "gold_answer": "the Atlantic Ocean",
+    "predicted_answer": "Atlantic Ocean",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Ocean To Ocean Bridge",
+      "Rocky Creek Bridge No. 01089",
+      "Beesley's Point Bridge",
+      "Spanish River Boulevard",
+      "Walnut Street Bridge (Chattanooga)"
+    ]
+  },
+  {
+    "query_id": "5a886b7555429938390d3f4d",
+    "question": "When did the party inspired by Cacareco begin in Canada?",
+    "gold_answer": "1960s",
+    "predicted_answer": "There is no party inspired by Cacareco in Canada.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Cacareco",
+      "Mexican Fascist Party",
+      "Communist Party of Chile",
+      "Fine Gael Front Bench",
+      "Dumb and Dumberer: When Harry Met Lloyd"
+    ]
+  },
+  {
+    "query_id": "5a79d2fe5542994f819ef0c3",
+    "question": "Who was born first, Aleksandr Ivanovsky or Arthur Lubin?",
+    "gold_answer": "Aleksandr Ivanovsky",
+    "predicted_answer": "Aleksandr Ivanovsky.",
+    "em": 1,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Aleksandr Ivanovsky",
+      "Silva (film)",
+      "Peter Pan (1950 musical)",
+      "Aleksandr Adabashyan",
+      "Nanyue"
+    ]
+  },
+  {
+    "query_id": "5ab4774d5542991751b4d781",
+    "question": "Crash is similar to what 16th century British card game in the sense that there is no betting?",
+    "gold_answer": "In Crash, there is no betting, as in Brag",
+    "predicted_answer": "Nine-card Brag.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Crash (card game)",
+      "Egyptian Ratscrew",
+      "Put (card game)",
+      "Anything's Wild",
+      "\u00c9cart\u00e9"
+    ]
+  },
+  {
+    "query_id": "5a89e47f5542992e4fca8457",
+    "question": "The university where Rolf Martin Theodor Dahlgren worked as a professor has how many employees?",
+    "gold_answer": "9,000",
+    "predicted_answer": "Over 9,000 employees.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Rolf Dahlgren",
+      "Gertrud Dahlgren",
+      "Theodor von Heuglin",
+      "Rolf M. Zinkernagel",
+      "University of Copenhagen"
+    ]
+  },
+  {
+    "query_id": "5a835a265542992ef85e2281",
+    "question": "What industry does Edgar Selwyn and Chantal Akerman work in?",
+    "gold_answer": "theater and film",
+    "predicted_answer": "Film industry.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "La Captive",
+      "The Girl in the Show",
+      "Chantal Akerman",
+      "Edgar Selwyn",
+      "Jordan Selwyn"
+    ]
+  },
+  {
+    "query_id": "5a8b82a05542995d1e6f13d0",
+    "question": "Are University of Virginia and Massachusetts Institute of Technology in the same country?",
+    "gold_answer": "yes",
+    "predicted_answer": "Yes, they are.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Daniel Haber",
+      "RIT Kosovo",
+      "Nikolaos Mavridis",
+      "Alan H. Epstein",
+      "Flexible solar cell research"
+    ]
+  },
+  {
+    "query_id": "5adfecd755429942ec259b90",
+    "question": "What year was the magazine that Stanley Bing spent a decade at founded in?",
+    "gold_answer": "1933",
+    "predicted_answer": "Esquire, 1933.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Stanley Bing",
+      "The American Mercury",
+      "August Schynse",
+      "1998 Stanley Cup Finals",
+      "Freebie and the Bean"
+    ]
+  },
+  {
+    "query_id": "5a7aa0a55542990198eaf165",
+    "question": "Who was born first, Sathish Kalathil or Jacques Feyder?",
+    "gold_answer": "Jacques Feyder",
+    "predicted_answer": "Jacques Feyder.",
+    "em": 1,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Jalachhayam",
+      "Laloorinu Parayanullathu",
+      "Sathish Kalathil",
+      "Veena Vaadanam",
+      "People Who Travel (1938 German-language film)"
+    ]
+  },
+  {
+    "query_id": "5a8b3af455429971feec467b",
+    "question": "Blinding Edge Pictures produced which 2000 film starring Bruce Willis?",
+    "gold_answer": "Unbreakable",
+    "predicted_answer": "Unbreakable.",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Blinding Edge Pictures",
+      "Signs (film)",
+      "Daniel Boone, Trail Blazer",
+      "Out of a Clear Sky",
+      "Going Back (film)"
+    ]
+  },
+  {
+    "query_id": "5ae12bcc5542997b2ef7d11a",
+    "question": "Are Benjamin Britten and B\u00e9la Bart\u00f3k from the same country?",
+    "gold_answer": "no",
+    "predicted_answer": "No, different countries.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Palace of Music (Miskolc)",
+      "Zorian Quartet",
+      "B\u00e9la Bart\u00f3k Music High School",
+      "List of compositions by B\u00e9la Bart\u00f3k",
+      "String Quartet No. 6 (Bart\u00f3k)"
+    ]
+  },
+  {
+    "query_id": "5a70f0a75542994082a3e403",
+    "question": "Which dialect spoken in the province of Scania calls Spettekaka, \"spiddekaga\"?",
+    "gold_answer": "Scanian dialects",
+    "predicted_answer": "Scanian dialect.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Scanian dialect",
+      "Nagoya dialect",
+      "Mikawa dialect",
+      "Pahang Malay",
+      "Hakata dialect"
+    ]
+  },
+  {
+    "query_id": "5a8f51185542992414482a3d",
+    "question": "The primary jockey of Binocular was Champion Jockey how many consecutive times?",
+    "gold_answer": "20",
+    "predicted_answer": "Not provided in context.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "German flat racing Champion Jockey",
+      "Irish flat racing Champion Jockey",
+      "Irish jump racing Champion Jockey",
+      "British flat racing Champion Jockey",
+      "Fred Winter"
+    ]
+  },
+  {
+    "query_id": "5abe535055429976d4830aea",
+    "question": "Where is the transportation company that owns Talbot based in?",
+    "gold_answer": "Montreal",
+    "predicted_answer": "Not mentioned in context.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Ukrtatnafta",
+      "Brisa \u2013 Auto-estradas de Portugal",
+      "Istad",
+      "Shaver Transportation Company",
+      "Sinclair Broadcast Group"
+    ]
+  },
+  {
+    "query_id": "5ac370ce5542995ef918c18c",
+    "question": "Are Southwest Florida International Airport and Henry E. Rohlsen Airport both in Florida?",
+    "gold_answer": "no",
+    "predicted_answer": "No, one is not.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Fort Myers, Florida",
+      "Henry E. Rohlsen Airport",
+      "Southwest Florida International Airport",
+      "Hummingbird Air",
+      "New Gen Airways"
+    ]
+  },
+  {
+    "query_id": "5a88f7855542993b751ca8da",
+    "question": "In what year did a movie that starred both Nicholas Cage and Cher come out? ",
+    "gold_answer": "1987",
+    "predicted_answer": "Not mentioned in context.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Lucie Memba",
+      "Us (film)",
+      "Nicholas Mele",
+      "2012 in Cage Warriors",
+      "Lucecita"
+    ]
+  },
+  {
+    "query_id": "5a8f799d55429918e830d22d",
+    "question": "Which genus has the most number of species, Myrsine or Styrax?",
+    "gold_answer": "Myrsine",
+    "predicted_answer": "Myrsine, with 200 species.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Myrsine",
+      "Nomascus",
+      "Sparganophilus",
+      "Taningia",
+      "Anthriscus"
+    ]
+  },
+  {
+    "query_id": "5ab9bb8355429970cfb8eb8b",
+    "question": "At what school is the individual who was awarded the 2012 Nobel Prize in Physics, jointly with David J. Wineland, a professor?",
+    "gold_answer": "Coll\u00e8ge de France",
+    "predicted_answer": "Coll\u00e8ge de France",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "David J. Wineland",
+      "Serge Haroche",
+      "List of female Nobel laureates",
+      "Brian Josephson",
+      "Nobel Prize in Literature"
+    ]
+  },
+  {
+    "query_id": "5ae81032554299540e5a572a",
+    "question": "Which satellite suburb of Melbourne is partially included in the Electoral district of Bass?",
+    "gold_answer": "Pakenham",
+    "predicted_answer": "Pakenham.",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Electoral district of Emerald Hill",
+      "Division of McMillan",
+      "Electoral district of Tullamarine",
+      "Electoral district of Nunawading",
+      "Pakenham, Victoria"
+    ]
+  },
+  {
+    "query_id": "5a8ad6db55429950cd6afba7",
+    "question": "What field of study is related to Ovamir Anjum's work and is known as Islamic mysticism?",
+    "gold_answer": "Sufism",
+    "predicted_answer": "Sufism.",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Ovamir Anjum",
+      "Madonna Studies",
+      "Islamic Foundation Bangladesh",
+      "Animality studies",
+      "Girl studies"
+    ]
+  },
+  {
+    "query_id": "5adf39295542992d7e9f92df",
+    "question": "Which genus has more species, Apium or Elodea?",
+    "gold_answer": "Apium",
+    "predicted_answer": "Apium has more species.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Dactylis",
+      "Taningia",
+      "Festuca gigantea",
+      "Apium annuum",
+      "Scaevola (plant)"
+    ]
+  },
+  {
+    "query_id": "5abced075542993a06baf9ac",
+    "question": "What time did the show, in which Gordon Burns was the host, usually air on Monday?",
+    "gold_answer": "7pm",
+    "predicted_answer": "7pm",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Burns Park (Detroit, Michigan)",
+      "The Krypton Factor",
+      "Brabham BT55",
+      "Ann D. Gordon",
+      "Gordon Burns"
+    ]
+  },
+  {
+    "query_id": "5a8241a855429940e5e1a819",
+    "question": "The Sports Museum is a non-profit museum currently located in what multi-purpose arena that opened in 1995?",
+    "gold_answer": "TD Garden",
+    "predicted_answer": "TD Garden",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Valga Sports Hall",
+      "Sadolin Sports Hall",
+      "TT\u00dc Sports Hall",
+      "P\u00e4rnu Sports Hall",
+      "The Sports Museum"
+    ]
+  },
+  {
+    "query_id": "5a8408a9554299123d8c21d3",
+    "question": "Which Canadian artist is credited with first coming up with the title of Various Positions?",
+    "gold_answer": "Leonard Cohen",
+    "predicted_answer": "Leonard Cohen",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Infamous (film)",
+      "Chandan Prabhakar",
+      "List of Billboard 200 number-one albums of 2002",
+      "Various Positions (film)",
+      "Next to You (Chris Brown song)"
+    ]
+  },
+  {
+    "query_id": "5a7296815542991f9a20c515",
+    "question": "Who brewed the first espresso coffee in space, Patrick Baudry or Samantha Cristoforetti?",
+    "gold_answer": "Samantha Cristoforetti",
+    "predicted_answer": "Samantha Cristoforetti.",
+    "em": 1,
+    "type": "comparison",
+    "retrieved_titles": [
+      "ISSpresso",
+      "Samantha Cristoforetti",
+      "Espresso",
+      "Patrick Baudry",
+      "Easy Serving Espresso Pod"
+    ]
+  },
+  {
+    "query_id": "5a85a2845542997175ce1fe1",
+    "question": "Are both Aloinopsis and Eriogonum ice plants?",
+    "gold_answer": "no",
+    "predicted_answer": "No, only Aloinopsis.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Aloinopsis",
+      "Dwyer Arena",
+      "Eriogonum",
+      "Chocolate Shoppe Ice Cream Company",
+      "Eriogonum heracleoides"
+    ]
+  },
+  {
+    "query_id": "5ab870ee5542990e739ec8f6",
+    "question": "A Wind in the Door is part of a series written by who?",
+    "gold_answer": "Madeleine L'Engle",
+    "predicted_answer": "Madeleine L'Engle",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "A Wind in the Door",
+      "A Tale of Two Toads",
+      "Close the Last Door",
+      "Kaze no Stigma",
+      "The Four Winds of Love"
+    ]
+  },
+  {
+    "query_id": "5ac09d265542992a796ded39",
+    "question": "Erving Goffman was cited as higher than a literary critic on which guide?",
+    "gold_answer": "The Times Higher Education Guide",
+    "predicted_answer": "The Times Higher Education Guide",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Goffman (disambiguation)",
+      "Dramaturgy (sociology)",
+      "Erving Goffman",
+      "Impression management",
+      "The Presentation of Self in Everyday Life"
+    ]
+  },
+  {
+    "query_id": "5ae39e9c5542990afbd1e195",
+    "question": "Wangaratta Wahine, an album featuring the work of an Australian Living Treasure, was recorded by what band?",
+    "gold_answer": "The Captain Matchbox Whoopee Band",
+    "predicted_answer": "The Captain Matchbox Whoopee Band",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Wangaratta Wahine",
+      "Mavis Taylor",
+      "One Step Beyond (Dungeon album)",
+      "Lonerism",
+      "Basie on the Beatles"
+    ]
+  },
+  {
+    "query_id": "5a844fd35542990548d0b274",
+    "question": "What occupation did Nicholas Christopher and Roger Ebert share?",
+    "gold_answer": "author",
+    "predicted_answer": "Film critic.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "RogerEbert.com",
+      "Ebert Presents: At the Movies",
+      "At the Movies (U.S. TV series)",
+      "Roger Ebert",
+      "At the Movies (1982\u201390 TV series)"
+    ]
+  },
+  {
+    "query_id": "5a7f244255429934daa2fcec",
+    "question": "St. John's College, Belize offers an education in a tradition in which what three subjects were the core?",
+    "gold_answer": "Grammar, logic, and rhetoric",
+    "predicted_answer": "Liberal arts and science.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "St. John's College, Belize",
+      "List of St. John's Seminary (California) people",
+      "St. John's Mine",
+      "Belizean municipal elections, 1989\u201391",
+      "Jack Kaiser"
+    ]
+  },
+  {
+    "query_id": "5ac31ad4554299741d48a1ee",
+    "question": "Are Ainslee's Magazine and The Australian Women's Weekly both monthly magazines?",
+    "gold_answer": "yes",
+    "predicted_answer": "Only The Australian Women's Weekly.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Josh Earl",
+      "The Australian Women's Weekly",
+      "Blue's Country Magazine",
+      "M Magazine",
+      "New South Wales Women's Rugby League"
+    ]
+  },
+  {
+    "query_id": "5ab6d04c554299710c8d1f70",
+    "question": "What family are the genus' Sinofranchetia and Stauntonia from?",
+    "gold_answer": "a genus of flowering plant in the Lardizabalaceae family",
+    "predicted_answer": "Lardizabalaceae",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Sinofranchetia",
+      "Nationality",
+      "Stauntonia",
+      "Now That's What I Call Music! 20 (UK series)",
+      "Elephant"
+    ]
+  },
+  {
+    "query_id": "5adbe1b355429944faac23a0",
+    "question": "Who wrote shorter stories, Raymond Carver or Lydia Davis?",
+    "gold_answer": "Lydia Davis",
+    "predicted_answer": "Raymond Carver.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Raymond Carver",
+      "Raymond Carver bibliography",
+      "Elephant (stories)",
+      "So Much Water So Close to Home",
+      "Where I'm Calling From"
+    ]
+  },
+  {
+    "query_id": "5a80caac554299260e20a161",
+    "question": "Were both Prince and Patty Jenkins have been inducted into the Rock and Roll Hall of Fame?",
+    "gold_answer": "no",
+    "predicted_answer": "No, only Prince was.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Leonard Cohen",
+      "My Generation",
+      "Doc Pomus",
+      "Music of Ohio",
+      "Rock &amp; Roll Hall of Fame Covers EP"
+    ]
+  },
+  {
+    "query_id": "5ab9d6ef5542994dbf01985b",
+    "question": "What country of origin does  Dana Ivey and Two Weeks Notice have in common?",
+    "gold_answer": "American",
+    "predicted_answer": "United States",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Two Weeks Notice",
+      "Dana Ivey",
+      "List of English words of French origin",
+      "Rules of origin",
+      "What Happens in Vegas"
+    ]
+  },
+  {
+    "query_id": "5ab846e155429919ba4e229c",
+    "question": "Who won more Grand Slam doubles titles, Tony Roche or Jamie Murray?",
+    "gold_answer": "Anthony Dalton Roche",
+    "predicted_answer": "Neither mentioned in context.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Yevgeny Kafelnikov",
+      "Martina Hingis",
+      "Helena Sukov\u00e1",
+      "Sergio Casal",
+      "Judy Tegart-Dalton"
+    ]
+  },
+  {
+    "query_id": "5ab3c270554299233954ff9e",
+    "question": "Midland F1 Racing was a racing team that, in 2007, competed under what name for sponsorship reasons?",
+    "gold_answer": "Spyker F1",
+    "predicted_answer": "Spyker F1 Team",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Midland F1 Racing",
+      "Spyker F1",
+      "Marussia F1",
+      "Colin Kolles",
+      "Spyker F8-VII"
+    ]
+  },
+  {
+    "query_id": "5ab207f65542993be8fa98b8",
+    "question": "Edmund Robert Harris is the principal benefactor of a museum located where ?",
+    "gold_answer": "Preston",
+    "predicted_answer": "Preston, Lancashire, UK.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Edmund Robert Harris",
+      "J. Robert Donnelly Husky Heritage Sports Museum",
+      "California Aqueduct",
+      "Edmund de Unger",
+      "Edmund Pevensie"
+    ]
+  },
+  {
+    "query_id": "5a7f96a95542995d8a8ddead",
+    "question": "IS Universidad de Oriente part of the same public university system as California State University, Dominguez Hills?",
+    "gold_answer": "no",
+    "predicted_answer": "No, different system.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "California State University, Dominguez Hills",
+      "Willie J. Hagan",
+      "University of California",
+      "California State University",
+      "Cal State Dominguez Hills Toros"
+    ]
+  },
+  {
+    "query_id": "5a80e468554299260e20a1a9",
+    "question": "Was Suzanne Chun Oakland a member of the upper of lower chamber of the Hawaii State Legislature?",
+    "gold_answer": "lower chamber",
+    "predicted_answer": "Upper chamber, the Hawaii Senate.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Suzanne Chun Oakland",
+      "Hawaii State Legislature",
+      "Hawaii Senate",
+      "Upper house",
+      "Oregon Territorial Legislature"
+    ]
+  },
+  {
+    "query_id": "5a88e75c5542993b751ca8c7",
+    "question": "Which of the following buildings was designed by SHoP Architects: 247 Cherry or General Motors Building?",
+    "gold_answer": "247 Cherry",
+    "predicted_answer": "247 Cherry.",
+    "em": 1,
+    "type": "comparison",
+    "retrieved_titles": [
+      "247 Cherry",
+      "Wayne Cherry",
+      "R\u00f8dovre Town Hall",
+      "General Motors India",
+      "Holden"
+    ]
+  },
+  {
+    "query_id": "5ae54c085542992663a4f1c4",
+    "question": "What are some other areas that share a common deer species with the forests of Mara and Mondrem?",
+    "gold_answer": "New Zealand, Canada, the United States, the Falkland Islands, and Peru.",
+    "predicted_answer": "Not mentioned in context.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Moose",
+      "Sri Lankan sambar deer",
+      "Temperate coniferous forest",
+      "Visayan spotted deer",
+      "Temperate deciduous forest"
+    ]
+  },
+  {
+    "query_id": "5a7ec61a55429934daa2fc5f",
+    "question": "Are Staten Island Catapult and This Is Elvis both documentaries?",
+    "gold_answer": "yes",
+    "predicted_answer": "Only Staten Island Catapult.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Staten Island Catapult",
+      "Staten Island Borough Hall",
+      "Staten Island",
+      "College of Staten Island Baseball Complex",
+      "St. George, Staten Island"
+    ]
+  },
+  {
+    "query_id": "5ac41b9e5542995c82c4acc4",
+    "question": "what species of plants are Chamelaucium and Vanilla derived from?",
+    "gold_answer": "flowers",
+    "predicted_answer": "Not mentioned in the context.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Botany",
+      "Zygotritonia",
+      "Flora of Saskatchewan",
+      "Jatropha",
+      "Lavatera"
+    ]
+  },
+  {
+    "query_id": "5ab5b6c1554299637185c5e5",
+    "question": "Did Franki Valli sing with Hellogoodbye or The Four Seasons?",
+    "gold_answer": "The Four Seasons",
+    "predicted_answer": "The Four Seasons.",
+    "em": 1,
+    "type": "comparison",
+    "retrieved_titles": [
+      "The Wonder Who?",
+      "The Four Seasons (band)",
+      "Valli (album)",
+      "Bobby Fox",
+      "My Eyes Adored You"
+    ]
+  },
+  {
+    "query_id": "5a739323554299623ed4abff",
+    "question": "Which famous mine was in service first, the Salmita Mine or the Kanichee Mine?",
+    "gold_answer": "Kanichee Mine",
+    "predicted_answer": "Neither, Salmita Mine.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Hermiston-McCauley Mine",
+      "Homestake Mine (South Dakota)",
+      "Salmita Mine",
+      "Salmita Mine",
+      "Franklin-Creighton Mine"
+    ]
+  },
+  {
+    "query_id": "5abaa954554299232ef4a362",
+    "question": "Are the writing from Maurice Level and Alice Hoffman focused on different audieces?",
+    "gold_answer": "yes",
+    "predicted_answer": "Most likely, yes.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Alice Hoffman",
+      "Maurice Level",
+      "Cohen Awards (Ploughshares)",
+      "Master of Science",
+      "Doug's 1st Movie"
+    ]
+  },
+  {
+    "query_id": "5ab465095542991751b4d75a",
+    "question": "During which period the sedan variant of the Volvo V50 car was manufactured?",
+    "gold_answer": "1995 to 2012",
+    "predicted_answer": "Not mentioned in the context.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Volvo V50",
+      "Volvo 480",
+      "Volvo 164",
+      "Volvo S90",
+      "Volvo 300 Series"
+    ]
+  },
+  {
+    "query_id": "5ab28c89554299340b525513",
+    "question": "What rank was higher than Karl Hermann Frank's rank until April 1942?",
+    "gold_answer": "Reichsf\u00fchrer-SS",
+    "predicted_answer": "Reichsf\u00fchrer-SS",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Obergruppenf\u00fchrer",
+      "List of Generalobersts",
+      "Senior lieutenant colonel",
+      "John Cornell Chads",
+      "Erwin Lambert"
+    ]
+  },
+  {
+    "query_id": "5a8efba955429918e830d173",
+    "question": "Who was the narrator of the 26-episode series which featured the British national museum organization with branches at five locations in England?",
+    "gold_answer": "Michael Redgrave",
+    "predicted_answer": "Michael Redgrave.",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Imperial War Museum",
+      "Imperial War Museum (disambiguation)",
+      "The Great War (documentary)",
+      "Imperial War Museum North",
+      "Casualty (series 26)"
+    ]
+  },
+  {
+    "query_id": "5a7f68365542994857a7672e",
+    "question": "Which band was formed at an earlier date, Unwritten Law or Jon Spencer Blues Explosion?",
+    "gold_answer": "Unwritten Law",
+    "predicted_answer": "Jon Spencer Blues Explosion.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Brassy (band)",
+      "Heavy Trash",
+      "Damage (Blues Explosion album)",
+      "Now I Got Worry",
+      "Jon Spencer"
+    ]
+  },
+  {
+    "query_id": "5a71166d5542994082a3e576",
+    "question": "Which battle occurred first, the Battle of Manila or the Battle of Guam?",
+    "gold_answer": "Battle of Guam",
+    "predicted_answer": "Manila, in 1899.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Second Battle of Caloocan",
+      "Battle of the Burbia River",
+      "Battle of Alhandic",
+      "Battle of Klushino",
+      "Battle of Masoller"
+    ]
+  },
+  {
+    "query_id": "5a74fd6d5542993748c8977d",
+    "question": "What day of the week does the Korean cooking-variety program featuring the owner of \"Dear. bread\" air?",
+    "gold_answer": "Mondays",
+    "predicted_answer": "Wednesdays",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Lee Won-il",
+      "Cook Representative",
+      "Battle of the Bowling Alley",
+      "NFL Films Game of the Week",
+      "Ode to My Father"
+    ]
+  },
+  {
+    "query_id": "5ade6eb65542992fa25da782",
+    "question": "What two singers who worked together on the song I Would Like to See You Again also performed as part of a country music group which was active between 1985 and 1995?",
+    "gold_answer": "Johnny Cash, Waylon Jennings",
+    "predicted_answer": "None, according to provided context.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "I Would Like to See You Again",
+      "There Ain't No Good Chain Gang",
+      "Love Me Like You Used To (song)",
+      "Jakaranda",
+      "Shame (Robbie Williams and Gary Barlow song)"
+    ]
+  },
+  {
+    "query_id": "5ab7de455542992aa3b8c864",
+    "question": "Janet Williams has performed with an internationally recognized solo pianist whose recordings have earned him five what?",
+    "gold_answer": "Grammy awards",
+    "predicted_answer": "Grammy Awards",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Vladimir Ashkenazy",
+      "Romeo Nelson",
+      "Fred Hersch",
+      "Anna Graceman",
+      "Don Williams"
+    ]
+  },
+  {
+    "query_id": "5ab913205542991b5579f0e0",
+    "question": "The Sanders-Brown Center on Aging was funded by a grant from a businessman known for what restaurant chain?",
+    "gold_answer": "Kentucky Fried Chicken (KFC)",
+    "predicted_answer": "KFC founder Colonel Harlan Sanders.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Hawaiian Cottage",
+      "Sanders\u2013Brown Center on Aging",
+      "Rancho Corte Madera del Presidio",
+      "Center for Electron Nanoscopy",
+      "Grays Road Recreation Center"
+    ]
+  },
+  {
+    "query_id": "5a83a7e15542992ef85e2347",
+    "question": "Who voices Homer Simpson's character on the animated television series? ",
+    "gold_answer": "Daniel Louis Castellaneta",
+    "predicted_answer": "Dan Castellaneta",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Patty and Selma",
+      "Dan Castellaneta",
+      "Homer Simpson",
+      "Cory Doran",
+      "Moe Szyslak"
+    ]
+  },
+  {
+    "query_id": "5a84eecd5542994c784dda8e",
+    "question": "What type of group does Pablo Carballo and Argentine Air Force have in common?",
+    "gold_answer": "military",
+    "predicted_answer": "Air Force group",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Pablo Carballo",
+      "Hector Fautario",
+      "South America air forces maneuvers",
+      "Double cantilever hangar",
+      "William J. Donahue"
+    ]
+  },
+  {
+    "query_id": "5a8459aa5542996488c2e51e",
+    "question": " Kenneth Anderson served under the General who was which President of the United States?",
+    "gold_answer": "34th",
+    "predicted_answer": "John G. Foster, not mentioned as President.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "John F. Anderson",
+      "Gerald Ford",
+      "William J. Crowe",
+      "Kevin J. O'Connor (attorney)",
+      "Tompkinsville, Kentucky"
+    ]
+  },
+  {
+    "query_id": "5a8e068b5542995085b37384",
+    "question": "Are Ferocactus and Silene both types of plant?",
+    "gold_answer": "yes",
+    "predicted_answer": "Yes, they are plants.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Ferocactus",
+      "Talkh Chikher",
+      "Silene menziesii",
+      "Silene antirrhina",
+      "Silene tomentosa"
+    ]
+  },
+  {
+    "query_id": "5a87136e5542991e771816b2",
+    "question": "Does Il trovatore have less acts than La rondine",
+    "gold_answer": "no",
+    "predicted_answer": "No, it has more acts.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Il trovatore",
+      "La rondine",
+      "La Fille de marbre",
+      "La fille de Madame Angot",
+      "La jolie fille de Perth"
+    ]
+  },
+  {
+    "query_id": "5a8bd4d65542997f31a41dd8",
+    "question": "Are both American Zeitgeist and Michael Jackson's This Is It documentary films about entertainment?",
+    "gold_answer": "no",
+    "predicted_answer": "Yes, they are.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Michael Jackson's This Is It (album)",
+      "Travis Payne",
+      "Michael Jackson: The Last Photo Shoot",
+      "Michael Jackson's Vision",
+      "This Is It (Michael Jackson song)"
+    ]
+  },
+  {
+    "query_id": "5a8841ee5542994846c1ce6b",
+    "question": "Which is farther west, Sheridan County, Montana or Chandra Taal?",
+    "gold_answer": "Sheridan County",
+    "predicted_answer": "Sheridan County, Montana.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Sheridan, Wyoming",
+      "Wyarno, Wyoming",
+      "Banner, Wyoming",
+      "Sheridan County Airport",
+      "Leiter, Wyoming"
+    ]
+  },
+  {
+    "query_id": "5abd05e655429965836004f1",
+    "question": "What was the companion piece that Poe's brother published?",
+    "gold_answer": "\"The Whalestoe Letters\"",
+    "predicted_answer": "There is no mention of Poe's brother.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "The Spectre Knight",
+      "Uncle Samuel",
+      "The Carp (opera)",
+      "A Predicament",
+      "A Tale of the Ragged Mountains"
+    ]
+  },
+  {
+    "query_id": "5a711c535542994082a3e59b",
+    "question": "Albanians in Montenegro which make up 4.91 of the county's total population could be members of the Albanian Coalation Perspect which is a what? ",
+    "gold_answer": "Albanian political party in Montenegro",
+    "predicted_answer": "Political party.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Albanians in Montenegro",
+      "Minority languages of Montenegro",
+      "Albanians",
+      "Pre\u0161evo Valley",
+      "Palm Beach County, Florida"
+    ]
+  },
+  {
+    "query_id": "5ab71b5c5542991d3222377e",
+    "question": "What is a luxury goods company long Northern Boulevard in the Miracle Mile?",
+    "gold_answer": "Gucci",
+    "predicted_answer": "Americana Manhasset.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Miracle Mile (Manhasset)",
+      "St. Mary's High School (Manhasset, New York)",
+      "Shinola",
+      "Salvatore Ferragamo S.p.A.",
+      "Luxify"
+    ]
+  },
+  {
+    "query_id": "5a8b83bc55429949d91db5c0",
+    "question": "Bandit was built in 1988 by which Japanese amusement ride company that built roller coasters, giant wheels, carousels, flumes, dark rides, sky cycles and other amusement rides?",
+    "gold_answer": "TOGO company",
+    "predicted_answer": "TOGO",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "TOGO",
+      "Mack Rides",
+      "Trolley park",
+      "Anton Schwarzkopf",
+      "Charles I. D. Looff"
+    ]
+  },
+  {
+    "query_id": "5ae6152d5542996de7b71b38",
+    "question": "The Cat in the Hat was a comedy film directed by which production designer and director?",
+    "gold_answer": "Robert W. \"Bo\" Welch III",
+    "predicted_answer": "Bo Welch",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "The Cat in the Hat (film)",
+      "Fritz the Cat (film)",
+      "The Private Eyes (1976 film)",
+      "Aquamarine (film)",
+      "Mexican Werewolf in Texas"
+    ]
+  },
+  {
+    "query_id": "5ab5574b554299488d4d994e",
+    "question": "Robin R. Bottin is known for his collaboration with an American director and producer who won an Academy Award, Golden Globe and BAFTA award for what movie?",
+    "gold_answer": "The Social Network",
+    "predicted_answer": "12 Years a Slave",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Al Pacino on stage and screen",
+      "Geoffrey Rush",
+      "Nicole Kidman",
+      "Joan Plowright",
+      "Steve McQueen (director)"
+    ]
+  },
+  {
+    "query_id": "5a798f8c5542994bb9457023",
+    "question": "What city and nation was the location of the 2015 Pacific Games where the Kiribati national basketball team finished with a 0-4 record?",
+    "gold_answer": "Port Moresby, Papua New Guinea",
+    "predicted_answer": "Port Moresby, Papua New Guinea.",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Kiribati national basketball team",
+      "Powerlifting at the 2015 Pacific Games",
+      "1992\u201393 Michigan Wolverines men's basketball team",
+      "Men's football at the 2015 Pacific Games",
+      "Rogelio Melencio"
+    ]
+  },
+  {
+    "query_id": "5a791ce955429974737f798e",
+    "question": "Brett McClure competed in the pommel horse event at the 2001 Goodwill Games in what Australian province?",
+    "gold_answer": "Queensland",
+    "predicted_answer": "Brisbane, Queensland.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Brett McClure",
+      "Marius Urzic\u0103",
+      "Tia-Clair Toomey",
+      "Quinto Vadi",
+      "Louis Smith (gymnast)"
+    ]
+  },
+  {
+    "query_id": "5abc23c45542993a06baf896",
+    "question": "Which region of Austria means 'Estate of the Salt Chamber' and covers the village of Obertraun, a popular destination for skiing and snowboarding in the winter?",
+    "gold_answer": "Salzkammergut",
+    "predicted_answer": "Salzkammergut.",
+    "em": 1,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Obertraun",
+      "Front Range",
+      "Salzkammergut",
+      "Bromley Mountain",
+      "Cortina d'Ampezzo"
+    ]
+  },
+  {
+    "query_id": "5a7a77425542995eb53be83e",
+    "question": "Who has released more solo albums, Nick Carter or Brady Seals?",
+    "gold_answer": "Brady Seals",
+    "predicted_answer": "Nick Carter has.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Nick Carter (musician)",
+      "Nick Carter and Red Club",
+      "Nick Carter, Master Detective",
+      "Nick Carter va tout casser",
+      "Thompson Street (album)"
+    ]
+  },
+  {
+    "query_id": "5a8835245542994846c1ce27",
+    "question": "Do Tropical Fish Hobbyist and Curve cover the same topic?",
+    "gold_answer": "no",
+    "predicted_answer": "No, different topics.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Tropical Fish Hobbyist",
+      "Duet All Night Long",
+      "Mystery Case Files: Escape From Ravenhearst",
+      "Hamilton Fish House",
+      "Premio Lo Nuestro 2003"
+    ]
+  },
+  {
+    "query_id": "5a85ee635542994775f606b4",
+    "question": "Which lake is located further south, Dal Lake or Waterton Lake?",
+    "gold_answer": "Dal Lake",
+    "predicted_answer": "Dal Lake.",
+    "em": 1,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Waterton Lake",
+      "Goat Haunt",
+      "Dal Lake",
+      "Dal Lake (Himachal Pradesh)",
+      "Brari Nambal"
+    ]
+  },
+  {
+    "query_id": "5a86fde6554299211dda2b7f",
+    "question": " Pramod Bhasin was the former CEO of a company that provided what kind of services?",
+    "gold_answer": "IT",
+    "predicted_answer": "Business process outsourcing services.",
+    "em": 0,
+    "type": "bridge",
+    "retrieved_titles": [
+      "Pramod Bhasin",
+      "Summit Behavioral Healthcare",
+      "Jonathan Michael Ansell",
+      "John F. Milligan",
+      "Mike Long (American businessman)"
+    ]
+  },
+  {
+    "query_id": "5ac406c155429919431738fc",
+    "question": "What are both Caleb Shomo and Brian Welch?",
+    "gold_answer": "singer",
+    "predicted_answer": "Musicians and vocalists.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Caleb Shomo",
+      "Sick (EP)",
+      "This Means War (Attack Attack! album)",
+      "Beartooth (band)",
+      "Caleb Stine"
+    ]
+  },
+  {
+    "query_id": "5a8482e55542997175ce1edc",
+    "question": "Are Trent Edwards and Lucy Saroyan both football players?",
+    "gold_answer": "no",
+    "predicted_answer": "No, only Trent Edwards is.",
+    "em": 0,
+    "type": "comparison",
+    "retrieved_titles": [
+      "Lucy Saroyan",
+      "Trent Edwards",
+      "Strawberry Saroyan",
+      "Anne of Ingleside",
+      "Lucy Pevensie"
+    ]
+  }
+]

@@ -1,0 +1,8 @@
+{
+  "dataset": "HotpotQA dev distractor v1",
+  "total_examples": 7405,
+  "corpus_size": 66635,
+  "sampled_queries": 100,
+  "random_seed": 42,
+  "created": "2025-12-17"
+}
