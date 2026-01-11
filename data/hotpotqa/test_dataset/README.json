@@ -1,0 +1,12 @@
+{
+  "dataset": "HotpotQA",
+  "setting": "distractor",
+  "num_questions": 100,
+  "num_documents": 992,
+  "docs_per_question": 10,
+  "supporting_docs_per_question": 2,
+  "distractor_docs_per_question": 8,
+  "description": "Research-grade test dataset matching KG\u00b2RAG and other published papers",
+  "source": "hotpot_dev_distractor_v1.json (first 100 questions)",
+  "corpus_source": "corpus.json (filtered to context documents)"
+}

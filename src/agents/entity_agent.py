@@ -284,7 +284,8 @@ Return a JSON array of entities:
 Only extract entities that are actually present in the text."""
 
         try:
-            response = self.llm_client.generate_json(prompt, temperature=0.1)
+            # CRITICAL FIX: Use 16000 max_tokens to prevent JSON truncation
+            response = self.llm_client.generate_json(prompt, temperature=0.0, max_tokens=16000)
 
             # Handle both list and dict responses
             if isinstance(response, dict) and "entities" in response:
@@ -356,7 +357,8 @@ Return JSON:
 ]"""
 
         try:
-            response = self.llm_client.generate_json(prompt, temperature=0.1)
+            # CRITICAL FIX: Use 16000 max_tokens to prevent JSON truncation
+            response = self.llm_client.generate_json(prompt, temperature=0.0, max_tokens=16000)
 
             # Create a lookup dict
             metadata_lookup = {}

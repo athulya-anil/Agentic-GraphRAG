@@ -1,0 +1,14 @@
+{
+  "overall_em": 0.0,
+  "comparison_em": 0.0,
+  "bridge_em": 0.0,
+  "vector_em": 0,
+  "graph_em": 0.0,
+  "strategy_counts": {
+    "vector": 0,
+    "graph": 100
+  },
+  "empty_contexts": 68,
+  "total_queries": 100,
+  "duration_seconds": 909.268826007843
+}

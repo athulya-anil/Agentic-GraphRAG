@@ -498,6 +498,11 @@ def get_faiss_index() -> FAISSIndex:
     global _faiss_index
     if _faiss_index is None:
         _faiss_index = FAISSIndex()
+        # Auto-load existing index if available
+        index_path = Path(_faiss_index.vector_config.index_path)
+        if (index_path / "faiss.index").exists():
+            logger.info("Auto-loading existing FAISS index from disk...")
+            _faiss_index.load()
     return _faiss_index
 
 

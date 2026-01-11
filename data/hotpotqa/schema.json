@@ -1,0 +1,113 @@
+{
+  "entity_types": [
+    "Person",
+    "Organization",
+    "Location",
+    "Event",
+    "CreativeWork",
+    "Date",
+    "Concept"
+  ],
+  "relation_types": [
+    "BORN_IN",
+    "MEMBER_OF",
+    "LOCATED_IN",
+    "CREATED_BY",
+    "OCCURRED_ON",
+    "PARTICIPATED_IN",
+    "RELATED_TO"
+  ],
+  "entity_schemas": {
+    "Person": {
+      "description": "Individual people, including historical figures, celebrities, athletes, politicians",
+      "properties": [
+        "name",
+        "nationality",
+        "occupation",
+        "birth_date",
+        "death_date"
+      ]
+    },
+    "Organization": {
+      "description": "Companies, institutions, sports teams, bands, government bodies",
+      "properties": [
+        "name",
+        "founded_date",
+        "location",
+        "type"
+      ]
+    },
+    "Location": {
+      "description": "Geographic locations including countries, cities, regions, landmarks",
+      "properties": [
+        "name",
+        "country",
+        "type",
+        "population"
+      ]
+    },
+    "Event": {
+      "description": "Historical events, battles, competitions, awards ceremonies",
+      "properties": [
+        "name",
+        "date",
+        "location",
+        "type"
+      ]
+    },
+    "CreativeWork": {
+      "description": "Books, movies, TV shows, albums, songs, artworks",
+      "properties": [
+        "title",
+        "creator",
+        "release_date",
+        "genre",
+        "type"
+      ]
+    },
+    "Date": {
+      "description": "Specific dates or time periods",
+      "properties": [
+        "value",
+        "granularity"
+      ]
+    },
+    "Concept": {
+      "description": "Abstract concepts, fields of study, ideologies",
+      "properties": [
+        "name",
+        "domain"
+      ]
+    }
+  },
+  "relation_schemas": {
+    "BORN_IN": {
+      "description": "Person was born in location",
+      "properties": []
+    },
+    "MEMBER_OF": {
+      "description": "Person is/was a member of organization",
+      "properties": []
+    },
+    "LOCATED_IN": {
+      "description": "Entity is located in location",
+      "properties": []
+    },
+    "CREATED_BY": {
+      "description": "Creative work was created by person or organization",
+      "properties": []
+    },
+    "OCCURRED_ON": {
+      "description": "Event occurred on date",
+      "properties": []
+    },
+    "PARTICIPATED_IN": {
+      "description": "Entity participated in event",
+      "properties": []
+    },
+    "RELATED_TO": {
+      "description": "Generic relationship between entities",
+      "properties": []
+    }
+  }
+}

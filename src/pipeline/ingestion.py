@@ -210,6 +210,11 @@ class IngestionPipeline:
         if self.schema_path:
             self._save_schema()
 
+        # Save FAISS index to disk
+        logger.info("Saving FAISS index to disk...")
+        self.faiss_index.save()
+        logger.info("✓ FAISS index saved")
+
         return {
             **self.ingestion_stats,
             "duration_seconds": duration,
@@ -359,7 +364,9 @@ class IngestionPipeline:
         Returns:
             Number of vectors created
         """
-        vectors_created = 0
+        # Collect all texts and metadata for batch insertion
+        all_texts = []
+        all_metadata = []
 
         # Index documents
         doc_metadata = document_metadata or [{}] * len(documents)
@@ -375,10 +382,8 @@ class IngestionPipeline:
                     "chunk_index": j,
                     "text": chunk
                 }
-
-                # Add to index
-                self.faiss_index.add_single(chunk, metadata=chunk_meta)
-                vectors_created += 1
+                all_texts.append(chunk)
+                all_metadata.append(chunk_meta)
 
         # Index entities (with their enriched metadata)
         for entity in entities:
@@ -400,9 +405,18 @@ class IngestionPipeline:
                 "text": entity_text,
                 **entity.get("metadata", {})
             }
+            all_texts.append(entity_text)
+            all_metadata.append(entity_meta)
 
-            self.faiss_index.add_single(entity_text, metadata=entity_meta)
-            vectors_created += 1
+        # Add all vectors in batches to avoid memory fragmentation
+        batch_size = 50  # Add in batches of 50 to prevent segfault
+        vectors_created = 0
+        for i in range(0, len(all_texts), batch_size):
+            batch_texts = all_texts[i:i+batch_size]
+            batch_metadata = all_metadata[i:i+batch_size]
+            self.faiss_index.add(batch_texts, metadata=batch_metadata)
+            vectors_created += len(batch_texts)
+            logger.info(f"Added batch {i//batch_size + 1} ({vectors_created}/{len(all_texts)} vectors)")
 
         return vectors_created
 

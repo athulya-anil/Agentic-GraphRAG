@@ -14,35 +14,39 @@ def main():
     print("HOTPOTQA CORPUS INGESTION")
     print("="*70)
 
-    corpus_path = Path("data/hotpotqa/corpus.json")
+    corpus_path = Path("data/hotpotqa/test_dataset/test_corpus.json")  # 991 unique docs (2 supporting + 8 distractors per question)
     schema_path = Path("data/hotpotqa/schema.json")
 
-    # Load corpus
-    print("\nLoading corpus...")
+    # Load test corpus
+    print("\nLoading test corpus (991 docs: 2 supporting + 8 distractors per 100 questions)...")
     with open(corpus_path, 'r', encoding='utf-8') as f:
         corpus = json.load(f)
 
+    # Process all test corpus documents (991 unique docs: 2 supporting + 8 distractors per question)
+    # Using Groq llama-3.3-70b-versatile for complete JSON extraction
     documents = [doc['text'] for doc in corpus]
-    print(f"✓ Loaded {len(documents)} documents")
+    print(f"✓ Loaded {len(documents)} documents (test corpus)")
+    print(f"   Using Groq llama-3.3-70b-versatile (~20-30 min for 991 docs)")
 
     # Initialize pipeline
     print("\nInitializing ingestion pipeline...")
     pipeline = get_ingestion_pipeline(
         schema_path=schema_path,
-        auto_refine_schema=True
+        auto_refine_schema=False  # Use pre-defined schema without refinement
     )
     print("✓ Pipeline initialized")
 
     # Ingest
     print(f"\nIngesting {len(documents)} documents...")
-    print("(This may take 30-60 minutes due to LLM API rate limits)\n")
+    estimated_time = len(documents) * 1.5  # ~1.5 min per document (LLM API calls)
+    print(f"(Estimated time: {estimated_time:.0f}-{estimated_time*1.5:.0f} minutes due to LLM API rate limits)\n")
 
     start_time = time.time()
 
     result = pipeline.ingest_documents(
         documents=documents,
         infer_schema=True,
-        enrich_metadata=True
+        enrich_metadata=False  # Disabled for performance
     )
 
     duration = time.time() - start_time

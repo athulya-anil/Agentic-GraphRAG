@@ -157,7 +157,7 @@ Return a JSON array:
 Only extract relationships that are explicitly or implicitly stated in the text."""
 
         try:
-            response = self.llm_client.generate_json(prompt, temperature=0.1)
+            response = self.llm_client.generate_json(prompt, temperature=0.0)
 
             # Handle both list and dict responses
             if isinstance(response, dict) and "relations" in response:
@@ -275,7 +275,7 @@ Return a JSON array:
 Only return relationships that are clearly evident in the text."""
 
         try:
-            response = self.llm_client.generate_json(prompt, temperature=0.1)
+            response = self.llm_client.generate_json(prompt, temperature=0.0)
 
             if isinstance(response, dict) and "relations" in response:
                 relations = response["relations"]

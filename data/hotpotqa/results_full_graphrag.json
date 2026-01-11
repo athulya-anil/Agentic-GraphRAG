@@ -1,0 +1,1002 @@
+[
+  {
+    "query_id": "5ae705725542995703ce8bbc",
+    "question": "Come from the Heart:was first recorded by an artist that sang what genre of music?",
+    "gold_answer": "country",
+    "predicted_answer": "The context provided does not contain enough information to answer the query. The context mentions \"Come Again\" which is different from \"Come from the Heart\" mentioned in the query. Additionally, it does not provide information about the genre of music associated with the artist who first recorded \"Come from the Heart\".",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a75321555429916b0164290",
+    "question": "What is the title of the person who is Head of the Department of Biological Sciences at the University of Lincoln",
+    "gold_answer": "Doctor",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab85b1755429916710eb041",
+    "question": "Which mathematician worked with algebraic geometry instead of probability theory, Askold Khovanskii or Andrey Kolmogorov?",
+    "gold_answer": "Askold Georgievich Khovanskii",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a88b3b4554299206df2b336",
+    "question": "What type of art does The Consul and Arlecchino have in common?",
+    "gold_answer": "music",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab85a1155429934fafe6d7c",
+    "question": "Are both Rutgers University and Carnegie Mellon University located in America?",
+    "gold_answer": "yes",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8de5d55542995085b3734d",
+    "question": "Are Even and Incubus known for their skill in classical music?",
+    "gold_answer": "no",
+    "predicted_answer": "Based on the provided context, there is no information about Incubus, and the context only discusses Even, an Australian indie rock band. The context does not mention classical music in relation to Even [1]. Therefore, it is not possible to determine if Even or Incubus are known for their skill in classical music based on the given context. More information would be needed to answer this question accurately.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5addffff5542992200553bdd",
+    "question": "How many Academy Awards did the film, in which Jimmy Bryant provided the singing voice for the character Tony, win ?",
+    "gold_answer": "10",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a7555215542996c70cfaee1",
+    "question": "Which came to market first, \"Hey Pa! There's a Goat on the Roof\" or \"Poleconomy\"",
+    "gold_answer": "Hey Pa! There's a Goat on the Roof",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5abf12f25542997719eab667",
+    "question": "Are McFarland, USA and The Black Hole both sports films?",
+    "gold_answer": "no",
+    "predicted_answer": "The context provided does not contain enough information to answer the query. The context mentions the Black Mountain poets [1], but it does not provide any information about the films \"McFarland, USA\" and \"The Black Hole\", or their genres. Therefore, it is not possible to determine if both films are sports films based on the given context.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a8fae205542997ba9cb32ec",
+    "question": " What type of television show did Dylan Everett star in, in 2015?",
+    "gold_answer": "American-Canadian mystery-drama",
+    "predicted_answer": "The context provided does not contain enough information to answer the query. The context [1] only discusses \"The Tracey Ullman Show\" and its relation to the creation of \"The Simpson\" series, but it does not mention Dylan Everett or any television show he may have starred in. Therefore, I cannot provide a clear and accurate answer based on the given context.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5ab6d9b25542995eadef00c8",
+    "question": "Which opera has more acts, Don Quichotte or Tosca?",
+    "gold_answer": "Don Quichotte",
+    "predicted_answer": "The context provided does not contain information about the operas \"Don Quichotte\" or \"Tosca\", or their acts. The context appears to be about an Australian indie rock band called \"Even\" and their discography [1].",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5ae3790f5542992e3233c415",
+    "question": "Are Leopold Lummerstorfer and Valeria Sarmiento both authors?",
+    "gold_answer": "no",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a81028b55429938b614228a",
+    "question": "For which film did the Director team with NASA scientists, Aliens of the Deep or Poetry in Motion?",
+    "gold_answer": "Aliens of the Deep",
+    "predicted_answer": "The context provided does not contain enough information to answer the query. The context mentions David Fincher's nominations and awards for his work on \"The Curious Case of Benjamin Button\" and \"The Social Network\", but it does not mention him teaming up with NASA scientists or working on the films \"Aliens of the Deep\" or \"Poetry in Motion\".",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5ac170af5542994d76dcce20",
+    "question": "Which of the singers has more things to be known for, Greg Puciato or Syd Barrett?",
+    "gold_answer": "Gregory John \"Greg\" Puciato",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ac2a3c7554299218029dadb",
+    "question": "Which genus has more species in it, Othonna or Stangeria?",
+    "gold_answer": "Othonna",
+    "predicted_answer": "The context provided does not contain information about the genera Othonna or Stangeria, or their respective number of species. The context appears to be about an Australian indie rock band called Even, and their discography [1]. Therefore, it is not possible to answer the query based on the given context.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a7a633a55429941d65f2609",
+    "question": "Who was born last, Dave Peverett or Jang Hyun-seung?",
+    "gold_answer": "Jang Hyun-seung",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5abb8afe5542993f40c73b1e",
+    "question": "Were both Roger Donaldson and Andr\u00e9 Cayatte french filmmakers?",
+    "gold_answer": "no",
+    "predicted_answer": "The context provided does not contain enough information to answer the query about Roger Donaldson and Andr\u00e9 Cayatte being French filmmakers. The context only discusses Patrick Pierre Roger Baudry, a retired Lieutenant Colonel in the French Air Force and a former CNES astronaut [1]. There is no mention of Roger Donaldson or Andr\u00e9 Cayatte. Therefore, it is not possible to provide a clear and accurate answer based on the given context.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a8af1e255429950cd6afc28",
+    "question": "Who is the English Professional Footballer that is the niece of a former footballer born in the same place as where he plays? ",
+    "gold_answer": "Trent Alexander-Arnold",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a7ae38c5542992d025e6721",
+    "question": "Who was older when they died, Teinosuke Kinugasa or Don O. Newland",
+    "gold_answer": "Teinosuke Kinugasa",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a82a1ae55429954d2e2eb89",
+    "question": "Between Aspidistra and Cyrtanthus, which genus of plant belongs to the Subfamily Amaryllidoideae?",
+    "gold_answer": "Cyrtanthus",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ae383e15542992f92d822fb",
+    "question": "Which film is newer, The Apple Dumpling Gang or Heavyweights?",
+    "gold_answer": "Heavyweights",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a76c98855429972597f13d0",
+    "question": "Near what ocean does the highway carried by the Long-Allen bridge terminate near?",
+    "gold_answer": "the Atlantic Ocean",
+    "predicted_answer": "The context provided does not contain enough information to answer the query. The context mentions \"The Highwaymen\" [1] and \"Highwayman\" [2] as CreativeWorks, and \"The Highwaymen\" [3] as an Organization, but it does not mention the Long-Allen bridge or any information about a highway terminating near an ocean.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 3
+  },
+  {
+    "query_id": "5a886b7555429938390d3f4d",
+    "question": "When did the party inspired by Cacareco begin in Canada?",
+    "gold_answer": "1960s",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a79d2fe5542994f819ef0c3",
+    "question": "Who was born first, Aleksandr Ivanovsky or Arthur Lubin?",
+    "gold_answer": "Aleksandr Ivanovsky",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab4774d5542991751b4d781",
+    "question": "Crash is similar to what 16th century British card game in the sense that there is no betting?",
+    "gold_answer": "In Crash, there is no betting, as in Brag",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a89e47f5542992e4fca8457",
+    "question": "The university where Rolf Martin Theodor Dahlgren worked as a professor has how many employees?",
+    "gold_answer": "9,000",
+    "predicted_answer": "The context does not contain enough information to answer the query. The context provides information about the University of Virginia [1] and the University of Toronto [2], but it does not mention Rolf Martin Theodor Dahlgren or the number of employees at the university where he worked. Therefore, I cannot provide a clear and accurate answer based on the given context.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 2
+  },
+  {
+    "query_id": "5a835a265542992ef85e2281",
+    "question": "What industry does Edgar Selwyn and Chantal Akerman work in?",
+    "gold_answer": "theater and film",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8b82a05542995d1e6f13d0",
+    "question": "Are University of Virginia and Massachusetts Institute of Technology in the same country?",
+    "gold_answer": "yes",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5adfecd755429942ec259b90",
+    "question": "What year was the magazine that Stanley Bing spent a decade at founded in?",
+    "gold_answer": "1933",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a7aa0a55542990198eaf165",
+    "question": "Who was born first, Sathish Kalathil or Jacques Feyder?",
+    "gold_answer": "Jacques Feyder",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8b3af455429971feec467b",
+    "question": "Blinding Edge Pictures produced which 2000 film starring Bruce Willis?",
+    "gold_answer": "Unbreakable",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ae12bcc5542997b2ef7d11a",
+    "question": "Are Benjamin Britten and B\u00e9la Bart\u00f3k from the same country?",
+    "gold_answer": "no",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a70f0a75542994082a3e403",
+    "question": "Which dialect spoken in the province of Scania calls Spettekaka, \"spiddekaga\"?",
+    "gold_answer": "Scanian dialects",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8f51185542992414482a3d",
+    "question": "The primary jockey of Binocular was Champion Jockey how many consecutive times?",
+    "gold_answer": "20",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5abe535055429976d4830aea",
+    "question": "Where is the transportation company that owns Talbot based in?",
+    "gold_answer": "Montreal",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ac370ce5542995ef918c18c",
+    "question": "Are Southwest Florida International Airport and Henry E. Rohlsen Airport both in Florida?",
+    "gold_answer": "no",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a88f7855542993b751ca8da",
+    "question": "In what year did a movie that starred both Nicholas Cage and Cher come out? ",
+    "gold_answer": "1987",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8f799d55429918e830d22d",
+    "question": "Which genus has the most number of species, Myrsine or Styrax?",
+    "gold_answer": "Myrsine",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab9bb8355429970cfb8eb8b",
+    "question": "At what school is the individual who was awarded the 2012 Nobel Prize in Physics, jointly with David J. Wineland, a professor?",
+    "gold_answer": "Coll\u00e8ge de France",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ae81032554299540e5a572a",
+    "question": "Which satellite suburb of Melbourne is partially included in the Electoral district of Bass?",
+    "gold_answer": "Pakenham",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8ad6db55429950cd6afba7",
+    "question": "What field of study is related to Ovamir Anjum's work and is known as Islamic mysticism?",
+    "gold_answer": "Sufism",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5adf39295542992d7e9f92df",
+    "question": "Which genus has more species, Apium or Elodea?",
+    "gold_answer": "Apium",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5abced075542993a06baf9ac",
+    "question": "What time did the show, in which Gordon Burns was the host, usually air on Monday?",
+    "gold_answer": "7pm",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 2
+  },
+  {
+    "query_id": "5a8241a855429940e5e1a819",
+    "question": "The Sports Museum is a non-profit museum currently located in what multi-purpose arena that opened in 1995?",
+    "gold_answer": "TD Garden",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a8408a9554299123d8c21d3",
+    "question": "Which Canadian artist is credited with first coming up with the title of Various Positions?",
+    "gold_answer": "Leonard Cohen",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 2
+  },
+  {
+    "query_id": "5a7296815542991f9a20c515",
+    "question": "Who brewed the first espresso coffee in space, Patrick Baudry or Samantha Cristoforetti?",
+    "gold_answer": "Samantha Cristoforetti",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a85a2845542997175ce1fe1",
+    "question": "Are both Aloinopsis and Eriogonum ice plants?",
+    "gold_answer": "no",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab870ee5542990e739ec8f6",
+    "question": "A Wind in the Door is part of a series written by who?",
+    "gold_answer": "Madeleine L'Engle",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ac09d265542992a796ded39",
+    "question": "Erving Goffman was cited as higher than a literary critic on which guide?",
+    "gold_answer": "The Times Higher Education Guide",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5ae39e9c5542990afbd1e195",
+    "question": "Wangaratta Wahine, an album featuring the work of an Australian Living Treasure, was recorded by what band?",
+    "gold_answer": "The Captain Matchbox Whoopee Band",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a844fd35542990548d0b274",
+    "question": "What occupation did Nicholas Christopher and Roger Ebert share?",
+    "gold_answer": "author",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a7f244255429934daa2fcec",
+    "question": "St. John's College, Belize offers an education in a tradition in which what three subjects were the core?",
+    "gold_answer": "Grammar, logic, and rhetoric",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ac31ad4554299741d48a1ee",
+    "question": "Are Ainslee's Magazine and The Australian Women's Weekly both monthly magazines?",
+    "gold_answer": "yes",
+    "predicted_answer": "The context provided does not contain enough information to determine if Ainslee's Magazine and The Australian Women's Weekly are both monthly magazines. The context only discusses the Australian Broadcasting Commission and its relationships with other entities, such as The Great War and various broadcasting corporations, but does not mention Ainslee's Magazine or The Australian Women's Weekly [1]. Therefore, it is not possible to provide a clear answer based on the given context.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5ab6d04c554299710c8d1f70",
+    "question": "What family are the genus' Sinofranchetia and Stauntonia from?",
+    "gold_answer": "a genus of flowering plant in the Lardizabalaceae family",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5adbe1b355429944faac23a0",
+    "question": "Who wrote shorter stories, Raymond Carver or Lydia Davis?",
+    "gold_answer": "Lydia Davis",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a80caac554299260e20a161",
+    "question": "Were both Prince and Patty Jenkins have been inducted into the Rock and Roll Hall of Fame?",
+    "gold_answer": "no",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab9d6ef5542994dbf01985b",
+    "question": "What country of origin does  Dana Ivey and Two Weeks Notice have in common?",
+    "gold_answer": "American",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5ab846e155429919ba4e229c",
+    "question": "Who won more Grand Slam doubles titles, Tony Roche or Jamie Murray?",
+    "gold_answer": "Anthony Dalton Roche",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5ab3c270554299233954ff9e",
+    "question": "Midland F1 Racing was a racing team that, in 2007, competed under what name for sponsorship reasons?",
+    "gold_answer": "Spyker F1",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab207f65542993be8fa98b8",
+    "question": "Edmund Robert Harris is the principal benefactor of a museum located where ?",
+    "gold_answer": "Preston",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a7f96a95542995d8a8ddead",
+    "question": "IS Universidad de Oriente part of the same public university system as California State University, Dominguez Hills?",
+    "gold_answer": "no",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a80e468554299260e20a1a9",
+    "question": "Was Suzanne Chun Oakland a member of the upper of lower chamber of the Hawaii State Legislature?",
+    "gold_answer": "lower chamber",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a88e75c5542993b751ca8c7",
+    "question": "Which of the following buildings was designed by SHoP Architects: 247 Cherry or General Motors Building?",
+    "gold_answer": "247 Cherry",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ae54c085542992663a4f1c4",
+    "question": "What are some other areas that share a common deer species with the forests of Mara and Mondrem?",
+    "gold_answer": "New Zealand, Canada, the United States, the Falkland Islands, and Peru.",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a7ec61a55429934daa2fc5f",
+    "question": "Are Staten Island Catapult and This Is Elvis both documentaries?",
+    "gold_answer": "yes",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ac41b9e5542995c82c4acc4",
+    "question": "what species of plants are Chamelaucium and Vanilla derived from?",
+    "gold_answer": "flowers",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 2
+  },
+  {
+    "query_id": "5ab5b6c1554299637185c5e5",
+    "question": "Did Franki Valli sing with Hellogoodbye or The Four Seasons?",
+    "gold_answer": "The Four Seasons",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a739323554299623ed4abff",
+    "question": "Which famous mine was in service first, the Salmita Mine or the Kanichee Mine?",
+    "gold_answer": "Kanichee Mine",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5abaa954554299232ef4a362",
+    "question": "Are the writing from Maurice Level and Alice Hoffman focused on different audieces?",
+    "gold_answer": "yes",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab465095542991751b4d75a",
+    "question": "During which period the sedan variant of the Volvo V50 car was manufactured?",
+    "gold_answer": "1995 to 2012",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab28c89554299340b525513",
+    "question": "What rank was higher than Karl Hermann Frank's rank until April 1942?",
+    "gold_answer": "Reichsf\u00fchrer-SS",
+    "predicted_answer": "The provided context does not contain any information about Karl Hermann Frank or his rank. The context only discusses The Times Higher Education Guide and its relations to Erving Goffman, Anthony Giddens, and the year 2007 [1]. Therefore, it is not possible to answer the query based on the given context.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a8efba955429918e830d173",
+    "question": "Who was the narrator of the 26-episode series which featured the British national museum organization with branches at five locations in England?",
+    "gold_answer": "Michael Redgrave",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a7f68365542994857a7672e",
+    "question": "Which band was formed at an earlier date, Unwritten Law or Jon Spencer Blues Explosion?",
+    "gold_answer": "Unwritten Law",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a71166d5542994082a3e576",
+    "question": "Which battle occurred first, the Battle of Manila or the Battle of Guam?",
+    "gold_answer": "Battle of Guam",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a74fd6d5542993748c8977d",
+    "question": "What day of the week does the Korean cooking-variety program featuring the owner of \"Dear. bread\" air?",
+    "gold_answer": "Mondays",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ade6eb65542992fa25da782",
+    "question": "What two singers who worked together on the song I Would Like to See You Again also performed as part of a country music group which was active between 1985 and 1995?",
+    "gold_answer": "Johnny Cash, Waylon Jennings",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab7de455542992aa3b8c864",
+    "question": "Janet Williams has performed with an internationally recognized solo pianist whose recordings have earned him five what?",
+    "gold_answer": "Grammy awards",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5ab913205542991b5579f0e0",
+    "question": "The Sanders-Brown Center on Aging was funded by a grant from a businessman known for what restaurant chain?",
+    "gold_answer": "Kentucky Fried Chicken (KFC)",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a83a7e15542992ef85e2347",
+    "question": "Who voices Homer Simpson's character on the animated television series? ",
+    "gold_answer": "Daniel Louis Castellaneta",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 2
+  },
+  {
+    "query_id": "5a84eecd5542994c784dda8e",
+    "question": "What type of group does Pablo Carballo and Argentine Air Force have in common?",
+    "gold_answer": "military",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8459aa5542996488c2e51e",
+    "question": " Kenneth Anderson served under the General who was which President of the United States?",
+    "gold_answer": "34th",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8e068b5542995085b37384",
+    "question": "Are Ferocactus and Silene both types of plant?",
+    "gold_answer": "yes",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a87136e5542991e771816b2",
+    "question": "Does Il trovatore have less acts than La rondine",
+    "gold_answer": "no",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a8bd4d65542997f31a41dd8",
+    "question": "Are both American Zeitgeist and Michael Jackson's This Is It documentary films about entertainment?",
+    "gold_answer": "no",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 2
+  },
+  {
+    "query_id": "5a8841ee5542994846c1ce6b",
+    "question": "Which is farther west, Sheridan County, Montana or Chandra Taal?",
+    "gold_answer": "Sheridan County",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5abd05e655429965836004f1",
+    "question": "What was the companion piece that Poe's brother published?",
+    "gold_answer": "\"The Whalestoe Letters\"",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a711c535542994082a3e59b",
+    "question": "Albanians in Montenegro which make up 4.91 of the county's total population could be members of the Albanian Coalation Perspect which is a what? ",
+    "gold_answer": "Albanian political party in Montenegro",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab71b5c5542991d3222377e",
+    "question": "What is a luxury goods company long Northern Boulevard in the Miracle Mile?",
+    "gold_answer": "Gucci",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8b83bc55429949d91db5c0",
+    "question": "Bandit was built in 1988 by which Japanese amusement ride company that built roller coasters, giant wheels, carousels, flumes, dark rides, sky cycles and other amusement rides?",
+    "gold_answer": "TOGO company",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ae6152d5542996de7b71b38",
+    "question": "The Cat in the Hat was a comedy film directed by which production designer and director?",
+    "gold_answer": "Robert W. \"Bo\" Welch III",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ab5574b554299488d4d994e",
+    "question": "Robin R. Bottin is known for his collaboration with an American director and producer who won an Academy Award, Golden Globe and BAFTA award for what movie?",
+    "gold_answer": "The Social Network",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a798f8c5542994bb9457023",
+    "question": "What city and nation was the location of the 2015 Pacific Games where the Kiribati national basketball team finished with a 0-4 record?",
+    "gold_answer": "Port Moresby, Papua New Guinea",
+    "predicted_answer": "The context provided does not contain enough information to answer the query. The context only discusses the location of the General Motors Building in New York City and its creation, but does not mention the 2015 Pacific Games or the Kiribati national basketball team [1]. Therefore, I cannot provide a clear and accurate answer based on the given context.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a791ce955429974737f798e",
+    "question": "Brett McClure competed in the pommel horse event at the 2001 Goodwill Games in what Australian province?",
+    "gold_answer": "Queensland",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5abc23c45542993a06baf896",
+    "question": "Which region of Austria means 'Estate of the Salt Chamber' and covers the village of Obertraun, a popular destination for skiing and snowboarding in the winter?",
+    "gold_answer": "Salzkammergut",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a7a77425542995eb53be83e",
+    "question": "Who has released more solo albums, Nick Carter or Brady Seals?",
+    "gold_answer": "Brady Seals",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  },
+  {
+    "query_id": "5a8835245542994846c1ce27",
+    "question": "Do Tropical Fish Hobbyist and Curve cover the same topic?",
+    "gold_answer": "no",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a85ee635542994775f606b4",
+    "question": "Which lake is located further south, Dal Lake or Waterton Lake?",
+    "gold_answer": "Dal Lake",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a86fde6554299211dda2b7f",
+    "question": " Pramod Bhasin was the former CEO of a company that provided what kind of services?",
+    "gold_answer": "IT",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "bridge",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5ac406c155429919431738fc",
+    "question": "What are both Caleb Shomo and Brian Welch?",
+    "gold_answer": "singer",
+    "predicted_answer": "I don't have enough information to answer this query.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 0
+  },
+  {
+    "query_id": "5a8482e55542997175ce1edc",
+    "question": "Are Trent Edwards and Lucy Saroyan both football players?",
+    "gold_answer": "no",
+    "predicted_answer": "Sorry, I encountered an error generating the response.",
+    "em": 0,
+    "type": "comparison",
+    "strategy": "graph",
+    "num_contexts": 1
+  }
+]

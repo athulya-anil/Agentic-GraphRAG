@@ -1,0 +1,76 @@
+{
+  "relationship_types": {
+    "PERSON_CREATIVE": [
+      "DIRECTED",
+      "CREATED",
+      "WROTE",
+      "PRODUCED",
+      "COMPOSED",
+      "DESIGNED",
+      "INVENTED",
+      "FOUNDED",
+      "CO_FOUNDED"
+    ],
+    "PERSON_PROFESSIONAL": [
+      "WORKED_FOR",
+      "EMPLOYED_BY",
+      "MEMBER_OF",
+      "AFFILIATED_WITH",
+      "COLLABORATED_WITH",
+      "MANAGED_BY",
+      "COACHED_BY"
+    ],
+    "PERSON_BIOGRAPHICAL": [
+      "BORN_IN",
+      "DIED_IN",
+      "LIVED_IN",
+      "EDUCATED_AT",
+      "GRADUATED_FROM",
+      "NATIONALITY"
+    ],
+    "WORK_RELATIONSHIPS": [
+      "RELEASED_IN",
+      "PUBLISHED_BY",
+      "PUBLISHED_IN",
+      "PART_OF",
+      "SEQUEL_TO",
+      "PREQUEL_TO",
+      "ADAPTED_FROM",
+      "BASED_ON",
+      "FEATURES",
+      "STARS",
+      "PERFORMED_BY"
+    ],
+    "LOCATION_RELATIONSHIPS": [
+      "LOCATED_IN",
+      "CAPITAL_OF",
+      "BORDERS",
+      "NEAR",
+      "REGION_OF",
+      "COUNTRY_OF"
+    ],
+    "TEMPORAL": [
+      "OCCURRED_IN",
+      "OCCURRED_ON",
+      "FOUNDED_IN",
+      "ESTABLISHED_IN",
+      "DISSOLVED_IN",
+      "ENDED_IN"
+    ],
+    "ORGANIZATIONAL": [
+      "SUBSIDIARY_OF",
+      "OWNED_BY",
+      "ACQUIRED_BY",
+      "MERGED_WITH",
+      "PARTNERED_WITH"
+    ],
+    "GENERAL": [
+      "RELATED_TO",
+      "ASSOCIATED_WITH",
+      "INFLUENCED_BY",
+      "INSPIRED_BY"
+    ]
+  },
+  "description": "HotpotQA relationship schema - comprehensive set of relationship types for knowledge graph construction",
+  "source": "Adapted from KARMA paper for HotpotQA domain"
+}

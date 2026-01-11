@@ -94,13 +94,20 @@ Examples:
 - "Where is Tesla headquartered?"
   → Looking for: Location, Know: "Tesla", Relationship: HEADQUARTERED_IN, Direction: forward
 
+- "Were Scott Derrickson and Ed Wood of the same nationality?"
+  → Looking for: Nationality, Know: ["Scott Derrickson", "Ed Wood"], Relationship: SAME_AS, Direction: reverse, Type: comparison
+
+IMPORTANT: For comparison questions (asking if X and Y have the same Z), extract BOTH entities as anchor_entities (list).
+
 Return JSON:
 {{
   "target_type": "EntityType of what we're looking for",
-  "anchor_entity": "the specific entity/value we know",
+  "anchor_entity": "the specific entity/value we know (for single entity queries)",
+  "anchor_entities": ["entity1", "entity2", ...],  // USE THIS for comparison/multi-entity questions
   "anchor_type": "EntityType of the anchor",
   "relationship_type": "RELATIONSHIP_TYPE",
   "direction": "forward or reverse",
+  "query_type": "factoid or comparison",
   "confidence": 0.0-1.0,
   "reasoning": "brief explanation"
 }}"""

@@ -1,0 +1,31 @@
+{
+  "documents_processed": 5,
+  "entities_extracted": 45,
+  "entities_after_dedup": 44,
+  "relationships_extracted": 60,
+  "relationships_per_node": 1.3636363636363635,
+  "relationship_types": {
+    "DIRECTED": 10,
+    "PRODUCED": 7,
+    "STARS": 6,
+    "RELATED_TO": 3,
+    "PERFORMED_BY": 1,
+    "LOCATED_IN": 7,
+    "LIVED_IN": 2,
+    "WROTE": 4,
+    "WORKED_FOR": 7,
+    "PART_OF": 2,
+    "BORN_IN": 1,
+    "OWNED_BY": 1,
+    "NEAR": 1,
+    "COLLABORATED_WITH": 3,
+    "COMPOSED": 5
+  },
+  "total_time_seconds": 39.29861283302307,
+  "phase_times": {
+    "entity_extraction": 12.004832983016968,
+    "summarization": 1.9892189502716064,
+    "relationship_extraction": 7.182770013809204,
+    "deduplication": 18.121790885925293
+  }
+}

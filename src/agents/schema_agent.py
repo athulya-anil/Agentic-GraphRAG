@@ -139,7 +139,7 @@ Provide your analysis in JSON format:
 Focus on extracting domain-specific entity and relationship types that are actually present in the document."""
 
         try:
-            response = self.llm_client.generate_json(prompt, temperature=0.1)
+            response = self.llm_client.generate_json(prompt, temperature=0.0)
             return response
         except Exception as e:
             logger.error(f"Error analyzing document: {e}")

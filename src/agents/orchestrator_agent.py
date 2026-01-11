@@ -355,31 +355,24 @@ Return JSON:
         if not retrieved_context:
             return "I don't have enough information to answer this query."
 
-        # Build context string
-        context_parts = []
-        for i, item in enumerate(retrieved_context[:10], 1):  # Limit to top 10
-            text = item.get("text", item.get("content", ""))
-            source = item.get("source", "unknown")
-            context_parts.append(f"[{i}] {text} (source: {source})")
+        # OPTION 2: Extractive concatenation - return top N chunks concatenated
+        # This tests retrieval quality without LLM synthesis
+        # For multi-document questions (comparisons), we need multiple chunks
+        # Return raw text from all retrieved documents
 
-        context_str = "\n\n".join(context_parts)
+        # Take top 5 chunks (or all if fewer)
+        top_chunks = retrieved_context[:5]
 
-        prompt = f"""Based on the following context, answer the user's query.
+        # Concatenate all chunk texts
+        texts = []
+        for chunk in top_chunks:
+            text = chunk.get("text", chunk.get("content", ""))
+            if text and text.strip():
+                texts.append(text.strip())
 
-Context:
-{context_str}
-
-Query: {query}
-
-Provide a clear, accurate answer based on the context. If the context doesn't contain enough information, say so.
-Cite sources using [1], [2], etc. when appropriate."""
-
-        try:
-            response = self.llm_client.generate(prompt, temperature=0.1)
-            return response
-        except Exception as e:
-            logger.error(f"Error synthesizing response: {e}")
-            return "Sorry, I encountered an error generating the response."
+        # Join with newlines
+        combined_text = "\n\n".join(texts)
+        return combined_text
 
 
 # Singleton instance

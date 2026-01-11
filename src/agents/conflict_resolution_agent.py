@@ -153,7 +153,13 @@ class ConflictResolutionAgent:
         name1 = entity1.get('name', '').lower().strip()
         name2 = entity2.get('name', '').lower().strip()
 
-        # Exact match
+        # CRITICAL: Check entity type first - don't merge different types!
+        type1 = entity1.get('type', '').lower()
+        type2 = entity2.get('type', '').lower()
+        if type1 != type2:
+            return False  # Different types can't be duplicates
+
+        # Exact match (same name AND same type)
         if name1 == name2:
             return True
 
@@ -278,9 +284,11 @@ Answer with JSON:
             for key, value in props.items():
                 if key not in merged_properties:
                     merged_properties[key] = value
-                # Keep value from entity with higher confidence
-                elif entity.get('confidence', 0) > cluster[0].get('confidence', 0):
-                    merged_properties[key] = value
+                # Keep value from entity with higher confidence OR if current value is None
+                # CRITICAL FIX: Always prefer non-null values over null values
+                elif merged_properties[key] is None or entity.get('confidence', 0) > cluster[0].get('confidence', 0):
+                    if value is not None:  # Don't overwrite with None
+                        merged_properties[key] = value
 
         # Average confidence
         confidences = [e.get('confidence', 0.5) for e in cluster]

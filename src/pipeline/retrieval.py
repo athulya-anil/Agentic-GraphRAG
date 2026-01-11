@@ -276,51 +276,59 @@ class RetrievalPipeline:
             )
 
             # Step 2: Use intent to guide retrieval
-            anchor_entity = intent.get("anchor_entity", "")
+            # Support both single and multiple anchor entities (for comparison questions)
+            anchor_entities_list = intent.get("anchor_entities", [])
+            if not anchor_entities_list and intent.get("anchor_entity"):
+                # Backward compatibility: single anchor_entity
+                anchor_entities_list = [intent.get("anchor_entity")]
+
             anchor_type = intent.get("anchor_type", "")
             target_type = intent.get("target_type", "")
             relationship = intent.get("relationship_type", "")
             direction = intent.get("direction", "bidirectional")
 
             # Step 3: Find anchor (seed) entities using enhanced search
+            # For comparison questions, we search for ALL anchor entities
             seed_entities = []
 
-            if anchor_entity and anchor_type:
-                # Use parsed anchor for precise matching
+            if anchor_entities_list and anchor_type:
+                # Use parsed anchors for precise matching
                 search_labels = [anchor_type] if anchor_type != "Unknown" else schema.get("labels", [])[:10]
             else:
                 # Fallback to keyword-based search
                 search_labels = schema.get("labels", [])[:10]
 
-            for label in search_labels:
-                # Search for anchor entity in multiple fields
-                search_term = anchor_entity.lower() if anchor_entity else ""
-                if not search_term:
-                    # Fallback: extract from query
-                    query_words = [w for w in query.lower().split() if len(w) > 3]
-                    search_term = query_words[0] if query_words else ""
+            # Search for each anchor entity (handles both single and multi-entity queries)
+            for anchor_entity in anchor_entities_list:
+                for label in search_labels:
+                    # Search for this anchor entity in multiple fields
+                    search_term = anchor_entity.lower() if anchor_entity else ""
+                    if not search_term:
+                        # Fallback: extract from query
+                        query_words = [w for w in query.lower().split() if len(w) > 3]
+                        search_term = query_words[0] if query_words else ""
 
-                if search_term:
-                    cypher = f"""
-                    MATCH (n:{label})
-                    WHERE toLower(n.name) CONTAINS $word
-                       OR toLower(coalesce(n.aliases, '')) CONTAINS $word
-                       OR toLower(coalesce(n.keywords, '')) CONTAINS $word
-                       OR toLower(coalesce(n.summary, '')) CONTAINS $word
-                    RETURN n, id(n) as node_id, $word as matched_word
-                    LIMIT {min(top_k, 5)}
-                    """
-                    results = self.neo4j_manager.execute_query(
-                        cypher, {"word": search_term}
-                    )
+                    if search_term:
+                        cypher = f"""
+                        MATCH (n:{label})
+                        WHERE toLower(n.name) CONTAINS $word
+                           OR toLower(coalesce(n.aliases, '')) CONTAINS $word
+                           OR toLower(coalesce(n.keywords, '')) CONTAINS $word
+                           OR toLower(coalesce(n.summary, '')) CONTAINS $word
+                        RETURN n, id(n) as node_id, $word as matched_word
+                        LIMIT {min(top_k, 5)}
+                        """
+                        results = self.neo4j_manager.execute_query(
+                            cypher, {"word": search_term}
+                        )
 
-                    for result in results:
-                        seed_entities.append({
-                            "node": dict(result["n"]),
-                            "node_id": result["node_id"],
-                            "label": label,
-                            "matched_word": result["matched_word"]
-                        })
+                        for result in results:
+                            seed_entities.append({
+                                "node": dict(result["n"]),
+                                "node_id": result["node_id"],
+                                "label": label,
+                                "matched_word": result["matched_word"]
+                            })
 
             # FALLBACK: If no entities found with parsed intent, try keyword-based search
             if not seed_entities:
@@ -602,9 +610,10 @@ class RetrievalPipeline:
             # Different filtering logic based on source
             if source == "graph":
                 # Graph results already did entity matching in retrieval
-                # Use more lenient filtering - trust the graph traversal
-                # Only filter if score is very low
-                if score < 0.3:
+                # Use very lenient filtering - trust the graph traversal
+                # For comparison questions, we need multiple entities even if scores vary
+                # Only filter if score is extremely low
+                if score < 0.1:
                     continue
                 # For graph, boost score based on path depth (already encoded in score)
                 result["adjusted_score"] = score * 1.1

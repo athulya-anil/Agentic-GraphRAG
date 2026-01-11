@@ -20,22 +20,28 @@ load_dotenv()
 
 
 class LLMConfig(BaseModel):
-    """Configuration for LLM (Groq) settings."""
+    """Configuration for LLM settings (Groq, Ollama, etc)."""
 
-    api_key: str = Field(..., description="Groq API key")
+    provider: str = Field(default="groq", description="LLM provider (groq, ollama, gemini)")
+    api_key: str = Field(default="", description="API key (not needed for Ollama)")
     model: str = Field(
         default="llama-3.3-70b-versatile",
-        description="Groq model name"
+        description="Model name"
     )
     temperature: float = Field(default=0.0, ge=0.0, le=2.0)
-    max_tokens: int = Field(default=2048, ge=1, le=8192)
+    max_tokens: int = Field(default=2048, ge=1, le=16384)
 
     @validator("api_key")
-    def validate_api_key(cls, v: str) -> str:
-        """Validate API key is not empty."""
+    def validate_api_key(cls, v: str, values: dict) -> str:
+        """Validate API key is not empty for providers that need it."""
+        provider = values.get("provider", "groq")
+        # Ollama runs locally and doesn't need an API key
+        if provider == "ollama":
+            return v
+        # Other providers need an API key
         if not v or v == "your_groq_api_key_here":
             raise ValueError(
-                "GROQ_API_KEY not set. Please set it in .env file or environment."
+                f"{provider.upper()}_API_KEY not set. Please set it in .env file or environment."
             )
         return v
 
@@ -146,13 +152,38 @@ class Config(BaseModel):
         Raises:
             ValueError: If required environment variables are missing
         """
-        return cls(
-            llm=LLMConfig(
+        # Determine LLM provider and load appropriate settings
+        llm_provider = os.getenv("LLM_PROVIDER", "groq").lower()
+
+        if llm_provider == "ollama":
+            llm_config = LLMConfig(
+                provider="ollama",
+                api_key="",  # Ollama doesn't need an API key
+                model=os.getenv("OLLAMA_MODEL", "llama3.1:8b"),
+                temperature=float(os.getenv("OLLAMA_TEMPERATURE", "0.0")),
+                max_tokens=int(os.getenv("OLLAMA_MAX_TOKENS", "16000")),
+            )
+        elif llm_provider == "groq":
+            llm_config = LLMConfig(
+                provider="groq",
                 api_key=os.getenv("GROQ_API_KEY", ""),
                 model=os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
                 temperature=float(os.getenv("GROQ_TEMPERATURE", "0.0")),
                 max_tokens=int(os.getenv("GROQ_MAX_TOKENS", "2048")),
-            ),
+            )
+        elif llm_provider == "gemini":
+            llm_config = LLMConfig(
+                provider="gemini",
+                api_key=os.getenv("GEMINI_API_KEY", ""),
+                model=os.getenv("GEMINI_MODEL", "gemini-2.0-flash-exp"),
+                temperature=float(os.getenv("GEMINI_TEMPERATURE", "0.0")),
+                max_tokens=int(os.getenv("GEMINI_MAX_TOKENS", "2048")),
+            )
+        else:
+            raise ValueError(f"Unsupported LLM provider: {llm_provider}")
+
+        return cls(
+            llm=llm_config,
             neo4j=Neo4jConfig(
                 uri=os.getenv("NEO4J_URI", "bolt://localhost:7687"),
                 user=os.getenv("NEO4J_USER", "neo4j"),

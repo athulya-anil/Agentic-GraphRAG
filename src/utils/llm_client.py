@@ -203,6 +203,80 @@ class GroqProvider(BaseLLMProvider):
             raise
 
 
+class OllamaProvider(BaseLLMProvider):
+    """Ollama provider implementation (local LLM)."""
+
+    def __init__(self, api_key: str, model: str, temperature: float, max_tokens: int):
+        super().__init__(api_key, model, temperature, max_tokens)
+
+        # Ollama runs locally, no API key needed but we keep the interface consistent
+        self.base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
+        # Test connection
+        try:
+            import requests
+            self.requests = requests
+            response = requests.get(f"{self.base_url}/api/tags", timeout=5)
+            if response.status_code == 200:
+                logger.info(f"Initialized Ollama provider with model: {model}")
+            else:
+                raise RuntimeError(f"Ollama not responding (status: {response.status_code})")
+        except ImportError:
+            raise ImportError(
+                "requests not installed. Install it with: pip install requests"
+            )
+        except Exception as e:
+            raise RuntimeError(
+                f"Failed to connect to Ollama at {self.base_url}. "
+                f"Make sure Ollama is running (brew services start ollama). Error: {e}"
+            )
+
+    def generate(
+        self,
+        messages: List[Dict[str, str]],
+        temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None,
+    ) -> tuple[str, int]:
+        """Generate completion using Ollama."""
+        temp = temperature if temperature is not None else self.temperature
+        max_tok = max_tokens if max_tokens is not None else self.max_tokens
+
+        try:
+            # Ollama chat API format
+            response = self.requests.post(
+                f"{self.base_url}/api/chat",
+                json={
+                    "model": self.model,
+                    "messages": messages,
+                    "stream": False,
+                    "options": {
+                        "temperature": temp,
+                        "num_predict": max_tok,
+                    }
+                },
+                timeout=300  # 5 minutes timeout for local generation
+            )
+
+            response.raise_for_status()
+            result = response.json()
+
+            content = result.get("message", {}).get("content", "")
+
+            # Estimate tokens (Ollama doesn't always return exact counts)
+            tokens_used = result.get("eval_count", 0) + result.get("prompt_eval_count", 0)
+            if tokens_used == 0:
+                # Fallback estimation
+                tokens_used = (sum(len(m["content"]) for m in messages) + len(content)) // 4
+
+            self.total_tokens_used += tokens_used
+
+            return content, tokens_used
+
+        except Exception as e:
+            logger.error(f"Ollama API error: {e}")
+            raise
+
+
 class UnifiedLLMClient:
     """
     Unified LLM client with multi-provider support and caching.
@@ -210,6 +284,7 @@ class UnifiedLLMClient:
     Supports:
     - Google Gemini (gemini, gemini-2.0-flash-exp)
     - Groq (llama-3.3-70b-versatile)
+    - Ollama (local LLM, llama3.1:8b)
 
     Features:
     - Automatic provider selection
@@ -220,7 +295,7 @@ class UnifiedLLMClient:
 
     def __init__(
         self,
-        provider: Literal["gemini", "groq"] = "gemini",
+        provider: Literal["gemini", "groq", "ollama"] = "gemini",
         enable_cache: bool = True,
         cache_dir: Optional[Path] = None,
     ):
@@ -265,6 +340,16 @@ class UnifiedLLMClient:
                 raise ValueError("GROQ_API_KEY not set in environment")
 
             return GroqProvider(api_key, model, temperature, max_tokens)
+
+        elif provider == "ollama":
+            # Ollama doesn't need an API key (runs locally)
+            api_key = ""
+            model = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
+            temperature = float(os.getenv("OLLAMA_TEMPERATURE", "0.0"))
+            # Higher max_tokens for Ollama (no API limits, runs locally)
+            max_tokens = int(os.getenv("OLLAMA_MAX_TOKENS", "16000"))
+
+            return OllamaProvider(api_key, model, temperature, max_tokens)
 
         else:
             raise ValueError(f"Unsupported provider: {provider}")
@@ -374,6 +459,7 @@ class UnifiedLLMClient:
         prompt: str,
         system_prompt: Optional[str] = None,
         temperature: Optional[float] = None,
+        max_tokens: Optional[int] = None,
     ) -> Dict[str, Any]:
         """
         Generate structured JSON output.
@@ -382,11 +468,13 @@ class UnifiedLLMClient:
             prompt: User prompt requesting JSON output
             system_prompt: Optional system prompt
             temperature: Override default temperature
+            max_tokens: Override default max tokens (use higher for large entity extraction)
 
         Returns:
             dict: Parsed JSON response
         """
         import json
+        import re
 
         # Add JSON instruction
         json_system = (
@@ -400,6 +488,7 @@ class UnifiedLLMClient:
             prompt=prompt,
             system_prompt=json_system,
             temperature=temperature,
+            max_tokens=max_tokens,  # CRITICAL FIX: Pass max_tokens through!
         )
 
         try:
@@ -416,8 +505,59 @@ class UnifiedLLMClient:
             return json.loads(response_text)
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse JSON: {e}")
-            logger.error(f"Response: {response_text}")
+            logger.error(f"Response: {response_text[:500]}...")  # Log first 500 chars only
+
+            # CRITICAL FIX: Try to repair truncated JSON
+            try:
+                repaired_json = self._repair_truncated_json(response_text)
+                if repaired_json:
+                    logger.warning("Successfully repaired truncated JSON")
+                    return repaired_json
+            except Exception:
+                pass
+
             raise ValueError(f"Invalid JSON response: {e}")
+
+    def _repair_truncated_json(self, text: str) -> Optional[Dict[str, Any]]:
+        """
+        Attempt to repair truncated JSON responses.
+
+        Handles common truncation issues:
+        - Missing closing brackets/braces
+        - Incomplete last object in array
+
+        Args:
+            text: Potentially truncated JSON text
+
+        Returns:
+            Repaired JSON dict or None if unrepairable
+        """
+        import json
+
+        # Try to close incomplete JSON array
+        if text.strip().startswith('['):
+            # Count open/close brackets and braces
+            open_brackets = text.count('[')
+            close_brackets = text.count(']')
+            open_braces = text.count('{')
+            close_braces = text.count('}')
+
+            # Remove incomplete last object if present
+            # Look for last complete object
+            last_complete = text.rfind('},')
+            if last_complete > 0:
+                text = text[:last_complete + 1]
+
+            # Close all unclosed structures
+            text += '}' * (open_braces - close_braces)
+            text += ']' * (open_brackets - close_brackets)
+
+            try:
+                return json.loads(text)
+            except json.JSONDecodeError:
+                return None
+
+        return None
 
     def batch_generate(
         self,
