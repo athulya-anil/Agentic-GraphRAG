@@ -1,10 +1,10 @@
 """
-OrchestratorAgent for Agentic GraphRAG
+OrchestratorAgent for Agentic GraphRAG (HotpotQA-optimized)
 
 This agent intelligently routes queries to the optimal retrieval strategy:
-- Classifies queries (factual vs. conceptual, relational vs. semantic)
-- Selects retrieval strategy (vector or graph)
-- Routes based on failure prediction
+- Classifies HotpotQA query types (single-hop, multi-hop, comparison, yes/no)
+- Routes multi-hop/comparison/yes-no → GRAPH
+- Routes single-hop → VECTOR
 - Synthesizes responses from retrieved context
 
 Author: Agentic GraphRAG Team
@@ -17,7 +17,7 @@ from enum import Enum
 
 from ..utils.llm_client import get_llm_client
 from ..utils.config import get_config
-from .failure_predictor import get_failure_predictor
+from ..answering import get_answer_selector
 
 
 # Configure logging
@@ -35,29 +35,29 @@ class RetrievalStrategy(Enum):
 
 
 class QueryType(Enum):
-    """Enumeration of query types."""
-    FACTUAL = "factual"           # Specific facts (e.g., "Who is the CEO?")
-    CONCEPTUAL = "conceptual"     # Broad concepts (e.g., "Explain RAG")
-    RELATIONAL = "relational"     # Entity relationships (e.g., "What does X treat?")
-    EXPLORATORY = "exploratory"   # Open-ended (e.g., "Tell me about...")
+    """HotpotQA query type taxonomy."""
+    SINGLE_HOP = "single_hop"      # Direct fact lookup (1 entity, 1 document)
+    MULTI_HOP = "multi_hop"        # Bridge entity reasoning (2+ hops)
+    COMPARISON = "comparison"      # Compare properties of 2+ entities
+    YES_NO = "yes_no"             # Boolean questions requiring aggregation
 
 
 class OrchestratorAgent:
     """
-    Agent responsible for query routing and response synthesis.
+    Agent responsible for query routing and response synthesis (HotpotQA).
 
-    Analyzes queries to determine:
-    1. Query type (factual, conceptual, relational, exploratory)
-    2. Optimal retrieval strategy (vector or graph)
-    3. Failure risk assessment
-    4. Response synthesis approach
+    Routing logic (simple, no ambiguity):
+    - MULTI_HOP → GRAPH (bridge entities require traversal)
+    - COMPARISON → GRAPH (must retrieve multiple entities)
+    - YES_NO → GRAPH (requires evidence aggregation)
+    - SINGLE_HOP → VECTOR (semantic similarity sufficient)
     """
 
     def __init__(self):
         """Initialize the OrchestratorAgent."""
         self.llm_client = get_llm_client()
         self.config = get_config()
-        self.failure_predictor = get_failure_predictor()
+        self.answer_selector = get_answer_selector()
 
         # Performance tracking for adaptive learning
         self.strategy_performance: Dict[str, List[float]] = {
@@ -65,7 +65,7 @@ class OrchestratorAgent:
             "graph": []
         }
 
-        logger.info("Initialized OrchestratorAgent with failure-aware routing")
+        logger.info("Initialized OrchestratorAgent (HotpotQA-optimized)")
 
     def route_query(
         self,
@@ -92,11 +92,9 @@ class OrchestratorAgent:
         # Classify query
         query_type, query_analysis = self._classify_query(query)
 
-        # Select strategy
+        # Select strategy (simple routing)
         strategy = self._select_strategy(
-            query=query,
             query_type=query_type,
-            query_analysis=query_analysis,
             available_strategies=available_strategies
         )
 
@@ -115,7 +113,7 @@ class OrchestratorAgent:
 
     def _classify_query(self, query: str) -> tuple[QueryType, Dict[str, Any]]:
         """
-        Classify a query to understand its nature.
+        Classify a HotpotQA query by type.
 
         Args:
             query: User query
@@ -123,128 +121,109 @@ class OrchestratorAgent:
         Returns:
             Tuple of (QueryType, analysis_dict)
         """
-        prompt = f"""Analyze the following user query and classify its type for a knowledge graph retrieval system.
+        prompt = f"""Analyze this query for a multi-hop QA system (HotpotQA).
 
 Query: "{query}"
 
-Classify the query into one of these types:
-1. FACTUAL: Asks for specific facts or data points (e.g., "What is the population of Paris?")
-2. CONCEPTUAL: Asks for explanations or broad concepts (e.g., "Explain how neural networks work")
-3. RELATIONAL: Asks about relationships between entities (e.g., "What drugs treat diabetes?")
-4. EXPLORATORY: Open-ended exploration (e.g., "Tell me about machine learning")
+Classify into ONE of these types:
 
-IMPORTANT: Determine if the query needs relationships between entities.
-Questions that need relationships include:
-- "Who/What/Where/When" questions involving entities (e.g., "Who founded Apple?" needs PERSON-FOUNDED->COMPANY relationship)
-- Questions about entity attributes that are other entities (e.g., "Where is X located?" needs ENTITY-LOCATED_IN->LOCATION)
-- Questions asking what entities do/cause/treat/produce (e.g., "What treats diabetes?" needs DRUG-TREATS->DISEASE)
-- Multi-hop queries (e.g., "Who founded the company that makes iPhone?" needs two relationships)
+1. SINGLE_HOP: Direct fact lookup requiring one entity/document
+   - Example: "What genre of music does Don Williams sing?"
+   - Characteristics: One entity, one relationship or property
 
-Questions that DON'T need relationships:
-- Asking for explanations of concepts (e.g., "What is machine learning?")
-- Asking for definitions (e.g., "Define photosynthesis")
-- Asking how things work conceptually (e.g., "How does gravity work?")
+2. MULTI_HOP: Bridge entity reasoning requiring 2+ hops
+   - Example: "What genre was sung by the artist who first recorded 'Come from the Heart'?"
+   - Characteristics: Must find intermediate entity (bridge) to reach answer
+   - Pattern: "X of Y of Z" or "Who/What that did Y?"
 
-Also determine:
-- needs_relationships: Does answering this require traversing entity relationships in a graph? (true/false)
-- needs_semantic: Does it need semantic/conceptual understanding beyond facts? (true/false)
-- needs_entities: Is it looking for specific entities? (true/false)
-- suggested_strategy: Best approach (vector=semantic search, graph=relationship traversal)
+3. COMPARISON: Compare properties of 2+ entities
+   - Example: "Were Scott Derrickson and Ed Wood of the same nationality?"
+   - Characteristics: Two or more entities mentioned, asking about commonality/difference
+   - Keywords: "both", "same", "versus", "and", "which ... or"
+
+4. YES_NO: Boolean question requiring evidence aggregation
+   - Example: "Are both Rutgers and Carnegie Mellon located in America?"
+   - Characteristics: Answer is yes/no, often overlaps with comparison
+   - Keywords: "is", "are", "does", "do", "was", "were" + expecting boolean
+
+IMPORTANT:
+- Multi-hop: Look for nested structures ("director of film starring X")
+- Comparison: Count entities - if 2+, it's comparison
+- Yes/no: Check if answer format is boolean (not factoid)
+- If multiple types apply, prefer: COMPARISON > YES_NO > MULTI_HOP > SINGLE_HOP
 
 Return JSON:
 {{
-  "type": "FACTUAL",
-  "needs_relationships": true,
-  "needs_semantic": false,
-  "needs_entities": true,
-  "suggested_strategy": "graph",
+  "type": "MULTI_HOP",
+  "num_hops": 2,
+  "num_entities": 1,
+  "is_comparison": false,
+  "is_yes_no": false,
   "confidence": 0.9,
-  "reasoning": "Brief explanation"
+  "reasoning": "Query requires finding intermediate entity"
 }}"""
 
         try:
             response = self.llm_client.generate_json(prompt, temperature=0.0)
 
             # Map type string to enum
-            type_str = response.get("type", "EXPLORATORY").upper()
-            query_type = QueryType[type_str] if type_str in QueryType.__members__ else QueryType.EXPLORATORY
+            type_str = response.get("type", "SINGLE_HOP").upper()
+            type_str = type_str.replace("-", "_")  # Handle "SINGLE-HOP" → "SINGLE_HOP"
+
+            query_type = QueryType[type_str] if type_str in QueryType.__members__ else QueryType.SINGLE_HOP
 
             return query_type, response
 
         except Exception as e:
             logger.error(f"Error classifying query: {e}")
-            # Default to exploratory + vector search
-            return QueryType.EXPLORATORY, {
-                "needs_relationships": True,
-                "needs_semantic": True,
-                "suggested_strategy": "vector",
-                "confidence": 0.5
+            # Default to multi-hop (safer for HotpotQA)
+            return QueryType.MULTI_HOP, {
+                "type": "MULTI_HOP",
+                "confidence": 0.5,
+                "reasoning": "Classification failed, defaulting to multi-hop"
             }
 
     def _select_strategy(
         self,
-        query: str,
         query_type: QueryType,
-        query_analysis: Dict[str, Any],
         available_strategies: List[str]
     ) -> RetrievalStrategy:
         """
-        Select the optimal retrieval strategy with failure-aware routing.
+        Select retrieval strategy based on query type.
+
+        Simple routing logic (no ambiguity):
+        - MULTI_HOP → GRAPH
+        - COMPARISON → GRAPH
+        - YES_NO → GRAPH
+        - SINGLE_HOP → VECTOR
 
         Args:
-            query: User query
             query_type: Classified query type
-            query_analysis: Query analysis results
             available_strategies: Available strategies
 
         Returns:
-            Selected RetrievalStrategy (GRAPH or VECTOR)
+            Selected RetrievalStrategy
         """
-        # STEP 1: Check for high failure risk (temporal, contact info, etc.)
-        should_avoid_graph, failure_reasoning = self.failure_predictor.should_avoid_graph(
-            query, threshold=0.6
-        )
-
-        if should_avoid_graph:
-            logger.info(
-                f"Avoiding graph for query (risk: {failure_reasoning['risk_level']}): "
-                f"{', '.join(failure_reasoning['risk_factors'])}"
-            )
-            return RetrievalStrategy.VECTOR
-
-        # STEP 2: Standard strategy selection based on query type
-        if query_type == QueryType.RELATIONAL:
-            # Relational queries use graph traversal
+        # HotpotQA routing: multi-hop/comparison/yes-no → graph
+        if query_type in [QueryType.MULTI_HOP, QueryType.COMPARISON, QueryType.YES_NO]:
             preferred = RetrievalStrategy.GRAPH
-        elif query_type == QueryType.FACTUAL:
-            # Factual queries: check if relationships needed
-            if query_analysis.get("needs_relationships", False):
-                preferred = RetrievalStrategy.GRAPH
-            else:
-                preferred = RetrievalStrategy.VECTOR
-        elif query_type == QueryType.CONCEPTUAL:
-            # Conceptual queries use semantic search
+        else:  # SINGLE_HOP
             preferred = RetrievalStrategy.VECTOR
-        else:  # EXPLORATORY
-            # Exploratory: if needs relationships → graph, else → vector
-            if query_analysis.get("needs_relationships", False):
-                preferred = RetrievalStrategy.GRAPH
-            else:
-                preferred = RetrievalStrategy.VECTOR
 
-        # STEP 3: Ensure strategy is available
+        # Ensure strategy is available
         if preferred.value not in available_strategies:
+            logger.warning(f"Preferred strategy {preferred.value} not available, falling back")
             if "vector" in available_strategies:
-                preferred = RetrievalStrategy.VECTOR
+                return RetrievalStrategy.VECTOR
             elif "graph" in available_strategies:
-                preferred = RetrievalStrategy.GRAPH
+                return RetrievalStrategy.GRAPH
 
-        # STEP 4: Consider historical performance (adaptive learning)
+        # Consider historical performance (adaptive learning)
         if self._has_performance_data():
             adjusted_strategy = self._adjust_based_on_performance(preferred, available_strategies)
             if adjusted_strategy:
                 logger.info(f"Adjusted strategy based on performance: {preferred.value} → {adjusted_strategy.value}")
-                preferred = adjusted_strategy
+                return adjusted_strategy
 
         return preferred
 
@@ -312,7 +291,7 @@ Return JSON:
 
         # Switch if best is significantly better (>15% improvement)
         if best_perf > preferred_perf * 1.15:
-            logger.info(f"Switching from {preferred.value} to {best_strategy} based on performance")
+            logger.info(f"Performance-based switch: {preferred.value} ({preferred_perf:.2f}) → {best_strategy} ({best_perf:.2f})")
             return RetrievalStrategy[best_strategy.upper()]
 
         return None
@@ -339,40 +318,44 @@ Return JSON:
         self,
         query: str,
         retrieved_context: List[Dict[str, Any]],
-        strategy: RetrievalStrategy
+        strategy: RetrievalStrategy,
+        query_type: Optional[QueryType] = None
     ) -> str:
         """
-        Synthesize a response from retrieved context.
+        Synthesize answer using symbolic AnswerSelector (HotpotQA EM-correct).
+
+        CRITICAL: This uses DETERMINISTIC answer selection (NOT text generation).
+        Output = single answer string for EM evaluation.
 
         Args:
             query: User query
             retrieved_context: List of retrieved context items
             strategy: Strategy that was used
+            query_type: Query type (YES_NO, COMPARISON, SINGLE_HOP, MULTI_HOP)
 
         Returns:
-            Synthesized response
+            Single answer string (EM-valid)
         """
         if not retrieved_context:
-            return "I don't have enough information to answer this query."
+            return ""
 
-        # OPTION 2: Extractive concatenation - return top N chunks concatenated
-        # This tests retrieval quality without LLM synthesis
-        # For multi-document questions (comparisons), we need multiple chunks
-        # Return raw text from all retrieved documents
+        # Default to SINGLE_HOP if query_type not provided
+        if query_type is None:
+            query_type = QueryType.SINGLE_HOP
 
-        # Take top 5 chunks (or all if fewer)
-        top_chunks = retrieved_context[:5]
+        # Use AnswerSelector for deterministic answer extraction
+        answer = self.answer_selector.select_answer(
+            query=query,
+            query_type=query_type.value,
+            evidence=retrieved_context
+        )
 
-        # Concatenate all chunk texts
-        texts = []
-        for chunk in top_chunks:
-            text = chunk.get("text", chunk.get("content", ""))
-            if text and text.strip():
-                texts.append(text.strip())
+        # Fallback if no answer selected
+        if not answer or answer.strip() == "":
+            logger.warning(f"AnswerSelector returned empty answer for query: {query[:50]}...")
+            return ""
 
-        # Join with newlines
-        combined_text = "\n\n".join(texts)
-        return combined_text
+        return answer
 
 
 # Singleton instance
@@ -393,22 +376,22 @@ def get_orchestrator_agent() -> OrchestratorAgent:
 
 
 if __name__ == "__main__":
-    """Test the OrchestratorAgent."""
+    """Test the OrchestratorAgent with HotpotQA queries."""
     import sys
 
     try:
-        print("🔄 Initializing OrchestratorAgent...")
+        print("🔄 Initializing OrchestratorAgent (HotpotQA)...")
         agent = get_orchestrator_agent()
 
-        # Test queries
+        # Test queries (HotpotQA-style)
         test_queries = [
-            "Who is the CEO of Tesla?",
-            "Explain how neural networks work",
-            "What drugs treat diabetes?",
-            "Tell me about machine learning applications"
+            "What genre of music does Don Williams sing?",  # SINGLE_HOP
+            "What genre was sung by the artist who first recorded 'Come from the Heart'?",  # MULTI_HOP
+            "Were Scott Derrickson and Ed Wood of the same nationality?",  # COMPARISON
+            "Are both Rutgers and Carnegie Mellon located in America?",  # YES_NO
         ]
 
-        print("\n📚 Testing query routing...")
+        print("\n📚 Testing query routing (HotpotQA)...")
         for query in test_queries:
             print(f"\nQuery: '{query}'")
             routing = agent.route_query(query)

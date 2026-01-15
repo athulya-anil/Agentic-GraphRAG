@@ -1,12 +1,11 @@
 """
-Retrieval Pipeline for Agentic GraphRAG
+Retrieval Pipeline for Agentic GraphRAG (HotpotQA-optimized)
 
 This module handles intelligent query retrieval:
 1. Query analysis and routing (OrchestratorAgent)
 2. Multi-strategy retrieval (vector or graph)
-3. Context reranking (optional cross-encoder)
-4. Response generation
-5. Performance tracking (ReflectionAgent)
+3. Result filtering
+4. Response generation (extractive concatenation)
 
 Author: Agentic GraphRAG Team
 """
@@ -19,7 +18,6 @@ from typing import List, Dict, Any, Optional
 
 from ..agents import (
     get_orchestrator_agent,
-    get_reflection_agent,
     RetrievalStrategy
 )
 from ..agents.query_parser_agent import get_query_parser
@@ -38,20 +36,20 @@ logger = logging.getLogger(__name__)
 
 class RetrievalPipeline:
     """
-    End-to-end query retrieval pipeline with intelligent routing.
+    End-to-end query retrieval pipeline with intelligent routing (HotpotQA).
 
     Features:
-    - Automatic query routing to optimal strategy
-    - Vector similarity search
-    - Graph traversal queries
-    - Optional cross-encoder reranking
-    - Response generation and evaluation
+    - Automatic query routing to optimal strategy (VECTOR vs GRAPH)
+    - Vector similarity search (FAISS)
+    - Graph traversal queries (Neo4j multi-hop)
+    - BAAI/bge-reranker-large for result reranking
+    - Result filtering
+    - Extractive response generation
     """
 
     def __init__(
         self,
-        use_reranking: bool = False,
-        use_reflection: bool = True,
+        use_reranking: bool = True,
         enable_cache: bool = True,
         cache_dir: Optional[Path] = None
     ):
@@ -59,14 +57,12 @@ class RetrievalPipeline:
         Initialize the retrieval pipeline.
 
         Args:
-            use_reranking: Whether to use cross-encoder reranking
-            use_reflection: Whether to track performance with ReflectionAgent
+            use_reranking: Whether to use BAAI/bge-reranker-large
             enable_cache: Whether to enable query result caching
             cache_dir: Directory for cache storage
         """
         self.config = get_config()
         self.use_reranking = use_reranking
-        self.use_reflection = use_reflection
         self.enable_cache = enable_cache
         self.cache_dir = cache_dir or Path("data/cache/queries")
 
@@ -76,27 +72,29 @@ class RetrievalPipeline:
 
         # Initialize agents
         self.orchestrator = get_orchestrator_agent()
-        self.reflection_agent = get_reflection_agent() if use_reflection else None
 
         # Initialize storage
         self.neo4j_manager = get_neo4j_manager()
         self.faiss_index = get_faiss_index()
 
-        # Cross-encoder for reranking (lazy load)
+        # Initialize reranker (BAAI/bge-reranker-large)
         self.reranker = None
         if use_reranking:
             self._initialize_reranker()
 
-        logger.info("Initialized RetrievalPipeline")
+        logger.info("Initialized RetrievalPipeline (HotpotQA-optimized)")
 
     def _initialize_reranker(self):
-        """Initialize cross-encoder reranker."""
+        """Initialize BAAI/bge-reranker-large for HotpotQA."""
         try:
             from sentence_transformers import CrossEncoder
-            self.reranker = CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')
-            logger.info("Loaded cross-encoder reranker")
+            self.reranker = CrossEncoder('BAAI/bge-reranker-large')
+            logger.info("Loaded BAAI/bge-reranker-large")
         except ImportError:
             logger.warning("sentence-transformers not available, reranking disabled")
+            self.use_reranking = False
+        except Exception as e:
+            logger.warning(f"Failed to load reranker: {e}")
             self.use_reranking = False
 
     def _get_cache_key(self, query: str, top_k: Optional[int], strategy: Optional[RetrievalStrategy]) -> str:
@@ -192,7 +190,7 @@ class RetrievalPipeline:
         else:
             raise ValueError(f"Unknown strategy: {strategy}")
 
-        # Rerank if enabled
+        # Rerank if enabled (BAAI/bge-reranker-large)
         if self.use_reranking and results:
             results = self._rerank_results(query, results)
 
@@ -506,7 +504,7 @@ class RetrievalPipeline:
         results: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
         """
-        Rerank results using cross-encoder.
+        Rerank results using BAAI/bge-reranker-large.
 
         Args:
             query: User query
@@ -520,7 +518,7 @@ class RetrievalPipeline:
 
         try:
             # Prepare pairs for reranking
-            pairs = [[query, result["text"]] for result in results if result["text"]]
+            pairs = [[query, result["text"]] for result in results if result.get("text")]
 
             if not pairs:
                 return results
@@ -532,12 +530,12 @@ class RetrievalPipeline:
             for i, score in enumerate(rerank_scores):
                 if i < len(results):
                     results[i]["rerank_score"] = float(score)
-                    results[i]["original_score"] = results[i]["score"]
+                    results[i]["original_score"] = results[i].get("score", 0.0)
                     results[i]["score"] = float(score)
 
             # Re-sort by new scores
-            results.sort(key=lambda x: x.get("rerank_score", x["score"]), reverse=True)
-            logger.info("Reranked results using cross-encoder")
+            results.sort(key=lambda x: x.get("rerank_score", x.get("score", 0.0)), reverse=True)
+            logger.info(f"Reranked {len(results)} results using BAAI/bge-reranker-large")
 
         except Exception as e:
             logger.error(f"Error in reranking: {e}")
@@ -548,17 +546,20 @@ class RetrievalPipeline:
         self,
         query: str,
         results: List[Dict[str, Any]],
-        min_score: float = 0.25,  # Balanced threshold
-        max_results: int = 10    # Keep reasonable number of results
+        min_score: float = 0.15,  # Lower for HotpotQA bridge entities
+        max_results: int = 15     # More contexts for multi-hop
     ) -> List[Dict[str, Any]]:
         """
-        Filter out low-quality and irrelevant results to improve context precision.
+        Filter out low-quality results (HotpotQA-optimized).
+
+        Simplified filtering - no lexical overlap checks to avoid
+        filtering out bridge entities with low keyword overlap.
 
         Args:
             query: User query
             results: Retrieved results
-            min_score: Minimum score threshold (default: 0.3)
-            max_results: Maximum number of results to keep (default: 8)
+            min_score: Minimum score threshold
+            max_results: Maximum number of results to keep
 
         Returns:
             Filtered results
@@ -567,25 +568,9 @@ class RetrievalPipeline:
             return results
 
         filtered = []
-        query_lower = query.lower()
-
-        # Extract meaningful query words (remove stop words)
-        stop_words = {'what', 'is', 'the', 'a', 'an', 'how', 'does', 'do', 'are',
-                      'was', 'were', 'been', 'being', 'have', 'has', 'had', 'having',
-                      'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am',
-                      'be', 'can', 'could', 'would', 'should', 'may', 'might', 'must',
-                      'shall', 'will', 'of', 'in', 'for', 'on', 'with', 'at', 'by',
-                      'from', 'to', 'and', 'or', 'but', 'if', 'then', 'so', 'than',
-                      'too', 'very', 'just', 'about', 'into', 'through', 'during',
-                      'before', 'after', 'above', 'below', 'between', 'under', 'again',
-                      'further', 'once', 'here', 'there', 'when', 'where', 'why',
-                      'all', 'each', 'few', 'more', 'most', 'other', 'some', 'such',
-                      'no', 'nor', 'not', 'only', 'own', 'same', 'any', 'both'}
-
-        query_words = set(w for w in query_lower.split() if w not in stop_words and len(w) > 2)
 
         for result in results:
-            text = result.get("text", "").lower()
+            text = result.get("text", "")
             score = result.get("score", 0.0)
             source = result.get("source", "vector")
 
@@ -597,40 +582,13 @@ class RetrievalPipeline:
             if len(text) < 20:
                 continue
 
-            # Filter 3: Source-aware relevance check
-            text_words = set(w for w in text.split() if len(w) > 2)
-            overlap = len(query_words & text_words)
-
-            # Calculate overlap ratio
-            if query_words:
-                overlap_ratio = overlap / len(query_words)
-            else:
-                overlap_ratio = 0.5  # Default for empty query words
-
-            # Different filtering logic based on source
-            if source == "graph":
-                # Graph results already did entity matching in retrieval
-                # Use very lenient filtering - trust the graph traversal
-                # For comparison questions, we need multiple entities even if scores vary
-                # Only filter if score is extremely low
-                if score < 0.1:
-                    continue
-                # For graph, boost score based on path depth (already encoded in score)
-                result["adjusted_score"] = score * 1.1
-            else:
-                # Vector results: use keyword overlap filtering
-                # Only filter truly irrelevant results - balance precision with recall
-                if score < 0.4 and overlap_ratio < 0.15:
-                    continue
-                elif score < 0.5 and overlap == 0:
-                    continue
-                # Add relevance boost to score based on overlap
-                result["adjusted_score"] = score * (1 + overlap_ratio * 0.3)
+            # No lexical overlap filtering - trust embedding similarity
+            # and graph traversal for HotpotQA
 
             filtered.append(result)
 
-        # Sort by adjusted score and limit
-        filtered.sort(key=lambda x: x.get("adjusted_score", x["score"]), reverse=True)
+        # Sort by score and limit
+        filtered.sort(key=lambda x: x["score"], reverse=True)
         filtered = filtered[:max_results]
 
         if len(filtered) < len(results):
@@ -651,26 +609,22 @@ class RetrievalPipeline:
         query: str,
         top_k: Optional[int] = None,
         strategy: Optional[RetrievalStrategy] = None,
-        evaluate: bool = False,
-        ground_truth: Optional[str] = None,
         use_cache: bool = True
     ) -> Dict[str, Any]:
         """
-        Complete query pipeline: retrieve + generate + optionally evaluate.
+        Complete query pipeline: retrieve + generate (HotpotQA).
 
         Args:
             query: User query
             top_k: Number of results
             strategy: Force specific strategy
-            evaluate: Whether to evaluate with ReflectionAgent
-            ground_truth: Optional ground truth for evaluation
             use_cache: Whether to use cached results (default: True)
 
         Returns:
-            Dictionary with response, context, and optional metrics
+            Dictionary with response, context, and metadata
         """
-        # Check cache first (if not evaluating, since evaluation needs fresh metrics)
-        if use_cache and not evaluate:
+        # Check cache first
+        if use_cache:
             cache_key = self._get_cache_key(query, top_k, strategy)
             cached_result = self._get_from_cache(cache_key)
             if cached_result:
@@ -678,17 +632,22 @@ class RetrievalPipeline:
                 return cached_result
 
         # Route query if strategy not specified
+        query_type = None
         if strategy is None:
             routing = self.orchestrator.route_query(query)
             strategy = routing["strategy"]
-            logger.info(f"Query routed to {strategy.value} strategy")
+            query_type = routing["query_type"]
+            logger.info(f"Query routed to {strategy.value} strategy (type: {query_type.value})")
 
         # Retrieve context
         context = self.retrieve(query, top_k=top_k, strategy=strategy)
 
-        # Generate response
+        # Generate response using AnswerSelector (EM-correct)
         response = self.orchestrator.synthesize_response(
-            query, context, strategy or RetrievalStrategy.VECTOR
+            query=query,
+            retrieved_context=context,
+            strategy=strategy or RetrievalStrategy.VECTOR,
+            query_type=query_type
         )
 
         result = {
@@ -696,21 +655,12 @@ class RetrievalPipeline:
             "response": response,
             "context": context,
             "num_contexts": len(context),
-            "strategy": strategy.value  # Track which strategy was used
+            "strategy": strategy.value,
+            "query_type": query_type.value if query_type else "unknown"
         }
 
-        # Evaluate if requested
-        if evaluate and self.reflection_agent:
-            metrics = self.reflection_agent.evaluate_response(
-                query, response, context, ground_truth
-            )
-            result["metrics"] = metrics
-
-            # Record performance for orchestrator
-            self.orchestrator.record_performance(strategy, metrics.get("overall", 0.5))
-
-        # Cache result if not evaluating
-        if use_cache and not evaluate:
+        # Cache result
+        if use_cache:
             cache_key = self._get_cache_key(query, top_k, strategy)
             self._save_to_cache(cache_key, result)
 
@@ -721,44 +671,38 @@ class RetrievalPipeline:
 _retrieval_pipeline: Optional[RetrievalPipeline] = None
 
 
-def get_retrieval_pipeline(
-    use_reranking: bool = False,
-    use_reflection: bool = True
-) -> RetrievalPipeline:
+def get_retrieval_pipeline(use_reranking: bool = True) -> RetrievalPipeline:
     """
     Get the global RetrievalPipeline instance (singleton pattern).
 
     Args:
-        use_reranking: Whether to use cross-encoder reranking
-        use_reflection: Whether to use reflection agent
+        use_reranking: Whether to use BAAI/bge-reranker-large (default: True)
 
     Returns:
-        RetrievalPipeline: Global retrieval pipeline
+        RetrievalPipeline: Global retrieval pipeline (HotpotQA-optimized)
     """
     global _retrieval_pipeline
     if _retrieval_pipeline is None:
-        _retrieval_pipeline = RetrievalPipeline(
-            use_reranking=use_reranking,
-            use_reflection=use_reflection
-        )
+        _retrieval_pipeline = RetrievalPipeline(use_reranking=use_reranking)
     return _retrieval_pipeline
 
 
 if __name__ == "__main__":
-    """Test the retrieval pipeline."""
+    """Test the retrieval pipeline (HotpotQA)."""
     import sys
 
     try:
-        print("🔄 Initializing retrieval pipeline...")
-        pipeline = get_retrieval_pipeline(use_reflection=False)
+        print("🔄 Initializing retrieval pipeline (HotpotQA-optimized)...")
+        pipeline = get_retrieval_pipeline()
 
-        # Test query
-        test_query = "What is machine learning?"
+        # Test query (HotpotQA-style)
+        test_query = "What genre was sung by the artist who first recorded 'Come from the Heart'?"
 
         print(f"\n🔍 Testing retrieval for: '{test_query}'")
-        result = pipeline.query(test_query, top_k=5, evaluate=False)
+        result = pipeline.query(test_query, top_k=10)
 
         print(f"\n✅ Query complete!")
+        print(f"  Strategy: {result['strategy']}")
         print(f"  Response: {result['response'][:200]}...")
         print(f"  Contexts retrieved: {result['num_contexts']}")
 

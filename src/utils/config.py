@@ -66,10 +66,13 @@ class EmbeddingConfig(BaseModel):
     """Configuration for embedding model and text processing."""
 
     model_name: str = Field(
-        default="sentence-transformers/all-MiniLM-L6-v2",
+        default="BAAI/bge-large-en-v1.5",
         description="HuggingFace model name for embeddings"
     )
-    dimension: int = Field(default=384, ge=1, description="Embedding dimension")
+    dimension: int = Field(default=1024, ge=1, description="Embedding dimension")
+    # TODO: Optimize chunking after span-level provenance implemented
+    # HotpotQA requires sentence-level evidence tracking
+    # Current: whole-document storage (no chunk provenance)
     chunk_size: int = Field(default=512, ge=1, description="Text chunk size")
     chunk_overlap: int = Field(default=50, ge=0, description="Chunk overlap size")
 
@@ -101,11 +104,12 @@ class AgentConfig(BaseModel):
 
 
 class RetrievalConfig(BaseModel):
-    """Configuration for retrieval parameters."""
+    """Configuration for retrieval parameters (HotpotQA-optimized)."""
 
-    top_k_vector: int = Field(default=5, ge=1, le=20, description="Top K for vector search")
-    top_k_graph: int = Field(default=10, ge=1, le=50, description="Top K for graph search")
-    # hybrid_alpha removed - system uses either VECTOR or GRAPH, not hybrid
+    top_k_vector: int = Field(default=10, ge=1, le=30, description="Top K for vector search")
+    top_k_graph: int = Field(default=15, ge=1, le=50, description="Top K for graph search")
+    # System uses either VECTOR or GRAPH (not hybrid)
+    # HotpotQA requires more contexts for multi-hop reasoning
 
 
 class ApplicationConfig(BaseModel):
@@ -193,9 +197,9 @@ class Config(BaseModel):
             embedding=EmbeddingConfig(
                 model_name=os.getenv(
                     "EMBEDDING_MODEL",
-                    "sentence-transformers/all-MiniLM-L6-v2"
+                    "BAAI/bge-large-en-v1.5"
                 ),
-                dimension=int(os.getenv("EMBEDDING_DIMENSION", "384")),
+                dimension=int(os.getenv("EMBEDDING_DIMENSION", "1024")),
                 chunk_size=int(os.getenv("CHUNK_SIZE", "512")),
                 chunk_overlap=int(os.getenv("CHUNK_OVERLAP", "50")),
             ),
@@ -209,8 +213,8 @@ class Config(BaseModel):
                 verbose=os.getenv("AGENT_VERBOSE", "true").lower() == "true",
             ),
             retrieval=RetrievalConfig(
-                top_k_vector=int(os.getenv("TOP_K_VECTOR", "5")),
-                top_k_graph=int(os.getenv("TOP_K_GRAPH", "10")),
+                top_k_vector=int(os.getenv("TOP_K_VECTOR", "10")),
+                top_k_graph=int(os.getenv("TOP_K_GRAPH", "15")),
             ),
             app=ApplicationConfig(
                 log_level=os.getenv("LOG_LEVEL", "INFO"),  # type: ignore

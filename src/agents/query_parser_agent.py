@@ -71,7 +71,7 @@ class QueryParserAgent:
             if "relationship_types" in self.schema:
                 schema_context += f"\nAvailable relationships: {', '.join(self.schema['relationship_types'])}"
 
-        prompt = f"""Parse this query to extract the graph query pattern.{schema_context}
+        prompt = f"""Parse this query to extract the graph query pattern (HotpotQA).{schema_context}
 
 Query: "{query}"
 
@@ -81,23 +81,27 @@ Analyze:
 3. What's the relationship connecting them?
 4. Is this a forward or reverse query?
 
-Examples:
-- "What does Aspirin treat?"
-  → Looking for: Disease, Know: "Aspirin", Relationship: TREATS, Direction: forward
+HotpotQA Examples:
 
-- "Which drugs treat diabetes?"
-  → Looking for: Drug, Know: "diabetes", Relationship: TREATS, Direction: reverse
+- "What genre was sung by the artist who first recorded 'Come from the Heart'?"
+  → Looking for: Genre, Know: "Come from the Heart", Relationship: RECORDED→GENRE, Direction: multi-hop (2 hops)
 
-- "Who manufactures Aspirin?"
-  → Looking for: Organization, Know: "Aspirin", Relationship: MANUFACTURES, Direction: reverse
-
-- "Where is Tesla headquartered?"
-  → Looking for: Location, Know: "Tesla", Relationship: HEADQUARTERED_IN, Direction: forward
+- "Who directed the film starring Tom Hanks in 1994?"
+  → Looking for: Person (Director), Know: "Tom Hanks", Relationship: STARS→DIRECTED, Direction: reverse
 
 - "Were Scott Derrickson and Ed Wood of the same nationality?"
-  → Looking for: Nationality, Know: ["Scott Derrickson", "Ed Wood"], Relationship: SAME_AS, Direction: reverse, Type: comparison
+  → Looking for: Nationality, Know: ["Scott Derrickson", "Ed Wood"], Relationship: NATIONALITY, Direction: comparison
 
-IMPORTANT: For comparison questions (asking if X and Y have the same Z), extract BOTH entities as anchor_entities (list).
+- "Are both Rutgers and Carnegie Mellon located in America?"
+  → Looking for: Boolean (yes/no), Know: ["Rutgers", "Carnegie Mellon"], Relationship: LOCATED_IN, Direction: comparison
+
+- "What is the birthplace of the director of Titanic?"
+  → Looking for: Location, Know: "Titanic", Relationship: DIRECTED→BORN_IN, Direction: forward (2 hops)
+
+IMPORTANT:
+- For comparison questions, extract BOTH entities as anchor_entities (list)
+- For multi-hop queries, identify bridge entity relationships
+- For yes/no questions, mark query_type as "yes_no"
 
 Return JSON:
 {{
