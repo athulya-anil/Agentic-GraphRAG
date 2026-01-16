@@ -74,7 +74,7 @@ def main():
     print(f"  Documents processed: {result['documents_processed']}")
     print(f"  Entities extracted: {result['entities_extracted']}")
     print(f"  Relations extracted: {result['relations_extracted']}")
-    print(f"  Processing time: {result['processing_time']:.1f}s")
+    print(f"  Processing time: {result.get('processing_time', 0.0):.1f}s")
 
     # Get graph statistics
     neo4j = get_neo4j_manager()
