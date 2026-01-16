@@ -1,9 +1,12 @@
 """
-Evaluator Agent - KARMA Implementation
+Confidence Evaluator
 
 Aggregates multiple verification signals into confidence scores.
-Based on KARMA: C(t) = σ(Σαᵢvᵢ(t)), Cl(t) = σ(Σβⱼcⱼ(t)), R(t) = σ(Σγₖrₖ(t))
+Formula: C(t) = σ(Σαᵢvᵢ(t)), Cl(t) = σ(Σβⱼcⱼ(t)), R(t) = σ(Σγₖrₖ(t))
 Final decision: integrate if (C+Cl+R)/3 ≥ Θ
+
+NOTE: This is NOT an agent (no LLM calls). It performs pure mathematical
+confidence aggregation using sigmoid-weighted signal combination.
 """
 
 import logging
@@ -13,23 +16,23 @@ from typing import List, Dict, Any, Tuple
 logger = logging.getLogger(__name__)
 
 
-class EvaluatorAgent:
+class ConfidenceEvaluator:
     """
-    KARMA Evaluator Agent.
+    Confidence Evaluator (symbolic, no LLM).
 
     Aggregates Confidence, Clarity, and Relevance scores to make
-    final integration decisions.
+    final integration decisions using mathematical formulas.
     """
 
     def __init__(self, integration_threshold: float = 0.7):
         """
-        Initialize Evaluator Agent.
+        Initialize Confidence Evaluator.
 
         Args:
             integration_threshold: Minimum avg score to integrate (0.0-1.0)
         """
         self.integration_threshold = integration_threshold
-        logger.info(f"Initialized EvaluatorAgent (threshold={integration_threshold})")
+        logger.info(f"Initialized ConfidenceEvaluator (threshold={integration_threshold})")
 
     def sigmoid(self, x: float) -> float:
         """Sigmoid activation function."""

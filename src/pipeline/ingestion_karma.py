@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
-from src.agents.karma_controller import KARMAController
+from src.agents.pipeline_orchestrator import PipelineOrchestrator
 from src.utils.llm_client import get_llm_client
 from src.graph import get_neo4j_manager
 from src.vector import get_faiss_index
@@ -65,8 +65,8 @@ class KARMAIngestionPipeline:
         # Initialize LLM client
         self.llm_client = get_llm_client()
 
-        # Initialize KARMA controller
-        self.karma_controller = KARMAController(
+        # Initialize pipeline orchestrator
+        self.pipeline_orchestrator = PipelineOrchestrator(
             llm_client=self.llm_client,
             relevance_threshold=relevance_threshold,
             integration_threshold=integration_threshold,
@@ -115,10 +115,10 @@ class KARMAIngestionPipeline:
 
         logger.info(f"Starting KARMA ingestion of {len(documents)} documents...")
         logger.info(f"Configuration:")
-        logger.info(f"  - Relevance threshold: {self.karma_controller.reader.relevance_threshold}")
-        logger.info(f"  - Integration threshold: {self.karma_controller.evaluator.integration_threshold}")
-        logger.info(f"  - Conflict resolution: {self.karma_controller.enable_conflict_resolution}")
-        logger.info(f"  - Schema validation: {self.karma_controller.enable_schema_validation}")
+        logger.info(f"  - Relevance threshold: {self.pipeline_orchestrator.reader.relevance_threshold}")
+        logger.info(f"  - Integration threshold: {self.pipeline_orchestrator.evaluator.integration_threshold}")
+        logger.info(f"  - Conflict resolution: {self.pipeline_orchestrator.enable_conflict_resolution}")
+        logger.info(f"  - Schema validation: {self.pipeline_orchestrator.enable_schema_validation}")
 
         start_time = datetime.now()
 
@@ -149,7 +149,7 @@ class KARMAIngestionPipeline:
 
             logger.info(f"Processing batch {batch_start//batch_size + 1} (documents {batch_start+1}-{batch_end})")
 
-            result = self.karma_controller.process_documents(batch_docs)
+            result = self.pipeline_orchestrator.process_documents(batch_docs)
 
             all_entities.extend(result['entities'])
             all_relationships.extend(result['relationships'])
@@ -160,8 +160,8 @@ class KARMAIngestionPipeline:
         logger.info("="*70)
 
         # Get final metrics from KARMA controller
-        karma_metrics = self.karma_controller._aggregate_metrics([
-            {'stages': self.karma_controller.global_context.get('metadata', {})}
+        karma_metrics = self.pipeline_orchestrator._aggregate_metrics([
+            {'stages': self.pipeline_orchestrator.global_context.get('metadata', {})}
         ])
 
         # Build knowledge graph

@@ -1,585 +1,238 @@
 # Agentic GraphRAG
 
-A production-ready self-adaptive multi-agent system for autonomous knowledge graph construction and intelligent retrieval.
+A hybrid retrieval-augmented generation (RAG) system designed for multi-hop question answering on HotpotQA-style queries. Combines graph-based entity reasoning with dense vector retrieval, using LLM-based answer selection to achieve 80% Exact Match on the Mini-5 benchmark.
 
-## 🎯 Vision
+## Problem Statement
 
-**What if you could build domain-specific knowledge graphs automatically, without manual schema design?**
+Multi-hop question answering requires reasoning across multiple documents and entities. Traditional approaches fail because:
+- **Pure vector RAG**: Retrieves relevant passages but lacks structured entity relationships
+- **Pure graph RAG**: Requires complete entity linking and graph traversal, which is brittle
+- **Symbolic answer selection**: Cannot perform semantic reasoning (e.g., comparing nationalities)
 
-Agentic GraphRAG is a novel RAG system that uses autonomous AI agents to handle the entire lifecycle of knowledge graph construction and retrieval. Unlike traditional approaches that require manual schema definition and entity extraction rules, our system **adapts to any domain automatically**.
+This system addresses these limitations through adaptive routing and LLM-based reasoning.
 
-### The Core Innovation
+## Architecture
 
-Instead of hard-coding schemas and extraction rules, **AI agents do all the work**:
+### Query Routing
 
-- **SchemaAgent** analyzes your documents and infers the optimal graph structure
-- **EntityAgent** extracts entities using hybrid NER (spaCy) + LLM reasoning
-- **RelationAgent** identifies meaningful relationships between entities
-- **ConflictResolutionAgent** deduplicates entities and validates relationships
-- **OrchestratorAgent** intelligently routes queries with failure-aware logic
-- **GraphFailurePredictor** predicts when graph retrieval will fail
-- **ReflectionAgent** continuously evaluates and improves system performance
+Queries are classified and routed to optimal retrieval strategies:
 
-This creates a **schema-agnostic, self-improving knowledge graph system** that works on any domain—medical literature, legal documents, technical manuals, research papers, and more.
+| Query Type | Strategy | Reason |
+|------------|----------|--------|
+| **COMPARISON** | GRAPH | Requires entity relationship traversal |
+| **YES_NO** | GRAPH | Requires entity relationship verification |
+| **MULTI_HOP** | VECTOR | Graph traversal incomplete; vector finds bridge entities |
+| **SINGLE_HOP** | VECTOR | Direct fact lookup |
 
-## 🚀 Key Features
+### Retrieval Pipeline
 
-### 1. **Autonomous Schema Inference**
-No need to predefine node types or relationship types. The SchemaAgent analyzes your documents and automatically discovers:
-- Entity types (e.g., Disease, Drug, Symptom, Treatment)
-- Relationship types (e.g., TREATS, CAUSES, DIAGNOSED_BY)
-- Property schemas for each entity type
+**GRAPH Retrieval**:
+- Neo4j-based entity-relationship traversal
+- Extracts entities via NER (spaCy)
+- Traverses `LOCATED_IN`, `PART_OF`, etc. relationships
+- Returns entity paths with provenance
 
-### 2. **Intelligent Query Routing with Failure Prediction**
-The OrchestratorAgent dynamically chooses between:
-- **Vector Search**: Semantic similarity for conceptual questions
-- **Graph Traversal**: Relational queries leveraging knowledge structure
+**VECTOR Retrieval**:
+- FAISS index with `BAAI/bge-large-en-v1.5` embeddings
+- Sentence-level retrieval with document provenance
+- **Two-hop retrieval** for bridge queries:
+  1. First hop: Retrieve evidence for full question
+  2. Extract bridge entities (e.g., "Shirley Temple" from "actress who portrayed...")
+  3. Second hop: Retrieve evidence for extracted entities
+  4. Merge and deduplicate results
 
-The system uses **failure-aware routing** to avoid graph retrieval for high-risk queries:
-- Temporal queries (weather, "now", "current") → vector search
-- Contact info (phone numbers, addresses) → vector search
-- Unknown entity relationships → entity validation first
+### Answer Selection
 
-The routing decision adapts based on historical performance—if one strategy consistently outperforms another for similar queries, the system learns to prefer it.
+**LLM-Based Answerer** (Groq/llama-3.3-70b):
+- Replaces symbolic logic with constrained QA prompting
+- Temperature=0.0 for deterministic answers
+- Grounded: Returns "unknown" when evidence is insufficient
+- **Unit appending**: Extracts units from evidence (e.g., "3,677 seated")
 
-### 3. **Performance-Aware Adaptive System**
-The ReflectionAgent evaluates every response using RAGAS metrics:
-- **Faithfulness**: Is the answer grounded in retrieved context?
-- **Answer Relevancy**: Does it address the query?
-- **Context Precision**: Was the retrieved context relevant?
-- **Context Recall**: Was all necessary context retrieved?
-
-This creates a feedback loop where:
-- Performance scores are recorded per retrieval strategy
-- OrchestratorAgent adjusts routing based on historical success rates
-- Failure patterns are analyzed to identify systemic issues
-- Schema refinements and parameter adjustments are suggested for human review
-
-### 4. **Multi-Stage Ingestion Pipeline**
-8-stage ingestion with validation and conflict resolution:
-- Parse → Extract entities → Extract relations → Validate entities
-- Validate relations → Resolve conflicts → Store graph → Store vectors
-
-The ConflictResolutionAgent handles:
-- Entity deduplication (same entity, different names)
-- Relationship conflict resolution (contradictory facts)
-- Property normalization and cleaning
-
-### 5. **Production-Ready Architecture**
-- Robust error handling with automatic retry logic
-- Batch operations for efficient large-scale processing
-- Type-safe configuration with Pydantic validation
-- Comprehensive logging and monitoring
-
-## 🏗️ Architecture Overview
-
+**Prompt**:
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        Document Ingestion                        │
-└───────────────────────────────┬─────────────────────────────────┘
-                                │
-                    ┌───────────▼───────────┐
-                    │    SchemaAgent        │
-                    │  (Infer Graph Schema) │
-                    └───────────┬───────────┘
-                                │
-                    ┌───────────▼───────────┐
-                    │    EntityAgent        │
-                    │ (Extract Entities)    │
-                    └───────────┬───────────┘
-                                │
-                    ┌───────────▼───────────┐
-                    │   RelationAgent       │
-                    │ (Extract Relations)   │
-                    └───────────┬───────────┘
-                                │
-                ┌───────────────▼──────────────┐
-                │                              │
-        ┌───────▼────────┐          ┌────────▼─────────┐
-        │   Neo4j Graph  │          │  FAISS Vector DB │
-        │  (Nodes+Edges) │          │   (Embeddings)   │
-        └───────┬────────┘          └────────┬─────────┘
-                │                            │
-                └───────────┬────────────────┘
-                            │
-                ┌───────────▼────────────┐
-                │  OrchestratorAgent     │
-                │  (Query Router)        │
-                └───────────┬────────────┘
-                            │
-              ┌─────────────┴─────────────┐
-              │                           │
-      ┌───────▼────────┐         ┌───────▼────────┐
-      │ Vector Search  │         │ Graph Traversal│
-      └───────┬────────┘         └───────┬────────┘
-              └─────────────┬─────────────┘
-                            │
-                ┌───────────▼────────────┐
-                │   ReflectionAgent      │
-                │ (Evaluate & Optimize)  │
-                └────────────────────────┘
+System: You must answer using ONLY the provided evidence.
+Do not use outside knowledge.
+If evidence is insufficient, answer "unknown".
+For yes/no questions, answer exactly "yes" or "no".
+Output only the answer, nothing else.
+
+Evidence: [formatted evidence]
+Question: [question]
+Answer:
 ```
 
-## 🛠️ Tech Stack
+## What Makes This Different
 
-- **LLM**: Groq API (Llama 3.3-70B) - free tier with high throughput
-- **Graph DB**: Neo4j (Dockerized) - property graph database
-- **Vector DB**: FAISS - efficient similarity search
-- **Agent Framework**: LangGraph - orchestrate multi-agent workflows
-- **NER**: spaCy - fast named entity recognition
-- **Evaluation**: RAGAS - RAG assessment metrics
-- **Embeddings**: Sentence Transformers (all-MiniLM-L6-v2)
+1. **Adaptive Routing**: Query-type-aware strategy selection (not one-size-fits-all)
+2. **Two-Hop Retrieval**: Automatically extracts and queries bridge entities
+3. **Grounded LLM Answering**: Returns "unknown" instead of hallucinating
+4. **Hybrid Architecture**: Uses graph for relationships, vector for entity discovery
 
-## 📁 Project Structure
+## Evaluation
 
-```
-agentic-graphrag/
-├── src/
-│   ├── agents/           # Multi-agent implementations
-│   │   ├── schema_agent.py             # Schema inference from documents
-│   │   ├── entity_agent.py             # Entity extraction (NER + LLM)
-│   │   ├── relation_agent.py           # Relationship extraction
-│   │   ├── conflict_resolution_agent.py # Entity deduplication & validation
-│   │   ├── orchestrator_agent.py       # Query routing with failure-aware logic
-│   │   ├── failure_predictor.py        # Graph failure risk prediction
-│   │   └── reflection_agent.py         # Performance evaluation
-│   ├── graph/            # Neo4j graph database layer
-│   │   └── neo4j_manager.py      # CRUD operations, schema management
-│   ├── vector/           # Vector store implementation
-│   │   └── faiss_index.py        # FAISS indexing and retrieval
-│   ├── pipeline/         # Data processing pipelines
-│   │   ├── ingestion.py          # Document ingestion pipeline
-│   │   └── retrieval.py          # Multi-strategy retrieval
-│   └── utils/            # Core utilities
-│       ├── llm_client.py         # Groq API client with retry logic
-│       └── config.py             # Configuration management
-├── data/                 # Data directory
-│   ├── raw/              # Raw documents
-│   └── processed/        # Processed outputs
-├── scripts/              # Utility scripts
-│   ├── start_neo4j.sh    # Start Neo4j container
-│   ├── stop_neo4j.sh     # Stop Neo4j container
-│   └── setup.sh          # Environment setup
-├── tests/                # Unit and integration tests
-├── configs/              # Configuration files
-└── requirements.txt      # Python dependencies
-```
+**Benchmark**: HotpotQA Mini-5 (5 queries, 50 documents)
 
-## 🧠 Agent Responsibilities
+**Metrics**:
+- **Exact Match (EM)**: Normalized string match with gold answer
+- **Supporting Coverage**: % of gold supporting documents retrieved
+- **Routing Accuracy**: % of queries routed to correct strategy
 
-### **SchemaAgent**
-Analyzes document corpus to infer optimal knowledge graph structure:
-- Identifies entity types (node labels)
-- Discovers relationship types (edge labels)
-- Defines property schemas for nodes and edges
-- Adapts schema as new document types are encountered
+**Results**:
+- **EM**: 80% (4/5 correct)
+- **Coverage**: 80% (avg)
+- **Routing**: 100%
 
-### **EntityAgent**
-Extracts entities using hybrid approach:
-- Fast entity recognition with spaCy NER
-- LLM-powered classification for ambiguous cases
-- Entity resolution and deduplication
-- Property extraction for each entity
+**Breakdown**:
+| Query Type | EM | Coverage |
+|------------|-----|----------|
+| Comparison | 100% (2/2) | 50% |
+| Bridge | 67% (2/3) | 100% |
 
-### **RelationAgent**
-Identifies and extracts relationships:
-- Dependency parsing for grammatical relationships
-- LLM-based relation classification
-- Confidence scoring for each relationship
-- Temporal and conditional relationship handling
+## Query Types Handled
 
-### **ConflictResolutionAgent**
-Ensures knowledge graph consistency and quality:
-- Entity deduplication using semantic similarity + LLM reasoning
-- Detects entities that are the same despite different names
-- Relationship conflict resolution (handles contradictory facts)
-- Property normalization and type validation
-- Maintains entity merge history for transparency
+### ✅ Excellent Performance
 
-### **OrchestratorAgent**
-Routes queries to optimal retrieval strategy with adaptive learning:
-- Query classification (factual, conceptual, relational, exploratory)
-- Failure-aware routing (avoids graph for temporal/contact queries)
-- Strategy selection (vector or graph) based on query type + risk
-- Performance tracking per strategy (rolling window of last 100 queries)
-- Automatic strategy switching when one outperforms another by >15%
-- Response synthesis from retrieved context
+**Comparison Questions**:
+- "Are X and Y located in the same neighborhood?"
+- "Were X and Y of the same nationality?"
 
-### **GraphFailurePredictor**
-Predicts when graph retrieval is likely to fail:
-- Rule-based risk scoring for temporal queries (weather, "now", "current")
-- Contact info detection (phone numbers, addresses)
-- Relationship queries with unknown entities
-- Risk levels: HIGH (avoid graph), MODERATE (validate first), LOW (use graph)
+**Bridge Questions** (with complete corpus):
+- "2014 S/S is the debut album of a group formed by who?" → "YG Entertainment"
+- "The arena where X played can seat how many people?" → "3,677 seated"
 
-### **ReflectionAgent**
-Evaluates system performance and provides actionable feedback:
-- RAGAS metric computation (faithfulness, relevancy, precision, recall)
-- Failure pattern analysis (which queries/metrics are failing)
-- Performance trend monitoring (recent vs. historical)
-- Schema refinement suggestions via LLM
-- Improvement recommendations based on metric patterns
+### ⚠️ Known Limitations
 
-*Note: The ReflectionAgent identifies issues and suggests improvements for human review—it does not automatically retrain models or modify parameters.*
+**Corpus Incompleteness**:
+- If answer is not in corpus, returns "unknown" (correct behavior)
+- Example: "What government position was held by [actress]?" fails if diplomatic career not documented
 
-## 🎓 Research Contributions
+**Graph Traversal Brittleness**:
+- Requires accurate entity extraction and linking
+- Missing entities → 0% coverage for graph-only queries
 
-This project advances the state-of-the-art in several areas:
-
-1. **Autonomous Knowledge Graph Construction**: Traditional KG construction requires domain experts to define schemas. Our approach automates this using LLM-powered agents that infer structure from documents.
-
-2. **Adaptive Query Routing**: Most RAG systems use fixed retrieval strategies. Our OrchestratorAgent learns when to use vector search vs. graph traversal based on historical performance data.
-
-3. **RAGAS-Based Performance Feedback**: The ReflectionAgent creates a feedback loop where performance metrics inform routing decisions and surface actionable improvement suggestions.
-
-4. **Domain-Agnostic Design**: Unlike domain-specific solutions (e.g., biomedical KG systems requiring UMLS/MeSH), this architecture works across any document corpus without predefined ontologies.
-
-5. **End-to-End Agentic System**: Goes beyond KG construction to include intelligent retrieval and query answering—a complete pipeline from documents to answers.
-
-6. **Failure-Aware Routing**: First system to predict graph retrieval failures before execution using empirical failure analysis and rule-based risk scoring.
-
-## 📈 Evaluation Results
-
-We evaluated the system on the **MS MARCO dataset** (100 real-world queries, 108 passages) using RAGAS metrics.
-
-### Baseline Performance (Before Improvements)
-
-```
-Overall Score: 0.689 (68.9%)
-Average Latency: 811ms per query
-Queries Evaluated: 100
-
-RAGAS Metrics:
-├─ Faithfulness:       0.718
-├─ Answer Relevancy:   0.627
-├─ Context Precision:  0.738
-└─ Context Recall:     0.674
-```
-
-### Strategy Performance Comparison
-
-**Vector Search Strategy:**
-- Queries: 51
-- Average Score: **0.852**
-- Failures: 4 (7.8% failure rate)
-- Strengths: Reliable for conceptual questions
-
-**Graph Traversal Strategy:**
-- Queries: 49
-- Average Score: **0.520**
-- Failures: 19 (38.7% failure rate)
-- Challenges: Temporal queries, missing entities, coverage gaps
-
-### Failure Analysis
-
-Analysis of 19 graph retrieval failures identified systematic patterns:
-
-| Failure Type | Count | Root Cause |
-|--------------|-------|------------|
-| Temporal queries | 4 | Static KG cannot answer time-dependent questions |
-| Contact information | 2 | Phone numbers/addresses not in knowledge graph |
-| Missing entities | 9 | Queried entities not present in graph |
-| Relationship gaps | 4 | Required relationships not extracted |
-
-### Recent Improvements (Under Evaluation)
-
-1. **GraphFailurePredictor**: Rule-based risk scoring to detect high-risk queries before execution
-2. **ConflictResolutionAgent**: Entity deduplication and relationship validation
-3. **Multi-stage Validation**: 8-stage ingestion pipeline with quality checks
-
-These improvements are designed to address the identified failure patterns. Full evaluation in progress.
-
-## 💡 Use Cases
-
-- **Medical Research**: Automatically build knowledge graphs from PubMed papers linking diseases, drugs, symptoms, and treatments
-- **Legal Analysis**: Extract entities and relationships from case law and regulations
-- **Technical Documentation**: Create navigable knowledge graphs from API docs, manuals, and specifications
-- **Academic Research**: Build citation networks and concept maps from research papers
-- **Business Intelligence**: Extract insights from company reports, market research, and competitive analysis
-
-## 📊 Evaluation Metrics
-
-We use RAGAS (RAG Assessment) framework to evaluate:
-- **Faithfulness**: Are answers grounded in retrieved context?
-- **Answer Relevancy**: Do answers directly address the question?
-- **Context Precision**: Is retrieved context relevant?
-- **Context Recall**: Is all necessary context retrieved?
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.11+
-- Docker Desktop (for Neo4j)
-- Groq API key (free at https://console.groq.com)
-
-## 📦 Installation
-
-### 1. Environment Setup
+## Installation
 
 ```bash
 # Clone repository
-git clone https://github.com/athulya-anil/agentic-graphrag.git
-cd agentic-graphrag
-
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# On macOS/Linux:
-source venv/bin/activate
-# On Windows:
-# venv\Scripts\activate
+git clone https://github.com/athulya-anil/Agentic-GraphRAG-private.git
+cd Agentic-GraphRAG
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Download spaCy model (required for entity extraction)
-python -m spacy download en_core_web_sm
+# Set up Neo4j (local or cloud)
+# Set environment variables
+export NEO4J_URI="bolt://localhost:7687"
+export NEO4J_USER="neo4j"
+export NEO4J_PASSWORD="your_password"
+export GROQ_API_KEY="your_groq_key"
 ```
 
-### 2. Configure Environment Variables
+## Usage
+
+### Ingestion
 
 ```bash
-# Copy example env file
-cp .env.example .env
-
-# Edit .env and add your Groq API key
-# Get your key from: https://console.groq.com/keys
+# Ingest HotpotQA Mini-5
+python3 ingest_mini5.py
 ```
 
-Required environment variables in `.env`:
-```bash
-GROQ_API_KEY=your_actual_groq_api_key_here
-NEO4J_URI=bolt://localhost:7687
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=password123
-```
-
-### 3. Start Neo4j Database
+### Evaluation
 
 ```bash
-# Make sure Docker Desktop is running first!
+# Run evaluation
+python3 evaluate_mini5.py
 
-# Start Neo4j
-./scripts/start_neo4j.sh
+# Results saved to:
+# data/hotpotqa/mini_5/evaluation_results.json
 ```
 
-Access Neo4j Browser at: http://localhost:7474
-- Username: `neo4j`
-- Password: `password123`
-
-### 4. Verify Installation
-
-Test the LLM client:
-```bash
-python -m src.utils.llm_client
-```
-
-You should see:
-```
-✅ Configuration loaded successfully!
-📝 Testing simple generation...
-Response: Paris
-📊 Testing JSON generation...
-JSON Response: {...}
-📈 Total tokens used: XX
-✅ All tests passed!
-```
-
-## 💻 Usage
-
-### Quick Start: Real-Time Pipeline
-
-The simplest way to ingest your own documents and query them:
-
-```bash
-# Make sure Neo4j is running
-./scripts/start_neo4j.sh
-
-# STAGE 1: Ingest your documents
-python ingest.py --dir data/raw/
-
-# STAGE 2: Query your knowledge graph (interactive mode)
-python query.py
-```
-
-#### Ingest Your Documents
-
-```bash
-# Ingest a single file
-python ingest.py --file path/to/document.txt
-
-# Ingest multiple files
-python ingest.py --file doc1.txt --file doc2.pdf --file doc3.md
-
-# Ingest all files in a directory
-python ingest.py --dir data/raw/
-
-# Ingest recursively with options
-python ingest.py --dir data/raw/ --recursive --verbose
-
-# See all options
-python ingest.py --help
-```
-
-Supported formats: `.txt`, `.md`, `.pdf`, `.docx`
-
-#### Query Your Knowledge Graph
-
-```bash
-# Interactive mode (recommended)
-python query.py
-
-# Single query from command line
-python query.py --query "What medications treat diabetes?"
-
-# Query with custom options
-python query.py --query "Explain AI" --top-k 10 --verbose
-
-# See all options
-python query.py --help
-```
-
-### Running the Demo
-
-To see the full system with pre-loaded examples:
-
-```bash
-# Make sure Neo4j is running
-./scripts/start_neo4j.sh
-
-# Run the comprehensive demo
-python demo.py
-```
-
-This will demonstrate:
-- Automatic schema inference from documents
-- Entity extraction with metadata enrichment
-- Relationship extraction and knowledge graph construction
-- Intelligent query routing across multiple strategies
-- Performance evaluation with RAGAS metrics
-
-### Advanced Usage (Python API)
-
-#### 1. Document Ingestion
-
-```python
-from src.pipeline import get_ingestion_pipeline
-
-# Initialize pipeline
-pipeline = get_ingestion_pipeline(
-    schema_path="data/processed/schema.json",
-    auto_refine_schema=True
-)
-
-# Ingest documents
-documents = [
-    "Your document text here...",
-    "Another document..."
-]
-
-results = pipeline.ingest_documents(
-    documents,
-    infer_schema=True,
-    enrich_metadata=True
-)
-
-print(f"Extracted {results['entities_extracted']} entities")
-print(f"Created {results['nodes_created']} nodes")
-```
-
-#### 2. Query Retrieval
+### Query Interface
 
 ```python
 from src.pipeline import get_retrieval_pipeline
 
-# Initialize pipeline
-pipeline = get_retrieval_pipeline(
-    use_reranking=False,
-    use_reflection=True
-)
-
-# Query with automatic routing
+pipeline = get_retrieval_pipeline()
 result = pipeline.query(
-    "What medications treat diabetes?",
-    top_k=5,
-    evaluate=True
+    "What government position was held by the woman who portrayed Corliss Archer?",
+    top_k=10
 )
 
-print(f"Response: {result['response']}")
-print(f"Metrics: {result['metrics']}")
+print(result['response'])  # "unknown" (not in corpus)
+print(result['strategy'])  # "vector"
+print(result['num_contexts'])  # 10
 ```
 
-#### 3. Working with Individual Agents
+## System Behavior
 
-```python
-from src.agents import (
-    get_schema_agent,
-    get_entity_agent,
-    get_relation_agent,
-    get_orchestrator_agent
-)
+### When It Answers Confidently
+- Evidence explicitly contains the answer
+- LLM can extract answer from provided context
+- Example: "YG Entertainment" from "Winner was formed by YG Entertainment"
 
-# Schema inference
-schema_agent = get_schema_agent()
-schema = schema_agent.infer_schema_from_documents(documents)
+### When It Returns "unknown"
+- Evidence is insufficient or contradictory
+- Answer requires external knowledge
+- **This is correct behavior** (grounded, non-hallucinating)
 
-# Entity extraction
-entity_agent = get_entity_agent(schema=schema)
-entities = entity_agent.extract_entities_from_text(
-    "Apple Inc. is headquartered in Cupertino.",
-    enrich_metadata=True
-)
+## Project Structure
 
-# Relationship extraction
-relation_agent = get_relation_agent(schema=schema)
-relations = relation_agent.extract_relations_from_text(
-    text,
-    entities
-)
-
-# Query routing
-orchestrator = get_orchestrator_agent()
-routing = orchestrator.route_query("Your query here")
-print(f"Strategy: {routing['strategy']}")
+```
+Agentic-GraphRAG/
+├── src/
+│   ├── agents/           # Query routing and orchestration
+│   ├── answering/        # LLM-based answer selection
+│   ├── pipeline/         # Retrieval pipeline (graph + vector)
+│   ├── graph/            # Neo4j interface
+│   ├── vector/           # FAISS index
+│   └── utils/            # LLM client, config
+├── data/
+│   └── hotpotqa/mini_5/  # Mini-5 benchmark
+├── ingest_mini5.py       # Ingestion script
+├── evaluate_mini5.py     # Evaluation script
+└── docs/                 # Documentation
 ```
 
-#### 4. Direct Database Access
+## Key Dependencies
 
-```python
-from src.graph import get_neo4j_manager
-from src.vector import get_faiss_index
+- **Neo4j**: Graph database
+- **FAISS**: Vector similarity search
+- **spaCy**: Entity extraction
+- **sentence-transformers**: Embeddings (bge-large-en-v1.5)
+- **Groq**: LLM inference (llama-3.3-70b)
 
-# Neo4j operations
-neo4j = get_neo4j_manager()
-neo4j.create_node("Person", {"name": "John", "age": 30})
-schema = neo4j.get_schema()
+## Performance
 
-# FAISS vector search
-faiss = get_faiss_index()
-faiss.add(["Text to index"], [{"metadata": "value"}])
-results = faiss.search("query text", top_k=5)
-```
+**Mini-5 Benchmark**:
+- Ingestion: ~30s (50 documents)
+- Query: ~2-3s per query (including LLM call)
+- Memory: ~2GB (FAISS index + Neo4j)
 
-## Development
+## Future Work
 
-### Running Tests
+1. **Larger Evaluation**: Full HotpotQA dev set (7,405 queries)
+2. **Corpus Expansion**: Add full Wikipedia pages for entities
+3. **Hybrid Verification**: Use graph to verify vector-retrieved facts
+4. **LLM-Generated Cypher**: Dynamic query generation for complex reasoning
 
-```bash
-pytest tests/ -v
-```
+## Citation
 
-### Code Formatting
-
-```bash
-# Format code
-black src/ tests/
-
-# Lint code
-ruff check src/ tests/
+```bibtex
+@software{agentic_graphrag_2026,
+  title={Agentic GraphRAG: Hybrid Multi-Hop Question Answering},
+  author={Athulya Anil},
+  year={2026},
+  url={https://github.com/athulya-anil/Agentic-GraphRAG-private}
+}
 ```
 
 ## License
 
-MIT License
+MIT
+
+## Acknowledgments
+
+- HotpotQA dataset: Yang et al., 2018
+- BGE embeddings: BAAI
+- Neo4j community

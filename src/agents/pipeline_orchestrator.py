@@ -1,16 +1,17 @@
 """
-KARMA Central Controller
+Pipeline Orchestrator
 
-Orchestrates all KARMA agents in the proper sequence:
+Orchestrates agents in the proper sequence for knowledge graph construction:
 1. Reader Agent (relevance scoring)
 2. Entity Agent (entity extraction)
-3. Summarizer (contextual summaries)
+3. Summarizer Agent (contextual summaries)
 4. Relation Agent (multi-label relationship extraction)
-5. Schema Alignment (type validation)
-6. Conflict Resolution (LLM debate)
-7. Evaluator (confidence aggregation)
+5. Schema Aligner (type validation) - rule-based, no LLM
+6. Conflict Resolution Agent (LLM debate)
+7. Confidence Evaluator (confidence aggregation) - symbolic, no LLM
 
-Based on KARMA paper: "Central controller manages workflow, maintains context"
+NOTE: This is NOT an agent (no direct LLM calls). It orchestrates other
+components and manages the pipeline workflow.
 """
 
 import logging
@@ -19,19 +20,20 @@ from src.utils.llm_client import LLMClient
 from src.agents.reader_agent import ReaderAgent
 from src.agents.entity_agent import EntityAgent
 from src.agents.summarizer_agent import SummarizerAgent
-from src.agents.karma_relation_agent import KARMARelationAgent
-from src.agents.schema_alignment_agent import SchemaAlignmentAgent
-from src.agents.conflict_resolution_agent_karma import KARMAConflictResolutionAgent
-from src.agents.evaluator_agent import EvaluatorAgent
+from src.agents.multi_label_relation_agent import MultiLabelRelationAgent
+from src.agents.schema_aligner import SchemaAligner
+from src.agents.debate_conflict_resolver import DebateConflictResolver
+from src.agents.confidence_evaluator import ConfidenceEvaluator
 
 logger = logging.getLogger(__name__)
 
 
-class KARMAController:
+class PipelineOrchestrator:
     """
-    Central controller for KARMA multi-agent system.
+    Pipeline Orchestrator (coordinator, no direct LLM calls).
 
-    Orchestrates the full KARMA pipeline for knowledge graph construction.
+    Orchestrates the full pipeline for knowledge graph construction.
+    Delegates LLM calls to individual agents.
     """
 
     def __init__(
@@ -43,7 +45,7 @@ class KARMAController:
         enable_schema_validation: bool = True
     ):
         """
-        Initialize KARMA Controller.
+        Initialize Pipeline Orchestrator.
 
         Args:
             llm_client: LLM client for agents
@@ -54,14 +56,16 @@ class KARMAController:
         """
         self.llm_client = llm_client
 
-        # Initialize agents
+        # Initialize agents (LLM-powered)
         self.reader = ReaderAgent(llm_client, relevance_threshold)
         self.entity_agent = EntityAgent(llm_client)
         self.summarizer = SummarizerAgent(llm_client)
-        self.relation_agent = KARMARelationAgent(llm_client)
-        self.schema_agent = SchemaAlignmentAgent(llm_client) if enable_schema_validation else None
-        self.conflict_agent = KARMAConflictResolutionAgent(llm_client) if enable_conflict_resolution else None
-        self.evaluator = EvaluatorAgent(integration_threshold)
+        self.relation_agent = MultiLabelRelationAgent()
+        self.conflict_agent = DebateConflictResolver(llm_client) if enable_conflict_resolution else None
+
+        # Initialize non-agent components (no LLM)
+        self.schema_aligner = SchemaAligner() if enable_schema_validation else None
+        self.evaluator = ConfidenceEvaluator(integration_threshold)
 
         self.enable_conflict_resolution = enable_conflict_resolution
         self.enable_schema_validation = enable_schema_validation
@@ -74,7 +78,7 @@ class KARMAController:
             'metadata': {}
         }
 
-        logger.info("Initialized KARMAController with all agents")
+        logger.info("Initialized PipelineOrchestrator with all components")
 
     def process_document(
         self,
@@ -160,9 +164,9 @@ class KARMAController:
         logger.info(f"[{doc_id}] Extracted {len(relationships)} relationships")
 
         # Stage 5: Schema Alignment (optional)
-        if self.enable_schema_validation and self.schema_agent:
+        if self.enable_schema_validation and self.schema_aligner:
             logger.debug(f"[{doc_id}] Stage 5: Schema Alignment")
-            relationships, invalid_rels = self.schema_agent.align_relationships(relationships)
+            relationships, invalid_rels = self.schema_aligner.align_relationships(relationships)
 
             metrics['stages']['schema'] = {
                 'valid': len(relationships),

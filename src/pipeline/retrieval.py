@@ -190,8 +190,38 @@ class RetrievalPipeline:
         else:
             raise ValueError(f"Unknown strategy: {strategy}")
 
-        # Rerank if enabled (BAAI/bge-reranker-large)
-        if self.use_reranking and results:
+        # TWO-HOP RETRIEVAL for bridge questions
+        # If this is a MULTI_HOP query with VECTOR strategy, perform second hop
+        if strategy == RetrievalStrategy.VECTOR and results:
+            # Check if query type is MULTI_HOP (bridge question)
+            routing = self.orchestrator.route_query(query)
+            query_type = routing.get("query_type")
+            
+            if query_type and query_type.value == "multi_hop":
+                logger.info("MULTI_HOP query detected - attempting two-hop retrieval")
+                bridge_entities = self._extract_bridge_entities(query, results)
+                
+                if bridge_entities:
+                    logger.info(f"Extracted bridge entities: {bridge_entities}")
+                    # Perform second-hop retrieval for each entity
+                    second_hop_results = []
+                    for entity in bridge_entities[:2]:  # Max 2 entities
+                        logger.info(f"Second-hop retrieval for: {entity}")
+                        second_hop = self.faiss_index.search(
+                            query=entity,
+                            top_k=5,
+                            return_metadata=True
+                        )
+                        second_hop_results.extend(second_hop)
+                    
+                    # Merge and deduplicate
+                    if second_hop_results:
+                        results = self._merge_and_deduplicate(results, second_hop_results)
+                        logger.info(f"After two-hop: {len(results)} total results")
+
+        # Rerank if enabled (BAAI/bge-reranker-large) - VECTOR ONLY
+        # Graph retrieval order must be preserved (hop depth, path structure, edge confidence)
+        if self.use_reranking and results and strategy == RetrievalStrategy.VECTOR:
             results = self._rerank_results(query, results)
 
         # Filter low-quality results
@@ -208,7 +238,14 @@ class RetrievalPipeline:
         return_metadata: bool
     ) -> List[Dict[str, Any]]:
         """
-        Retrieve using vector similarity search.
+        Retrieve using vector similarity search with sentence-level provenance.
+
+        Returns evidence items with:
+        - doc_id: document index
+        - sent_id: sentence index within document
+        - text: sentence text (exact)
+        - source: "vector"
+        - score: similarity score
 
         Args:
             query: User query
@@ -216,23 +253,34 @@ class RetrievalPipeline:
             return_metadata: Whether to include metadata
 
         Returns:
-            List of results
+            List of results with sentence-level provenance
         """
         top_k = params.get("top_k", self.config.retrieval.top_k_vector)
         results = self.faiss_index.search(
             query=query,
             top_k=top_k,
-            return_metadata=return_metadata
+            return_metadata=True  # Always need metadata for provenance
         )
 
-        # Format results
+        # Format results with sentence-level provenance
         formatted_results = []
         for result in results:
+            meta = result.get("metadata", {})
+
+            # Extract provenance from metadata
+            doc_id = meta.get("doc_id", meta.get("doc_index", 0))
+            sent_id = meta.get("sent_id", meta.get("chunk_index", 0))
+
+            # Use sentence_text if available, fallback to text
+            text = meta.get("sentence_text", meta.get("text", ""))
+
             formatted_results.append({
-                "text": result.get("metadata", {}).get("text", ""),
+                "doc_id": doc_id,
+                "sent_id": sent_id,
+                "text": text,
                 "score": result.get("score", 0.0),
                 "source": "vector",
-                "metadata": result.get("metadata", {}) if return_metadata else {}
+                "metadata": meta if return_metadata else {}
             })
 
         return formatted_results
@@ -386,15 +434,18 @@ class RetrievalPipeline:
                 target_filter = f":{target_type}" if target_type and target_type != "Unknown" else ""
 
                 # Get multi-hop paths using intent-aware Cypher
+                # CRITICAL FIX: Also fetch Document nodes via MENTIONED_IN
                 cypher = f"""
                 MATCH path = (start:{label}){rel_pattern}(connected{target_filter})
                 WHERE id(start) = $node_id
-                WITH path, connected, start, length(path) as depth
+                OPTIONAL MATCH (start)-[:MENTIONED_IN]->(doc:Document)
+                WITH path, connected, start, doc, length(path) as depth
                 ORDER BY depth
                 LIMIT {min(top_k * 2, 20)}
                 RETURN
                     start,
                     connected,
+                    doc,
                     [r in relationships(path) | type(r)] as rel_types,
                     [n in nodes(path) | coalesce(n.name, labels(n)[0])] as path_names,
                     depth
@@ -410,6 +461,15 @@ class RetrievalPipeline:
 
                     if "summary" in node and node["summary"]:
                         context_parts.append(f"Summary: {node['summary']}")
+
+                    # CRITICAL FIX: Extract Document info from query results
+                    doc_title = None
+                    doc_id_from_node = None
+                    if path_results and "doc" in path_results[0]:
+                        doc_node = path_results[0]["doc"]
+                        if doc_node:
+                            doc_title = doc_node.get("title")
+                            doc_id_from_node = doc_node.get("doc_id")
 
                     # IMPORTANT: Also retrieve source document text from FAISS
                     # This ensures we get the rich original content, not just entity names
@@ -456,7 +516,22 @@ class RetrievalPipeline:
                     avg_depth = sum(r["depth"] for r in path_results) / max(len(path_results), 1)
                     score = max(0.5, 1.0 - (avg_depth / max_depth) * 0.3)
 
+                    # Extract provenance from node if available
+                    node_provenance = node.get("provenance", "[]")
+                    try:
+                        import json
+                        prov_list = json.loads(node_provenance) if isinstance(node_provenance, str) else node_provenance
+                    except (json.JSONDecodeError, TypeError):
+                        prov_list = []
+
+                    # Use first provenance entry for doc_id/sent_id, or defaults
+                    doc_id = prov_list[0]["doc_id"] if prov_list else (doc_id_from_node or 0)
+                    sent_id = prov_list[0]["sent_id"] if prov_list else 0
+
                     entity_results.append({
+                        "doc_id": doc_id,
+                        "sent_id": sent_id,
+                        "doc_title": doc_title,  # CRITICAL: Add doc_title for coverage
                         "text": context_text,
                         "score": score,
                         "source": "graph",
@@ -464,19 +539,35 @@ class RetrievalPipeline:
                             "node": node,
                             "node_id": node_id,
                             "paths_found": len(paths_seen),
-                            "avg_path_depth": avg_depth
+                            "avg_path_depth": avg_depth,
+                            "provenance": prov_list  # Full provenance list
                         } if return_metadata else {}
                     })
 
                 except Exception as e:
                     logger.error(f"Error in multi-hop traversal: {e}")
-                    # Fallback to simple retrieval
+                    # Fallback to simple retrieval with provenance
                     context_text = f"{label}: {node.get('name')}"
+
+                    # Try to extract provenance from node
+                    node_provenance = node.get("provenance", "[]")
+                    try:
+                        import json
+                        prov_list = json.loads(node_provenance) if isinstance(node_provenance, str) else node_provenance
+                    except (json.JSONDecodeError, TypeError):
+                        prov_list = []
+
+                    doc_id = prov_list[0]["doc_id"] if prov_list else 0
+                    sent_id = prov_list[0]["sent_id"] if prov_list else 0
+
                     entity_results.append({
+                        "doc_id": doc_id,
+                        "sent_id": sent_id,
+                        "doc_title": None,  # Fallback case - no doc title available
                         "text": context_text,
                         "score": 0.7,
                         "source": "graph",
-                        "metadata": {"node": node, "node_id": node_id} if return_metadata else {}
+                        "metadata": {"node": node, "node_id": node_id, "provenance": prov_list} if return_metadata else {}
                     })
 
         except Exception as e:
@@ -665,6 +756,114 @@ class RetrievalPipeline:
             self._save_to_cache(cache_key, result)
 
         return result
+    
+    def _extract_bridge_entities(
+        self,
+        query: str,
+        evidence: List[Dict[str, Any]]
+    ) -> List[str]:
+        """
+        Extract candidate bridge entities from first-hop evidence.
+        
+        Strategy:
+        1. Look for proper nouns (capitalized phrases)
+        2. Prefer multi-word entities (full names)
+        3. Exclude query terms and generic words
+        
+        Args:
+            query: Original query
+            evidence: First-hop evidence
+        
+        Returns:
+            List of candidate bridge entities
+        """
+        import re
+        from collections import Counter
+        
+        # Extract all capitalized phrases (2-4 words for full names)
+        candidates = []
+        for item in evidence:
+            text = item.get("metadata", {}).get("text", "") or item.get("text", "")
+            if not text:
+                continue
+            
+            # Match capitalized words (proper nouns)
+            # Prefer longer phrases (full names like "Shirley Temple")
+            matches = re.findall(r'\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}\b', text)
+            candidates.extend(matches)
+        
+        if not candidates:
+            return []
+        
+        # Count frequency
+        entity_counts = Counter(candidates)
+        
+        # Filter out query terms and generic words
+        query_words_lower = set(word.lower() for word in query.split())
+        generic_words = {'american', 'person', 'organization', 'location', 'facility', 'creativework'}
+        
+        filtered = []
+        for entity, count in entity_counts.most_common(10):
+            entity_words = entity.split()
+            entity_words_lower = set(word.lower() for word in entity_words)
+            
+            # Skip if all words are in query
+            if entity_words_lower.issubset(query_words_lower):
+                continue
+            
+            # Skip generic entity types
+            if any(word.lower() in generic_words for word in entity_words):
+                continue
+            
+            # Prefer entities with 2+ words (full names)
+            if len(entity_words) >= 2 and count >= 2:
+                filtered.append(entity)
+            elif len(entity_words) >= 2 and count >= 1:
+                # Allow single mention if it's a full name
+                filtered.append(entity)
+        
+        logger.debug(f"Bridge entity candidates: {filtered[:5]}")
+        return filtered[:2]  # Return top 2
+    
+    def _merge_and_deduplicate(
+        self,
+        first_hop: List[Dict[str, Any]],
+        second_hop: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """
+        Merge first-hop and second-hop results, removing duplicates.
+        
+        Args:
+            first_hop: Results from first retrieval
+            second_hop: Results from second retrieval
+        
+        Returns:
+            Merged and deduplicated results
+        """
+        seen_texts = set()
+        merged = []
+        
+        # Add first-hop results (higher priority)
+        for item in first_hop:
+            text = item.get("metadata", {}).get("text", "") or item.get("text", "")
+            if text and text not in seen_texts:
+                seen_texts.add(text)
+                merged.append(item)
+        
+        # Add second-hop results (if not duplicate)
+        for item in second_hop:
+            text = item.get("metadata", {}).get("text", "") or item.get("text", "")
+            if text and text not in seen_texts:
+                seen_texts.add(text)
+                merged.append(item)
+        
+        # Cap total results to avoid overwhelming LLM
+        max_results = 15
+        if len(merged) > max_results:
+            logger.info(f"Capping results from {len(merged)} to {max_results}")
+            merged = merged[:max_results]
+        
+        return merged
 
 
 # Singleton instance

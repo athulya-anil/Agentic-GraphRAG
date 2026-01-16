@@ -1,0 +1,109 @@
+{
+  "summary": {
+    "total_queries": 5,
+    "em_score": 0.8,
+    "em_correct": 4,
+    "strategy_distribution": {
+      "graph": 2,
+      "vector": 3
+    },
+    "avg_supporting_coverage": 0.8
+  },
+  "results": [
+    {
+      "query_id": "q1",
+      "question": "Were Scott Derrickson and Ed Wood of the same nationality?",
+      "gold_answer": "yes",
+      "predicted": "yes",
+      "em": true,
+      "query_type": "comparison",
+      "routed_type": "comparison",
+      "strategy": "graph",
+      "num_contexts": 3,
+      "supporting_coverage": {
+        "found": [],
+        "missing": [
+          "Scott Derrickson",
+          "Ed Wood"
+        ],
+        "coverage": 0.0
+      }
+    },
+    {
+      "query_id": "q2",
+      "question": "Are the Laleli Mosque and Esma Sultan Mansion located in the same neighborhood?",
+      "gold_answer": "no",
+      "predicted": "no",
+      "em": true,
+      "query_type": "comparison",
+      "routed_type": "comparison",
+      "strategy": "graph",
+      "num_contexts": 2,
+      "supporting_coverage": {
+        "found": [
+          "Laleli Mosque",
+          "Esma Sultan Mansion"
+        ],
+        "missing": [],
+        "coverage": 1.0
+      }
+    },
+    {
+      "query_id": "q3",
+      "question": "What government position was held by the woman who portrayed Corliss Archer in the film Kiss and Tell?",
+      "gold_answer": "Chief of Protocol",
+      "predicted": "unknown",
+      "em": false,
+      "query_type": "bridge",
+      "routed_type": "multi_hop",
+      "strategy": "vector",
+      "num_contexts": 10,
+      "supporting_coverage": {
+        "found": [
+          "Shirley Temple",
+          "Kiss and Tell (1945 film)"
+        ],
+        "missing": [],
+        "coverage": 1.0
+      }
+    },
+    {
+      "query_id": "q4",
+      "question": "2014 S/S is the debut album of a South Korean boy group that was formed by who?",
+      "gold_answer": "YG Entertainment",
+      "predicted": "yg entertainment",
+      "em": true,
+      "query_type": "bridge",
+      "routed_type": "multi_hop",
+      "strategy": "vector",
+      "num_contexts": 10,
+      "supporting_coverage": {
+        "found": [
+          "Winner (band)",
+          "2014 S/S"
+        ],
+        "missing": [],
+        "coverage": 1.0
+      }
+    },
+    {
+      "query_id": "q5",
+      "question": "The arena where the Lewiston Maineiacs played their home games can seat how many people?",
+      "gold_answer": "3,677 seated",
+      "predicted": "3677 seated",
+      "em": true,
+      "query_type": "bridge",
+      "routed_type": "multi_hop",
+      "strategy": "vector",
+      "num_contexts": 8,
+      "supporting_coverage": {
+        "found": [
+          "Androscoggin Bank Colis\u00e9e",
+          "Lewiston Maineiacs"
+        ],
+        "missing": [],
+        "coverage": 1.0
+      }
+    }
+  ]
+}

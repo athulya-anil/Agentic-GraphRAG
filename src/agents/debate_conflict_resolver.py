@@ -1,8 +1,8 @@
 """
-KARMA Conflict Resolution Agent with LLM Debate
+Debate Conflict Resolver
 
-Based on KARMA: "CRA resolves contradictions through LLM-based debate mechanisms"
-Reduces contradictory edges by 18.6%
+Resolves contradictions through LLM-based debate mechanisms.
+Identifies conflicting relationships and uses LLM reasoning to pick winners.
 """
 
 import logging
@@ -12,23 +12,24 @@ from collections import defaultdict
 logger = logging.getLogger(__name__)
 
 
-class KARMAConflictResolutionAgent:
+class DebateConflictResolver:
     """
-    KARMA-inspired Conflict Resolution with LLM debate.
+    Conflict Resolution Agent with LLM Debate.
 
-    Identifies and resolves contradicting relationships through debate.
+    Identifies and resolves contradicting relationships through
+    LLM-based debate and reasoning.
     """
 
     def __init__(self, llm_client):
         """
-        Initialize KARMA Conflict Resolution Agent.
+        Initialize Debate Conflict Resolver.
 
         Args:
             llm_client: UnifiedLLMClient instance
         """
         self.llm_client = llm_client
         self.contradictory_pairs = self._load_contradictory_pairs()
-        logger.info("Initialized KARMAConflictResolutionAgent (LLM debate enabled)")
+        logger.info("Initialized DebateConflictResolver (LLM debate enabled)")
 
     def _load_contradictory_pairs(self) -> Dict[str, List[str]]:
         """

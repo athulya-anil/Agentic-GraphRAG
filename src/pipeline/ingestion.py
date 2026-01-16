@@ -5,16 +5,17 @@ This module orchestrates the document ingestion process:
 1. Schema inference from documents
 2. Entity extraction with metadata enrichment
 3. Relationship extraction
-4. Knowledge graph construction (Neo4j)
-5. Vector index creation (FAISS)
+4. Knowledge graph construction (Neo4j) with sentence-level provenance
+5. Vector index creation (FAISS) at sentence level
 
 Author: Agentic GraphRAG Team
 """
 
 import logging
 import json
+import re
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
 
 from ..agents import (
@@ -184,15 +185,27 @@ class IngestionPipeline:
         # Update conflict resolution stats
         self.ingestion_stats["conflicts_resolved"] = duplicates_merged + conflicts_resolved
 
-        # Stage 7: Graph Construction
-        logger.info("Building knowledge graph...")
-        nodes_created, edges_created = self._build_knowledge_graph(all_entities, all_relations)
+        # Stage 7: Sentence Tokenization (for provenance)
+        logger.info("Tokenizing documents into sentences...")
+        all_sentences = []
+        for doc_id, doc in enumerate(documents):
+            sentences = self._sentence_tokenize(doc, doc_id)
+            all_sentences.extend(sentences)
+        logger.info(f"✓ Tokenized {len(documents)} documents into {len(all_sentences)} sentences")
+
+        # Stage 8: Graph Construction (with sentence-level provenance)
+        logger.info("Building knowledge graph with provenance...")
+        nodes_created, edges_created = self._build_knowledge_graph(
+            all_entities, all_relations, all_sentences, documents, document_metadata
+        )
         logger.info(f"✓ Created {nodes_created} nodes and {edges_created} edges")
 
-        # Stage 8: Vector Indexing
-        logger.info("Building vector index...")
-        vectors_created = self._build_vector_index(documents, all_entities, document_metadata)
-        logger.info(f"✓ Indexed {vectors_created} vectors")
+        # Stage 9: Vector Indexing (at sentence level)
+        logger.info("Building sentence-level vector index...")
+        vectors_created, _ = self._build_vector_index(
+            documents, all_entities, document_metadata, all_sentences
+        )
+        logger.info(f"✓ Indexed {vectors_created} vectors (sentences + entities)")
 
         # Update stats
         self.ingestion_stats["documents_processed"] += len(documents)
@@ -252,20 +265,52 @@ class IngestionPipeline:
     def _build_knowledge_graph(
         self,
         entities: List[Dict[str, Any]],
-        relations: List[Dict[str, Any]]
+        relations: List[Dict[str, Any]],
+        all_sentences: Optional[List[Dict[str, Any]]] = None,
+        documents: Optional[List[str]] = None,
+        document_metadata: Optional[List[Dict[str, Any]]] = None
     ) -> tuple[int, int]:
         """
-        Build knowledge graph in Neo4j.
+        Build knowledge graph in Neo4j with sentence-level provenance.
+
+        Each node and relationship stores provenance as a LIST of {doc_id, sent_id}
+        since entities/relations may appear in multiple sentences.
 
         Args:
             entities: Extracted entities
             relations: Extracted relationships
+            all_sentences: Tokenized sentences for provenance tracking
 
         Returns:
             Tuple of (nodes_created, edges_created)
         """
         nodes_created = 0
         edges_created = 0
+        all_sentences = all_sentences or []
+
+        # Create Document nodes
+        if documents:
+            logger.info(f"Creating {len(documents)} Document nodes...")
+            for i, doc_text in enumerate(documents):
+                doc_id = i
+                meta = document_metadata[i] if document_metadata and i < len(document_metadata) else {}
+                title = meta.get("title") or meta.get("doc_title") or f"Document {i}"
+
+                props = {
+                    "doc_id": doc_id,
+                    "title": title,
+                    "length": len(doc_text)
+                }
+                
+                try:
+                    self.neo4j_manager.create_node(
+                        label="Document",
+                        properties=props,
+                        merge=True
+                    )
+                    nodes_created += 1
+                except Exception as e:
+                    logger.error(f"Error creating Document node {doc_id}: {e}")
 
         # Create entity nodes
         entity_lookup = {}  # Map (name, type) -> (node properties, entity_type)
@@ -288,6 +333,14 @@ class IngestionPipeline:
                 node_props["keywords"] = ",".join(metadata.get("keywords", []))
                 node_props["aliases"] = ",".join(metadata.get("aliases", []))
 
+            # Find provenance for this entity (LIST of {doc_id, sent_id})
+            if all_sentences:
+                provenance = self._find_sentence_for_entity(name, all_sentences)
+                # Store as JSON string for Neo4j compatibility
+                node_props["provenance"] = json.dumps(provenance) if provenance else "[]"
+            else:
+                node_props["provenance"] = "[]"
+
             # Create or merge node
             try:
                 node = self.neo4j_manager.create_node(
@@ -301,6 +354,26 @@ class IngestionPipeline:
             except Exception as e:
                 logger.error(f"Error creating node for {name}: {e}")
 
+            # Link to Document (MENTIONED_IN)
+            if "provenance" in node_props and node_props["provenance"] != "[]":
+                try:
+                    prov_list = json.loads(node_props["provenance"])
+                    # Get unique doc_ids from provenance
+                    doc_ids = set(p["doc_id"] for p in prov_list)
+                    
+                    for doc_id in doc_ids:
+                        self.neo4j_manager.create_relationship(
+                            from_label=entity_type,
+                            from_properties={"name": name},
+                            to_label="Document",
+                            to_properties={"doc_id": doc_id},
+                            relationship_type="MENTIONED_IN",
+                            merge=True
+                        )
+                        edges_created += 1
+                except Exception as e:
+                    logger.warning(f"Error linking entity {name} to document: {e}")
+
         # Create relationship edges
         for relation in relations:
             source_name = relation.get("source", "").lower()
@@ -310,6 +383,17 @@ class IngestionPipeline:
 
             # Add confidence
             rel_props["confidence"] = relation.get("confidence", 0.5)
+
+            # Find provenance for this relationship (sentences mentioning both entities)
+            if all_sentences:
+                rel_provenance = self._find_sentence_for_relationship(
+                    relation.get("source", ""),
+                    relation.get("target", ""),
+                    all_sentences
+                )
+                rel_props["provenance"] = json.dumps(rel_provenance) if rel_provenance else "[]"
+            else:
+                rel_props["provenance"] = "[]"
 
             # Find source and target nodes with their types
             source_node = None
@@ -347,43 +431,97 @@ class IngestionPipeline:
 
         return nodes_created, edges_created
 
+    def _find_sentence_for_relationship(
+        self,
+        source_name: str,
+        target_name: str,
+        sentences: List[Dict[str, Any]]
+    ) -> List[Dict[str, int]]:
+        """
+        Find sentences where both source and target entities co-occur.
+
+        Args:
+            source_name: Source entity name
+            target_name: Target entity name
+            sentences: List of sentence dicts from _sentence_tokenize
+
+        Returns:
+            List of {doc_id, sent_id} where both entities appear
+        """
+        provenance = []
+        source_lower = source_name.lower()
+        target_lower = target_name.lower()
+
+        for sent in sentences:
+            text_lower = sent["sentence_text"].lower()
+            if source_lower in text_lower and target_lower in text_lower:
+                provenance.append({
+                    "doc_id": sent["doc_id"],
+                    "sent_id": sent["sent_id"]
+                })
+
+        return provenance
+
     def _build_vector_index(
         self,
         documents: List[str],
         entities: List[Dict[str, Any]],
-        document_metadata: Optional[List[Dict[str, Any]]] = None
-    ) -> int:
+        document_metadata: Optional[List[Dict[str, Any]]] = None,
+        all_sentences: Optional[List[Dict[str, Any]]] = None
+    ) -> Tuple[int, List[Dict[str, Any]]]:
         """
-        Build vector index for documents and entities.
+        Build vector index at SENTENCE level for HotpotQA provenance.
+
+        Each sentence is indexed with:
+        - doc_id: document index
+        - sent_id: sentence index within document
+        - sentence_text: exact sentence text (no trimming)
 
         Args:
             documents: Document texts
             entities: Extracted entities
             document_metadata: Optional document metadata
+            all_sentences: Pre-tokenized sentences (if None, will tokenize)
 
         Returns:
-            Number of vectors created
+            Tuple of (vectors_created, all_sentences for reuse in graph building)
         """
         # Collect all texts and metadata for batch insertion
         all_texts = []
         all_metadata = []
 
-        # Index documents
-        doc_metadata = document_metadata or [{}] * len(documents)
-        for i, (doc, meta) in enumerate(zip(documents, doc_metadata)):
-            # Chunk document
-            chunks = self._chunk_document(doc)
+        # Tokenize documents into sentences if not provided
+        if all_sentences is None:
+            all_sentences = []
+            for doc_id, doc in enumerate(documents):
+                sentences = self._sentence_tokenize(doc, doc_id)
+                all_sentences.extend(sentences)
+            logger.info(f"Tokenized {len(documents)} documents into {len(all_sentences)} sentences")
 
-            for j, chunk in enumerate(chunks):
-                chunk_meta = {
-                    **meta,
-                    "type": "document_chunk",
-                    "doc_index": i,
-                    "chunk_index": j,
-                    "text": chunk
-                }
-                all_texts.append(chunk)
-                all_metadata.append(chunk_meta)
+        # Index sentences (instead of arbitrary chunks)
+        doc_metadata_list = document_metadata or [{}] * len(documents)
+        for sent in all_sentences:
+            doc_id = sent["doc_id"]
+            sent_id = sent["sent_id"]
+            sentence_text = sent["sentence_text"]
+
+            # Skip empty sentences
+            if not sentence_text.strip():
+                continue
+
+            # Get document-level metadata if available
+            doc_meta = doc_metadata_list[doc_id] if doc_id < len(doc_metadata_list) else {}
+
+            sent_meta = {
+                **doc_meta,
+                "type": "sentence",
+                "doc_id": doc_id,
+                "sent_id": sent_id,
+                "sentence_text": sentence_text,  # EXACT text
+                "text": sentence_text  # For backward compatibility
+            }
+            all_texts.append(sentence_text)
+            all_metadata.append(sent_meta)
 
         # Index entities (with their enriched metadata)
         for entity in entities:
@@ -398,11 +536,15 @@ class IngestionPipeline:
                 keywords = ", ".join(entity["metadata"].get("keywords", []))
                 entity_text += f". {summary}. Keywords: {keywords}"
 
+            # Find provenance for this entity
+            provenance = self._find_sentence_for_entity(name, all_sentences)
+
             entity_meta = {
                 "type": "entity",
                 "entity_name": name,
                 "entity_type": entity_type,
                 "text": entity_text,
+                "provenance": provenance,  # List of {doc_id, sent_id}
                 **entity.get("metadata", {})
             }
             all_texts.append(entity_text)
@@ -418,7 +560,7 @@ class IngestionPipeline:
             vectors_created += len(batch_texts)
             logger.info(f"Added batch {i//batch_size + 1} ({vectors_created}/{len(all_texts)} vectors)")
 
-        return vectors_created
+        return vectors_created, all_sentences
 
     def _chunk_document(
         self,
@@ -428,6 +570,7 @@ class IngestionPipeline:
     ) -> List[str]:
         """
         Chunk a document into smaller pieces.
+        DEPRECATED: Use _sentence_tokenize for HotpotQA sentence-level provenance.
 
         Args:
             document: Document text
@@ -453,6 +596,110 @@ class IngestionPipeline:
             start = end - chunk_overlap
 
         return chunks
+
+    def _sentence_tokenize(self, document: str, doc_id: int) -> List[Dict[str, Any]]:
+        """
+        Tokenize document into sentences with stable IDs for HotpotQA provenance.
+
+        Fallback chain:
+        1. NLTK punkt (with auto-download guard)
+        2. spaCy sentencizer (if available)
+        3. Regex fallback (last resort)
+
+        Stores EXACT text (no trimming) - critical for EM evaluation.
+
+        Args:
+            document: Document text
+            doc_id: Document index for provenance
+
+        Returns:
+            List of dicts with doc_id, sent_id, sentence_text
+        """
+        sentences = []
+
+        # Try NLTK first (with download guard)
+        try:
+            import nltk
+            try:
+                nltk.data.find('tokenizers/punkt')
+            except LookupError:
+                logger.info("Downloading NLTK punkt tokenizer...")
+                nltk.download('punkt', quiet=True)
+                try:
+                    nltk.download('punkt_tab', quiet=True)  # For newer NLTK versions
+                except Exception:
+                    pass
+
+            sentences = nltk.sent_tokenize(document)
+            logger.debug(f"NLTK tokenized doc {doc_id} into {len(sentences)} sentences")
+        except Exception as e:
+            logger.warning(f"NLTK sentence tokenization failed: {e}")
+            sentences = []
+
+        # Fallback to spaCy if NLTK failed
+        if not sentences:
+            try:
+                import spacy
+                try:
+                    nlp = spacy.load("en_core_web_sm", disable=["ner", "tagger", "lemmatizer"])
+                except OSError:
+                    nlp = spacy.blank("en")
+
+                if "sentencizer" not in nlp.pipe_names:
+                    nlp.add_pipe("sentencizer")
+
+                doc = nlp(document)
+                sentences = [sent.text for sent in doc.sents]
+                logger.info(f"Used spaCy sentencizer as fallback for doc {doc_id}")
+            except Exception as e:
+                logger.warning(f"spaCy sentence tokenization failed: {e}")
+                sentences = []
+
+        # Last resort: regex fallback
+        if not sentences:
+            # Split on .!? followed by whitespace and capital letter (or end)
+            sentences = re.split(r'(?<=[.!?])\s+(?=[A-Z])', document)
+            if not sentences or (len(sentences) == 1 and not sentences[0].strip()):
+                # If no splits or empty, treat whole doc as one sentence
+                sentences = [document] if document.strip() else []
+            logger.warning(f"Used regex fallback for sentence tokenization on doc {doc_id}")
+
+        # Build output with EXACT text (no modification)
+        return [
+            {
+                "doc_id": doc_id,
+                "sent_id": sent_idx,
+                "sentence_text": sent  # EXACT, no strip/modification
+            }
+            for sent_idx, sent in enumerate(sentences)
+        ]
+
+    def _find_sentence_for_entity(
+        self,
+        entity_name: str,
+        sentences: List[Dict[str, Any]]
+    ) -> List[Dict[str, int]]:
+        """
+        Find which sentences contain an entity (for provenance tracking).
+
+        Args:
+            entity_name: Entity name to search for
+            sentences: List of sentence dicts from _sentence_tokenize
+
+        Returns:
+            List of {doc_id, sent_id} where entity appears
+        """
+        provenance = []
+        entity_lower = entity_name.lower()
+
+        for sent in sentences:
+            if entity_lower in sent["sentence_text"].lower():
+                provenance.append({
+                    "doc_id": sent["doc_id"],
+                    "sent_id": sent["sent_id"]
+                })
+
+        return provenance
 
     def _load_schema(self) -> None:
         """Load schema from file."""

@@ -1,0 +1,82 @@
+{
+  "q1": {
+    "supporting_titles": [
+      "Scott Derrickson",
+      "Ed Wood"
+    ],
+    "distractor_titles": [
+      "Ed Wood (film)",
+      "Woodson, Arkansas",
+      "Tyler Bates",
+      "Deliver Us from Evil (2014 film)",
+      "Adam Collis",
+      "Sinister (film)",
+      "Conrad Brooks",
+      "Doctor Strange (2016 film)"
+    ]
+  },
+  "q2": {
+    "supporting_titles": [
+      "Laleli Mosque",
+      "Esma Sultan Mansion"
+    ],
+    "distractor_titles": [
+      "Esma Sultan (daughter of Abd\u00fclaziz)",
+      "Djama\u00e2 el Kebir",
+      "K\u00fc\u00e7\u00fck H\u00fcseyin Pasha",
+      "Esma Sultan (daughter of Abdul Hamid I)",
+      "Sultan Ahmed Mosque",
+      "Esma Sultan",
+      "Gevheri Kad\u0131n",
+      "Esma Sultan (daughter of Ahmed III)"
+    ]
+  },
+  "q3": {
+    "supporting_titles": [
+      "Shirley Temple",
+      "Kiss and Tell (1945 film)"
+    ],
+    "distractor_titles": [
+      "Meet Corliss Archer",
+      "Janet Waldo",
+      "Meet Corliss Archer (TV series)",
+      "Lord High Treasurer",
+      "A Kiss for Corliss",
+      "Secretary of State for Constitutional Affairs",
+      "Village accountant",
+      "Charles Craft"
+    ]
+  },
+  "q4": {
+    "supporting_titles": [
+      "Winner (band)",
+      "2014 S/S"
+    ],
+    "distractor_titles": [
+      "List of awards and nominations received by Shinee",
+      "Cho Kyuhyun",
+      "History (band)",
+      "Madtown",
+      "List of songs written by Ravi",
+      "SF9 (band)",
+      "Seventeen discography",
+      "BTS discography"
+    ]
+  },
+  "q5": {
+    "supporting_titles": [
+      "Androscoggin Bank Colis\u00e9e",
+      "Lewiston Maineiacs"
+    ],
+    "distractor_titles": [
+      "Billings Bulls",
+      "Robins Center",
+      "2011\u201312 QMJHL season",
+      "Loan modification in the United States",
+      "Case Gym",
+      "2007 Memorial Cup",
+      "Dwyer Arena",
+      "2006\u201307 QMJHL season"
+    ]
+  }
+}

@@ -1,14 +1,11 @@
 """
-KARMA-Inspired Enhanced Relation Agent
+Multi-Label Relation Agent
 
-Key improvements over original:
+Key features:
 1. Multi-label relationship extraction (multiple rels per entity pair)
 2. Schema-guided extraction with predefined relationship types
 3. Confidence scoring based on context
 4. Entity-pair enumeration (catch all possible relationships)
-
-Based on KARMA paper: "REA uses multi-label classification allowing
-multiple relationships between same entity pairs"
 """
 
 import logging
@@ -23,16 +20,17 @@ from ..utils.config import get_config
 logger = logging.getLogger(__name__)
 
 
-class KARMARelationAgent:
+class MultiLabelRelationAgent:
     """
-    KARMA-inspired Relationship Extraction Agent.
+    Multi-Label Relationship Extraction Agent.
 
     Implements multi-label relationship extraction with schema guidance.
+    Allows multiple relationships between the same entity pair.
     """
 
     def __init__(self, schema: Optional[Dict[str, Any]] = None, schema_path: Optional[str] = None):
         """
-        Initialize KARMA Relation Agent.
+        Initialize Multi-Label Relation Agent.
 
         Args:
             schema: Optional predefined schema
@@ -53,7 +51,7 @@ class KARMARelationAgent:
             else:
                 self.relationship_schema = None
 
-        logger.info("Initialized KARMARelationAgent (multi-label extraction enabled)")
+        logger.info("Initialized MultiLabelRelationAgent (multi-label extraction enabled)")
 
     def _load_relationship_schema(self, schema_path: str) -> Dict[str, Any]:
         """Load relationship schema from JSON file."""

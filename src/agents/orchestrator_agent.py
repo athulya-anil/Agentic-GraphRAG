@@ -17,7 +17,7 @@ from enum import Enum
 
 from ..utils.llm_client import get_llm_client
 from ..utils.config import get_config
-from ..answering import get_answer_selector
+from ..answering import get_llm_answerer
 
 
 # Configure logging
@@ -42,6 +42,17 @@ class QueryType(Enum):
     YES_NO = "yes_no"             # Boolean questions requiring aggregation
 
 
+class AnswerType(Enum):
+    """Expected answer type category."""
+    UNKNOWN = "unknown"
+    PERSON = "person"
+    ORGANIZATION = "organization" 
+    LOCATION = "location"
+    DATE = "date"
+    NUMBER = "number"
+    BOOLEAN = "boolean" 
+
+
 class OrchestratorAgent:
     """
     Agent responsible for query routing and response synthesis (HotpotQA).
@@ -57,7 +68,8 @@ class OrchestratorAgent:
         """Initialize the OrchestratorAgent."""
         self.llm_client = get_llm_client()
         self.config = get_config()
-        self.answer_selector = get_answer_selector()
+        # Initialize LLM answerer (replaces symbolic AnswerSelector)
+        self.llm_answerer = get_llm_answerer()
 
         # Performance tracking for adaptive learning
         self.strategy_performance: Dict[str, List[float]] = {
@@ -88,6 +100,27 @@ class OrchestratorAgent:
         """
         if available_strategies is None:
             available_strategies = ["vector", "graph"]
+
+        # Deterministic Routing Override
+        # CRITICAL: Vector retrieval proven to work for bridge queries
+        # Graph traversal is incomplete and should NOT be used for first hop
+        
+        query_lower = query.lower()
+        
+        # Force "how many" queries to VECTOR (not GRAPH)
+        # Vector search finds numeric evidence better than graph traversal
+        if "how many" in query_lower:
+            strategy = RetrievalStrategy.VECTOR
+            query_type = QueryType.MULTI_HOP
+            logger.info("Deterministic override: 'how many' -> VECTOR")
+            
+            return {
+                "strategy": strategy,
+                "query_type": query_type,
+                "confidence": 1.0,
+                "params": self._get_strategy_params(strategy, {}),
+                "analysis": {"deterministic": True}
+            }
 
         # Classify query
         query_type, query_analysis = self._classify_query(query)
@@ -191,11 +224,11 @@ Return JSON:
         """
         Select retrieval strategy based on query type.
 
-        Simple routing logic (no ambiguity):
-        - MULTI_HOP → GRAPH
-        - COMPARISON → GRAPH
-        - YES_NO → GRAPH
-        - SINGLE_HOP → VECTOR
+        UPDATED ROUTING (based on vector retrieval test results):
+        - MULTI_HOP → VECTOR (graph traversal incomplete)
+        - COMPARISON → GRAPH (needs entity relationships)
+        - YES_NO → GRAPH (needs entity relationships)
+        - SINGLE_HOP → VECTOR (direct fact lookup)
 
         Args:
             query_type: Classified query type
@@ -204,8 +237,11 @@ Return JSON:
         Returns:
             Selected RetrievalStrategy
         """
-        # HotpotQA routing: multi-hop/comparison/yes-no → graph
-        if query_type in [QueryType.MULTI_HOP, QueryType.COMPARISON, QueryType.YES_NO]:
+        # CRITICAL: Vector retrieval proven to work for bridge/multi-hop queries
+        # Graph traversal is incomplete and misses evidence
+        if query_type == QueryType.MULTI_HOP:
+            preferred = RetrievalStrategy.VECTOR
+        elif query_type in [QueryType.COMPARISON, QueryType.YES_NO]:
             preferred = RetrievalStrategy.GRAPH
         else:  # SINGLE_HOP
             preferred = RetrievalStrategy.VECTOR
@@ -322,16 +358,16 @@ Return JSON:
         query_type: Optional[QueryType] = None
     ) -> str:
         """
-        Synthesize answer using symbolic AnswerSelector (HotpotQA EM-correct).
+        Synthesize answer using LLM-based answerer.
 
-        CRITICAL: This uses DETERMINISTIC answer selection (NOT text generation).
+        CRITICAL: This uses LLM for answer generation (NOT symbolic logic).
         Output = single answer string for EM evaluation.
 
         Args:
             query: User query
             retrieved_context: List of retrieved context items
             strategy: Strategy that was used
-            query_type: Query type (YES_NO, COMPARISON, SINGLE_HOP, MULTI_HOP)
+            query_type: Query type (ignored - LLM handles this)
 
         Returns:
             Single answer string (EM-valid)
@@ -339,23 +375,48 @@ Return JSON:
         if not retrieved_context:
             return ""
 
-        # Default to SINGLE_HOP if query_type not provided
-        if query_type is None:
-            query_type = QueryType.SINGLE_HOP
-
-        # Use AnswerSelector for deterministic answer extraction
-        answer = self.answer_selector.select_answer(
-            query=query,
-            query_type=query_type.value,
+        # Use LLM answerer (replaces symbolic AnswerSelector)
+        answer = self.llm_answerer.answer(
+            question=query,
             evidence=retrieved_context
         )
 
-        # Fallback if no answer selected
+        # Fallback if no answer generated
         if not answer or answer.strip() == "":
-            logger.warning(f"AnswerSelector returned empty answer for query: {query[:50]}...")
+            logger.warning(f"LLMAnswerer returned empty answer for query: {query[:50]}...")
             return ""
 
         return answer
+
+    def _classify_answer_type(self, query: str) -> AnswerType:
+        """
+        Classify expected answer type from query pattern.
+        """
+        q = query.lower()
+        
+        # Boolean
+        if q.split()[0] in ["is", "are", "was", "were", "do", "does", "did"]:
+            return AnswerType.BOOLEAN
+            
+        # Number/Count
+        if "how many" in q or "how much" in q or "total number" in q:
+            return AnswerType.NUMBER
+        if "what year" in q or "when" in q.split()[:2]:
+            return AnswerType.DATE
+            
+        # Person
+        if "who" in q or "whose" in q:
+            return AnswerType.PERSON
+            
+        # Organization
+        if "formed by" in q or "founded by" in q or "company" in q or "band" in q or "group" in q:
+            return AnswerType.ORGANIZATION
+            
+        # Location
+        if "where" in q or "location" in q or "country" in q or "city" in q:
+            return AnswerType.LOCATION
+            
+        return AnswerType.UNKNOWN
 
 
 # Singleton instance

@@ -1,35 +1,35 @@
 """
-Schema Alignment Agent - KARMA Implementation
+Schema Aligner
 
 Ensures extracted relationships conform to predefined schema.
-Based on KARMA: "SAA validates against ontology, maps synonyms, enforces constraints"
-Improves schema compliance by 31.2%
+Uses rule-based validation: exact match, synonym mapping, fuzzy matching.
+
+NOTE: This is NOT an agent (no LLM calls). It performs purely deterministic
+schema validation using string matching and predefined mappings.
 """
 
 import logging
 from typing import List, Dict, Any, Optional, Set
 from difflib import SequenceMatcher
-from src.utils.llm_client import LLMClient
 
 logger = logging.getLogger(__name__)
 
 
-class SchemaAlignmentAgent:
+class SchemaAligner:
     """
-    KARMA Schema Alignment Agent.
+    Schema Aligner (rule-based, no LLM).
 
-    Validates and aligns relationships to a predefined schema/ontology.
+    Validates and aligns relationships to a predefined schema/ontology
+    using exact matching, synonym mapping, and fuzzy string matching.
     """
 
-    def __init__(self, llm_client: LLMClient, schema: Optional[Dict[str, Any]] = None):
+    def __init__(self, schema: Optional[Dict[str, Any]] = None):
         """
-        Initialize Schema Alignment Agent.
+        Initialize Schema Aligner.
 
         Args:
-            llm_client: LLM client for schema reasoning
             schema: Optional schema definition
         """
-        self.llm_client = llm_client
         self.schema = schema or self._get_default_schema()
 
         # Build lookup structures
@@ -37,7 +37,7 @@ class SchemaAlignmentAgent:
         self.type_synonyms = self.schema.get('synonyms', {})
         self.entity_types = set(self.schema.get('entity_types', []))
 
-        logger.info(f"Initialized SchemaAlignmentAgent with {len(self.allowed_types)} relationship types")
+        logger.info(f"Initialized SchemaAligner with {len(self.allowed_types)} relationship types")
 
     def _get_default_schema(self) -> Dict[str, Any]:
         """Get default schema for general-purpose knowledge graphs."""

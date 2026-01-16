@@ -6,7 +6,8 @@ This module contains all autonomous agents:
 - EntityAgent: Extracts entities with metadata enrichment
 - RelationAgent: Extracts relationships between entities
 - OrchestratorAgent: Routes queries to optimal retrieval strategy
-- ReflectionAgent: Evaluates and optimizes system performance
+- QueryParserAgent: Parses query intent for graph traversal
+- ConflictResolutionAgent: Resolves entity/relation conflicts
 """
 
 from .schema_agent import SchemaAgent, get_schema_agent
@@ -18,7 +19,8 @@ from .orchestrator_agent import (
     RetrievalStrategy,
     QueryType
 )
-from .reflection_agent import ReflectionAgent, get_reflection_agent
+from .query_parser_agent import QueryParserAgent, get_query_parser
+from .conflict_resolution_agent import ConflictResolutionAgent, get_conflict_resolution_agent
 
 
 __all__ = [
@@ -36,7 +38,10 @@ __all__ = [
     "get_orchestrator_agent",
     "RetrievalStrategy",
     "QueryType",
-    # Reflection Agent
-    "ReflectionAgent",
-    "get_reflection_agent",
+    # Query Parser Agent
+    "QueryParserAgent",
+    "get_query_parser",
+    # Conflict Resolution Agent
+    "ConflictResolutionAgent",
+    "get_conflict_resolution_agent",
 ]
