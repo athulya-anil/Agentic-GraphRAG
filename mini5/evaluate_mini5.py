@@ -14,7 +14,7 @@ import re
 from pathlib import Path
 
 # Add project root to path
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.pipeline.retrieval import get_retrieval_pipeline
 
@@ -35,6 +35,47 @@ def normalize_answer(answer: str) -> str:
 def exact_match(prediction: str, gold: str) -> bool:
     """Check if prediction matches gold answer (normalized)."""
     return normalize_answer(prediction) == normalize_answer(gold)
+
+
+def subem_check(prediction: str, gold: str) -> bool:
+    """
+    Check if gold answer is a substring of prediction (normalized) with word boundaries.
+
+    Following Search-R1's approach for lenient matching, but with word boundary protection
+    to avoid false positives like "no" matching "unknown".
+    
+    This handles cases like:
+    - prediction: "no laleli mosque is not in same neighborhood"
+    - gold: "no"
+    - Result: True (gold is a word in prediction)
+    
+    But prevents:
+    - prediction: "unknown"
+    - gold: "no"  
+    - Result: False ("no" is substring but not a word)
+    """
+    import re
+    normalized_prediction = normalize_answer(prediction)
+    normalized_gold = normalize_answer(gold)
+    
+    # Use word boundaries to match whole words only
+    pattern = r'\b' + re.escape(normalized_gold) + r'\b'
+    return bool(re.search(pattern, normalized_prediction))
+
+
+def em_check(prediction: str, gold: str) -> tuple[bool, str]:
+    """
+    Combined EM check: tries strict EM first, falls back to SubEM.
+
+    Returns:
+        (matched, match_type) where match_type is 'strict', 'subem', or 'none'
+    """
+    if exact_match(prediction, gold):
+        return True, 'strict'
+    elif subem_check(prediction, gold):
+        return True, 'subem'
+    else:
+        return False, 'none'
 
 
 def check_supporting_coverage(contexts: list, supporting_titles: list) -> dict:
@@ -82,7 +123,8 @@ def main():
 
     # Results storage
     results = []
-    em_scores = []
+    em_scores = []          # SubEM (lenient) - Search-R1 style
+    strict_em_scores = []   # Strict EM only
 
     print("\n" + "-"*70)
     print("RUNNING QUERIES")
@@ -110,9 +152,10 @@ def main():
             num_contexts = result.get('num_contexts', 0)
             contexts = result.get('context', [])
 
-            # Calculate EM
-            em = exact_match(predicted, gold_answer)
+            # Calculate EM (with SubEM fallback - Search-R1 style)
+            em, match_type = em_check(predicted, gold_answer)
             em_scores.append(1 if em else 0)
+            strict_em_scores.append(1 if match_type == 'strict' else 0)
 
             # Check supporting document coverage
             coverage = check_supporting_coverage(contexts, supporting_titles)
@@ -121,7 +164,7 @@ def main():
             print(f"  Routed type: {routed_type}")
             print(f"  Contexts: {num_contexts}")
             print(f"  Predicted: {predicted}")
-            print(f"  EM: {'✓' if em else '✗'}")
+            print(f"  EM: {'✓' if em else '✗'} ({match_type})")
             print(f"  Supporting coverage: {coverage['coverage']:.0%} ({len(coverage['found'])}/{len(supporting_titles)})")
             if coverage['missing']:
                 print(f"  Missing: {coverage['missing']}")
@@ -132,6 +175,7 @@ def main():
                 "gold_answer": gold_answer,
                 "predicted": predicted,
                 "em": em,
+                "match_type": match_type,
                 "query_type": query_type,
                 "routed_type": routed_type,
                 "strategy": strategy,
@@ -142,10 +186,12 @@ def main():
         except Exception as e:
             print(f"  ERROR: {e}")
             em_scores.append(0)
+            strict_em_scores.append(0)
             results.append({
                 "query_id": query_id,
                 "error": str(e),
-                "em": False
+                "em": False,
+                "match_type": "none"
             })
 
     # Summary
@@ -154,9 +200,12 @@ def main():
     print("="*70)
 
     total_em = sum(em_scores)
+    total_strict_em = sum(strict_em_scores)
     em_rate = total_em / len(em_scores) if em_scores else 0
+    strict_em_rate = total_strict_em / len(strict_em_scores) if strict_em_scores else 0
 
-    print(f"\nOverall EM: {total_em}/{len(em_scores)} = {em_rate:.1%}")
+    print(f"\nOverall EM (SubEM): {total_em}/{len(em_scores)} = {em_rate:.1%}")
+    print(f"Strict EM only: {total_strict_em}/{len(strict_em_scores)} = {strict_em_rate:.1%}")
 
     # By query type
     comparison_em = [r['em'] for r in results if r.get('query_type') == 'comparison' and 'em' in r]
@@ -188,6 +237,8 @@ def main():
                 "total_queries": len(queries),
                 "em_score": em_rate,
                 "em_correct": total_em,
+                "strict_em_score": strict_em_rate,
+                "strict_em_correct": total_strict_em,
                 "strategy_distribution": strategies,
                 "avg_supporting_coverage": avg_coverage if coverages else 0
             },

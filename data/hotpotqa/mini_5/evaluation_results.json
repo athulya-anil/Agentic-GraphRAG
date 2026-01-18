@@ -1,13 +1,15 @@
 {
   "summary": {
     "total_queries": 5,
-    "em_score": 0.8,
-    "em_correct": 4,
+    "em_score": 1.0,
+    "em_correct": 5,
+    "strict_em_score": 0.8,
+    "strict_em_correct": 4,
     "strategy_distribution": {
       "graph": 2,
       "vector": 3
     },
-    "avg_supporting_coverage": 0.7
+    "avg_supporting_coverage": 0.8
   },
   "results": [
     {
@@ -16,6 +18,7 @@
       "gold_answer": "yes",
       "predicted": "yes",
       "em": true,
+      "match_type": "strict",
       "query_type": "comparison",
       "routed_type": "comparison",
       "strategy": "graph",
@@ -35,10 +38,11 @@
       "gold_answer": "no",
       "predicted": "no",
       "em": true,
+      "match_type": "strict",
       "query_type": "comparison",
       "routed_type": "comparison",
       "strategy": "graph",
-      "num_contexts": 2,
+      "num_contexts": 7,
       "supporting_coverage": {
         "found": [
           "Laleli Mosque",
@@ -52,20 +56,20 @@
       "query_id": "q3",
       "question": "What government position was held by the woman who portrayed Corliss Archer in the film Kiss and Tell?",
       "gold_answer": "Chief of Protocol",
-      "predicted": "unknown",
-      "em": false,
+      "predicted": "united states ambassador to ghana and to czechoslovakia and also served as chief of protocol of united states",
+      "em": true,
+      "match_type": "subem",
       "query_type": "bridge",
       "routed_type": "multi_hop",
       "strategy": "vector",
-      "num_contexts": 5,
+      "num_contexts": 15,
       "supporting_coverage": {
         "found": [
+          "Shirley Temple",
           "Kiss and Tell (1945 film)"
         ],
-        "missing": [
-          "Shirley Temple"
-        ],
-        "coverage": 0.5
+        "missing": [],
+        "coverage": 1.0
       }
     },
     {
@@ -74,10 +78,11 @@
       "gold_answer": "YG Entertainment",
       "predicted": "yg entertainment",
       "em": true,
+      "match_type": "strict",
       "query_type": "bridge",
       "routed_type": "multi_hop",
       "strategy": "vector",
-      "num_contexts": 5,
+      "num_contexts": 15,
       "supporting_coverage": {
         "found": [
           "Winner (band)",
@@ -93,10 +98,11 @@
       "gold_answer": "3,677 seated",
       "predicted": "3677 seated",
       "em": true,
+      "match_type": "strict",
       "query_type": "bridge",
       "routed_type": "multi_hop",
       "strategy": "vector",
-      "num_contexts": 4,
+      "num_contexts": 15,
       "supporting_coverage": {
         "found": [
           "Androscoggin Bank Colis\u00e9e",

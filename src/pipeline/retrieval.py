@@ -219,6 +219,21 @@ class RetrievalPipeline:
                         results = self._merge_and_deduplicate(results, second_hop_results)
                         logger.info(f"After two-hop: {len(results)} total results")
 
+        # FALLBACK: Augment with VECTOR if insufficient contexts
+        # Critical for GRAPH-ANCHORED mode when entity matching or text grounding fails
+        CONTEXT_THRESHOLD = 3
+        if len(results) < CONTEXT_THRESHOLD and strategy == RetrievalStrategy.GRAPH:
+            logger.warning(
+                f"GRAPH returned only {len(results)} contexts (< {CONTEXT_THRESHOLD}), "
+                f"augmenting with VECTOR fallback"
+            )
+            # Get vector results to supplement graph
+            vector_fallback = self._retrieve_vector(query, params, return_metadata)
+            
+            # Merge, keeping graph results first (they're more structured)
+            results = self._merge_and_deduplicate(results, vector_fallback[:5])
+            logger.info(f"After VECTOR fallback: {len(results)} total contexts")
+
         # Rerank if enabled (BAAI/bge-reranker-large) - VECTOR ONLY
         # Graph retrieval order must be preserved (hop depth, path structure, edge confidence)
         if self.use_reranking and results and strategy == RetrievalStrategy.VECTOR:
@@ -238,14 +253,22 @@ class RetrievalPipeline:
         return_metadata: bool
     ) -> List[Dict[str, Any]]:
         """
-        Retrieve using vector similarity search with sentence-level provenance.
+        Retrieve using DOCUMENT-LEVEL strategy for HotpotQA.
+        
+        Strategy:
+        1. Sentence-level search to find relevant documents
+        2. Group by document and rank documents by max sentence score
+        3. Return ALL sentences from top-K documents
+        
+        This ensures complete document context for multi-hop reasoning.
 
         Returns evidence items with:
         - doc_id: document index
+        - doc_title: document title
         - sent_id: sentence index within document
         - text: sentence text (exact)
         - source: "vector"
-        - score: similarity score
+        - score: document score
 
         Args:
             query: User query
@@ -253,37 +276,86 @@ class RetrievalPipeline:
             return_metadata: Whether to include metadata
 
         Returns:
-            List of results with sentence-level provenance
+            List of results with sentence-level provenance from top documents
         """
         top_k = params.get("top_k", self.config.retrieval.top_k_vector)
-        results = self.faiss_index.search(
+        
+        # Step 1: Retrieve more sentences than needed for document discovery
+        # Use 3x multiplier to ensure we find the top documents
+        search_k = top_k * 3
+        sentence_results = self.faiss_index.search(
             query=query,
-            top_k=top_k,
-            return_metadata=True  # Always need metadata for provenance
+            top_k=search_k,
+            return_metadata=True
         )
-
-        # Format results with sentence-level provenance
-        formatted_results = []
-        for result in results:
+        
+        # Step 2: Group by document and calculate document scores
+        doc_scores = {}
+        for result in sentence_results:
             meta = result.get("metadata", {})
-
-            # Extract provenance from metadata
             doc_id = meta.get("doc_id", meta.get("doc_index", 0))
-            sent_id = meta.get("sent_id", meta.get("chunk_index", 0))
-
-            # Use sentence_text if available, fallback to text
-            text = meta.get("sentence_text", meta.get("text", ""))
-
-            formatted_results.append({
-                "doc_id": doc_id,
-                "sent_id": sent_id,
-                "text": text,
-                "score": result.get("score", 0.0),
-                "source": "vector",
-                "metadata": meta if return_metadata else {}
-            })
-
-        return formatted_results
+            doc_title = meta.get("doc_title", "Unknown")
+            score = result.get("score", 0.0)
+            
+            if doc_id not in doc_scores:
+                doc_scores[doc_id] = {
+                    "doc_id": doc_id,
+                    "doc_title": doc_title,
+                    "max_score": score,
+                    "scores": [score],
+                    "sentence_count": 1
+                }
+            else:
+                doc_scores[doc_id]["scores"].append(score)
+                doc_scores[doc_id]["max_score"] = max(doc_scores[doc_id]["max_score"], score)
+                doc_scores[doc_id]["sentence_count"] += 1
+        
+        # Calculate avg score for each document
+        for doc_id in doc_scores:
+            scores = doc_scores[doc_id]["scores"]
+            doc_scores[doc_id]["avg_score"] = sum(scores) / len(scores)
+        
+        # Step 3: Rank documents by max score (prioritize best match)
+        ranked_docs = sorted(
+            doc_scores.values(),
+            key=lambda x: x["max_score"],
+            reverse=True
+        )
+        
+        # Step 4: Take top-K documents (K=5 for HotpotQA's 2 supporting + distractors)
+        num_docs = min(5, len(ranked_docs))
+        top_docs = ranked_docs[:num_docs]
+        
+        logger.info(f"Document-level retrieval: Selected {num_docs} documents from {len(ranked_docs)} candidates")
+        for i, doc in enumerate(top_docs, 1):
+            logger.info(f"  Doc {i}: '{doc['doc_title']}' (score: {doc['max_score']:.4f}, sentences: {doc['sentence_count']})")
+        
+        # Step 5: Retrieve ALL sentences from selected documents
+        selected_doc_ids = {doc["doc_id"] for doc in top_docs}
+        all_results = []
+        
+        for meta in self.faiss_index.metadata:
+            if meta.get("type") == "sentence" and meta.get("doc_id") in selected_doc_ids:
+                # Find the document's score
+                doc_score = next(d["max_score"] for d in top_docs if d["doc_id"] == meta["doc_id"])
+                doc_title = next(d["doc_title"] for d in top_docs if d["doc_id"] == meta["doc_id"])
+                
+                all_results.append({
+                    "doc_id": meta["doc_id"],
+                    "doc_title": doc_title,
+                    "sent_id": meta["sent_id"],
+                    "text": meta.get("sentence_text", meta.get("text", "")),
+                    "score": doc_score,  # Use document score for all sentences
+                    "source": "vector",
+                    "metadata": meta if return_metadata else {}
+                })
+        
+        # Sort by doc score (descending) then sent_id (ascending) for readability
+        all_results.sort(key=lambda x: (-x["score"], x["doc_id"], x["sent_id"]))
+        
+        logger.info(f"Document-level retrieval: Retrieved {len(all_results)} sentences from {num_docs} documents")
+        
+        return all_results
 
     def _retrieve_graph(
         self,
@@ -476,9 +548,10 @@ class RetrievalPipeline:
                     entity_name = node.get('name', '')
                     if entity_name:
                         # Search FAISS for documents mentioning this entity
+                        # Increased from top_k=2 to top_k=5 for better coverage
                         doc_results = self.faiss_index.search(
                             query=entity_name,
-                            top_k=2,
+                            top_k=5,  # Increased from 2 for better text grounding
                             return_metadata=True
                         )
                         for doc_result in doc_results:
