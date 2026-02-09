@@ -1,0 +1,2077 @@
+{
+  "experiment": "gold_only",
+  "description": "50 supporting docs, 0 distractors",
+  "summary": {
+    "vector": {
+      "em_score": 0.64,
+      "em_correct": 16,
+      "strict_em_score": 0.52,
+      "strict_em_correct": 13,
+      "total": 25,
+      "strategy_distribution": {
+        "vector": 25
+      }
+    },
+    "graph": {
+      "em_score": 0.36,
+      "em_correct": 9,
+      "strict_em_score": 0.32,
+      "strict_em_correct": 8,
+      "total": 25,
+      "strategy_distribution": {
+        "graph": 25
+      }
+    },
+    "hybrid": {
+      "em_score": 0.68,
+      "em_correct": 17,
+      "strict_em_score": 0.56,
+      "strict_em_correct": 14,
+      "total": 25,
+      "strategy_distribution": {
+        "hybrid": 25
+      }
+    },
+    "orchestrator": {
+      "em_score": 0.6,
+      "em_correct": 15,
+      "strict_em_score": 0.48,
+      "strict_em_correct": 12,
+      "total": 25,
+      "strategy_distribution": {
+        "vector": 18,
+        "graph": 7
+      }
+    }
+  },
+  "best_strategy": "hybrid",
+  "results_by_strategy": {
+    "vector": [
+      {
+        "query_id": "q1",
+        "question": "2014 S/S is the debut album of a South Korean boy group that was formed by who?",
+        "gold_answer": "YG Entertainment",
+        "predicted": "yg entertainment",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 10,
+        "supporting_coverage": {
+          "found": [
+            "Winner (band)",
+            "2014 S/S"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q2",
+        "question": "Who was known by his stage name Aladin and helped organizations improve their performance as a consultant?",
+        "gold_answer": "Eenasul Fateh",
+        "predicted": "eenasul fateh",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Eenasul Fateh",
+            "Management consulting"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q3",
+        "question": "The arena where the Lewiston Maineiacs played their home games can seat how many people?",
+        "gold_answer": "3,677 seated",
+        "predicted": "3677 seated",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Lewiston Maineiacs",
+            "Androscoggin Bank Colis\u00e9e"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q4",
+        "question": "Who is older, Annie Morton or Terry Richardson?",
+        "gold_answer": "Terry Richardson",
+        "predicted": "annie morton",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 12,
+        "supporting_coverage": {
+          "found": [
+            "Annie Morton",
+            "Terry Richardson"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q5",
+        "question": "Are Local H and For Against both from the United States?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 8,
+        "supporting_coverage": {
+          "found": [
+            "For Against",
+            "Local H"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q6",
+        "question": "What is the name of the fight song of the university whose main campus is in Lawrence, Kansas and whose branch campuses are in the Kansas City metropolitan area?",
+        "gold_answer": "Kansas Song",
+        "predicted": "kansas song we\u2019re from kansas",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Kansas Song",
+            "University of Kansas"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q7",
+        "question": "What screenwriter with credits for \"Evolution\" co-wrote a film starring Nicolas Cage and T\u00e9a Leoni?",
+        "gold_answer": "David Weissman",
+        "predicted": "david weissman",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 11,
+        "supporting_coverage": {
+          "found": [
+            "David Weissman",
+            "The Family Man"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q8",
+        "question": "What year did Guns N Roses perform a promo for a movie starring Arnold Schwarzenegger as a former New York Police detective?",
+        "gold_answer": "1999",
+        "predicted": "1999",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Oh My God (Guns N' Roses song)",
+            "End of Days (film)"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q9",
+        "question": "Are Random House Tower and 888 7th Avenue both used for real estate?",
+        "gold_answer": "no",
+        "predicted": "yes",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 10,
+        "supporting_coverage": {
+          "found": [
+            "Random House Tower",
+            "888 7th Avenue"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q10",
+        "question": "The football manager who recruited David Beckham managed Manchester United during what timeframe?",
+        "gold_answer": "from 1986 to 2013",
+        "predicted": "1986 to 2013",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "1995\u201396 Manchester United F.C. season",
+            "Alex Ferguson"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q11",
+        "question": "Brown State Fishing Lake is in a country that has a population of how many inhabitants ?",
+        "gold_answer": "9,984",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Brown State Fishing Lake",
+            "Brown County, Kansas"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q12",
+        "question": "The Vermont Catamounts men's soccer team currently competes in a conference that was formerly known as what from 1988 to 1996?",
+        "gold_answer": "the North Atlantic Conference",
+        "predicted": "north atlantic conference",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "America East Conference",
+            "Vermont Catamounts men's soccer"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q13",
+        "question": "Are Giuseppe Verdi and Ambroise Thomas both Opera composers ?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 9,
+        "supporting_coverage": {
+          "found": [
+            "Ambroise Thomas",
+            "Giuseppe Verdi"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q14",
+        "question": "Roger O. Egeberg was Assistant Secretary for Health and Scientific Affairs during the administration of a president that served during what years?",
+        "gold_answer": "1969 until 1974",
+        "predicted": "19691974",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Richard Nixon",
+            "Roger O. Egeberg"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q15",
+        "question": "Which writer was from England, Henry Roth or Robert Erskine Childers?",
+        "gold_answer": "Robert Erskine Childers DSC",
+        "predicted": "robert erskine childers",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 14,
+        "supporting_coverage": {
+          "found": [
+            "Robert Erskine Childers",
+            "Henry Roth"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q16",
+        "question": "Which other Mexican Formula One race car driver has held the podium besides the Force India driver born in 1990?",
+        "gold_answer": "Pedro Rodr\u00edguez",
+        "predicted": "pedro rodr\u00edguez",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 11,
+        "supporting_coverage": {
+          "found": [
+            "Sergio P\u00e9rez",
+            "Formula One drivers from Mexico"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q17",
+        "question": "This singer of A Rather Blustery Day also voiced what hedgehog?",
+        "gold_answer": "Sonic",
+        "predicted": "sonic hedgehog",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 12,
+        "supporting_coverage": {
+          "found": [
+            "A Rather Blustery Day",
+            "Jim Cummings"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q18",
+        "question": "Aside from the Apple Remote, what other device can control the program Apple Remote was originally designed to interact with?",
+        "gold_answer": "keyboard function keys",
+        "predicted": "keyboard function keys",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 12,
+        "supporting_coverage": {
+          "found": [
+            "Apple Remote",
+            "Front Row (software)"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q19",
+        "question": "Which performance act has a higher instrument to person ratio, Badly Drawn Boy or Wolf Alice? ",
+        "gold_answer": "Badly Drawn Boy",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 8,
+        "supporting_coverage": {
+          "found": [
+            "Wolf Alice",
+            "Badly Drawn Boy"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q20",
+        "question": "What was the father of Kasper Schmeichel voted to be by the IFFHS in 1992?",
+        "gold_answer": "World's Best Goalkeeper",
+        "predicted": "iffhs worlds best goalkeeper",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Kasper Schmeichel",
+            "Peter Schmeichel"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q21",
+        "question": "Who was the writer of These Boots Are Made for Walkin' and who died in 2007?",
+        "gold_answer": "Barton Lee Hazlewood",
+        "predicted": "lee hazlewood",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 10,
+        "supporting_coverage": {
+          "found": [
+            "These Boots Are Made for Walkin'",
+            "Lee Hazlewood"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q22",
+        "question": "The 2011\u201312 VCU Rams men's basketball team, led by third year head coach Shaka Smart, represented Virginia Commonwealth University which was founded in what year?",
+        "gold_answer": "1838",
+        "predicted": "1838",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Virginia Commonwealth University",
+            "2011\u201312 VCU Rams men's basketball team"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q23",
+        "question": "Are both Dictyosperma, and Huernia described as a genus?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Dictyosperma",
+            "Huernia"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q24",
+        "question": "Kaiser Ventures corporation was founded by an American industrialist who became known as the father of modern American shipbuilding?",
+        "gold_answer": "Henry J. Kaiser",
+        "predicted": "yes",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Kaiser Ventures",
+            "Henry J. Kaiser"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q25",
+        "question": "What is the name for the adventure in \"Tunnels and Trolls\", a game designed by Ken St. Andre?",
+        "gold_answer": "Arena of Khazan",
+        "predicted": "arena of khazan",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": null,
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Tunnels &amp; Trolls",
+            "Arena of Khazan"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      }
+    ],
+    "graph": [
+      {
+        "query_id": "q1",
+        "question": "2014 S/S is the debut album of a South Korean boy group that was formed by who?",
+        "gold_answer": "YG Entertainment",
+        "predicted": "yg entertainment",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Winner (band)",
+            "2014 S/S"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q2",
+        "question": "Who was known by his stage name Aladin and helped organizations improve their performance as a consultant?",
+        "gold_answer": "Eenasul Fateh",
+        "predicted": "eenasul fateh",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Eenasul Fateh",
+            "Management consulting"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q3",
+        "question": "The arena where the Lewiston Maineiacs played their home games can seat how many people?",
+        "gold_answer": "3,677 seated",
+        "predicted": "3677 seated",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Androscoggin Bank Colis\u00e9e"
+          ],
+          "missing": [
+            "Lewiston Maineiacs"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q4",
+        "question": "Who is older, Annie Morton or Terry Richardson?",
+        "gold_answer": "Terry Richardson",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Annie Morton"
+          ],
+          "missing": [
+            "Terry Richardson"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q5",
+        "question": "Are Local H and For Against both from the United States?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "For Against",
+            "Local H"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q6",
+        "question": "What is the name of the fight song of the university whose main campus is in Lawrence, Kansas and whose branch campuses are in the Kansas City metropolitan area?",
+        "gold_answer": "Kansas Song",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 3,
+        "supporting_coverage": {
+          "found": [],
+          "missing": [
+            "Kansas Song",
+            "University of Kansas"
+          ],
+          "coverage": 0.0
+        }
+      },
+      {
+        "query_id": "q7",
+        "question": "What screenwriter with credits for \"Evolution\" co-wrote a film starring Nicolas Cage and T\u00e9a Leoni?",
+        "gold_answer": "David Weissman",
+        "predicted": "david weissman",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "The Family Man"
+          ],
+          "missing": [
+            "David Weissman"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q8",
+        "question": "What year did Guns N Roses perform a promo for a movie starring Arnold Schwarzenegger as a former New York Police detective?",
+        "gold_answer": "1999",
+        "predicted": "1999",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Oh My God (Guns N' Roses song)",
+            "End of Days (film)"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q9",
+        "question": "Are Random House Tower and 888 7th Avenue both used for real estate?",
+        "gold_answer": "no",
+        "predicted": "yes",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 7,
+        "supporting_coverage": {
+          "found": [
+            "Random House Tower"
+          ],
+          "missing": [
+            "888 7th Avenue"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q10",
+        "question": "The football manager who recruited David Beckham managed Manchester United during what timeframe?",
+        "gold_answer": "from 1986 to 2013",
+        "predicted": "1986 to 2013",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Alex Ferguson"
+          ],
+          "missing": [
+            "1995\u201396 Manchester United F.C. season"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q11",
+        "question": "Brown State Fishing Lake is in a country that has a population of how many inhabitants ?",
+        "gold_answer": "9,984",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 7,
+        "supporting_coverage": {
+          "found": [],
+          "missing": [
+            "Brown State Fishing Lake",
+            "Brown County, Kansas"
+          ],
+          "coverage": 0.0
+        }
+      },
+      {
+        "query_id": "q12",
+        "question": "The Vermont Catamounts men's soccer team currently competes in a conference that was formerly known as what from 1988 to 1996?",
+        "gold_answer": "the North Atlantic Conference",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 4,
+        "supporting_coverage": {
+          "found": [],
+          "missing": [
+            "America East Conference",
+            "Vermont Catamounts men's soccer"
+          ],
+          "coverage": 0.0
+        }
+      },
+      {
+        "query_id": "q13",
+        "question": "Are Giuseppe Verdi and Ambroise Thomas both Opera composers ?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Ambroise Thomas",
+            "Giuseppe Verdi"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q14",
+        "question": "Roger O. Egeberg was Assistant Secretary for Health and Scientific Affairs during the administration of a president that served during what years?",
+        "gold_answer": "1969 until 1974",
+        "predicted": "nixon 19691974",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Roger O. Egeberg"
+          ],
+          "missing": [
+            "Richard Nixon"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q15",
+        "question": "Which writer was from England, Henry Roth or Robert Erskine Childers?",
+        "gold_answer": "Robert Erskine Childers DSC",
+        "predicted": "robert erskine childers",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Robert Erskine Childers",
+            "Henry Roth"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q16",
+        "question": "Which other Mexican Formula One race car driver has held the podium besides the Force India driver born in 1990?",
+        "gold_answer": "Pedro Rodr\u00edguez",
+        "predicted": "pedro rodr\u00edguez",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 5,
+        "supporting_coverage": {
+          "found": [
+            "Sergio P\u00e9rez",
+            "Formula One drivers from Mexico"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q17",
+        "question": "This singer of A Rather Blustery Day also voiced what hedgehog?",
+        "gold_answer": "Sonic",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "A Rather Blustery Day"
+          ],
+          "missing": [
+            "Jim Cummings"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q18",
+        "question": "Aside from the Apple Remote, what other device can control the program Apple Remote was originally designed to interact with?",
+        "gold_answer": "keyboard function keys",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Apple Remote"
+          ],
+          "missing": [
+            "Front Row (software)"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q19",
+        "question": "Which performance act has a higher instrument to person ratio, Badly Drawn Boy or Wolf Alice? ",
+        "gold_answer": "Badly Drawn Boy",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Wolf Alice"
+          ],
+          "missing": [
+            "Badly Drawn Boy"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q20",
+        "question": "What was the father of Kasper Schmeichel voted to be by the IFFHS in 1992?",
+        "gold_answer": "World's Best Goalkeeper",
+        "predicted": "iffhs worlds best goalkeeper",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 3,
+        "supporting_coverage": {
+          "found": [
+            "Kasper Schmeichel"
+          ],
+          "missing": [
+            "Peter Schmeichel"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q21",
+        "question": "Who was the writer of These Boots Are Made for Walkin' and who died in 2007?",
+        "gold_answer": "Barton Lee Hazlewood",
+        "predicted": "lee hazlewood",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "These Boots Are Made for Walkin'"
+          ],
+          "missing": [
+            "Lee Hazlewood"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q22",
+        "question": "The 2011\u201312 VCU Rams men's basketball team, led by third year head coach Shaka Smart, represented Virginia Commonwealth University which was founded in what year?",
+        "gold_answer": "1838",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "2011\u201312 VCU Rams men's basketball team"
+          ],
+          "missing": [
+            "Virginia Commonwealth University"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q23",
+        "question": "Are both Dictyosperma, and Huernia described as a genus?",
+        "gold_answer": "yes",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 7,
+        "supporting_coverage": {
+          "found": [
+            "Dictyosperma"
+          ],
+          "missing": [
+            "Huernia"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q24",
+        "question": "Kaiser Ventures corporation was founded by an American industrialist who became known as the father of modern American shipbuilding?",
+        "gold_answer": "Henry J. Kaiser",
+        "predicted": "yes",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Henry J. Kaiser"
+          ],
+          "missing": [
+            "Kaiser Ventures"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q25",
+        "question": "What is the name for the adventure in \"Tunnels and Trolls\", a game designed by Ken St. Andre?",
+        "gold_answer": "Arena of Khazan",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": null,
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Tunnels &amp; Trolls"
+          ],
+          "missing": [
+            "Arena of Khazan"
+          ],
+          "coverage": 0.5
+        }
+      }
+    ],
+    "hybrid": [
+      {
+        "query_id": "q1",
+        "question": "2014 S/S is the debut album of a South Korean boy group that was formed by who?",
+        "gold_answer": "YG Entertainment",
+        "predicted": "yg entertainment",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Winner (band)",
+            "2014 S/S"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q2",
+        "question": "Who was known by his stage name Aladin and helped organizations improve their performance as a consultant?",
+        "gold_answer": "Eenasul Fateh",
+        "predicted": "eenasul fateh",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 14,
+        "supporting_coverage": {
+          "found": [
+            "Eenasul Fateh",
+            "Management consulting"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q3",
+        "question": "The arena where the Lewiston Maineiacs played their home games can seat how many people?",
+        "gold_answer": "3,677 seated",
+        "predicted": "3677 seated",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 14,
+        "supporting_coverage": {
+          "found": [
+            "Lewiston Maineiacs",
+            "Androscoggin Bank Colis\u00e9e"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q4",
+        "question": "Who is older, Annie Morton or Terry Richardson?",
+        "gold_answer": "Terry Richardson",
+        "predicted": "annie morton",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 12,
+        "supporting_coverage": {
+          "found": [
+            "Annie Morton",
+            "Terry Richardson"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q5",
+        "question": "Are Local H and For Against both from the United States?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 10,
+        "supporting_coverage": {
+          "found": [
+            "For Against",
+            "Local H"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q6",
+        "question": "What is the name of the fight song of the university whose main campus is in Lawrence, Kansas and whose branch campuses are in the Kansas City metropolitan area?",
+        "gold_answer": "Kansas Song",
+        "predicted": "kansas song we\u2019re from kansas",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Kansas Song",
+            "University of Kansas"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q7",
+        "question": "What screenwriter with credits for \"Evolution\" co-wrote a film starring Nicolas Cage and T\u00e9a Leoni?",
+        "gold_answer": "David Weissman",
+        "predicted": "david weissman",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "David Weissman",
+            "The Family Man"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q8",
+        "question": "What year did Guns N Roses perform a promo for a movie starring Arnold Schwarzenegger as a former New York Police detective?",
+        "gold_answer": "1999",
+        "predicted": "1999",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Oh My God (Guns N' Roses song)",
+            "End of Days (film)"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q9",
+        "question": "Are Random House Tower and 888 7th Avenue both used for real estate?",
+        "gold_answer": "no",
+        "predicted": "yes",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 14,
+        "supporting_coverage": {
+          "found": [
+            "Random House Tower",
+            "888 7th Avenue"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q10",
+        "question": "The football manager who recruited David Beckham managed Manchester United during what timeframe?",
+        "gold_answer": "from 1986 to 2013",
+        "predicted": "1986 to 2013",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 14,
+        "supporting_coverage": {
+          "found": [
+            "1995\u201396 Manchester United F.C. season",
+            "Alex Ferguson"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q11",
+        "question": "Brown State Fishing Lake is in a country that has a population of how many inhabitants ?",
+        "gold_answer": "9,984",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Brown State Fishing Lake",
+            "Brown County, Kansas"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q12",
+        "question": "The Vermont Catamounts men's soccer team currently competes in a conference that was formerly known as what from 1988 to 1996?",
+        "gold_answer": "the North Atlantic Conference",
+        "predicted": "north atlantic conference",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "America East Conference",
+            "Vermont Catamounts men's soccer"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q13",
+        "question": "Are Giuseppe Verdi and Ambroise Thomas both Opera composers ?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 14,
+        "supporting_coverage": {
+          "found": [
+            "Ambroise Thomas",
+            "Giuseppe Verdi"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q14",
+        "question": "Roger O. Egeberg was Assistant Secretary for Health and Scientific Affairs during the administration of a president that served during what years?",
+        "gold_answer": "1969 until 1974",
+        "predicted": "19691974",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 14,
+        "supporting_coverage": {
+          "found": [
+            "Richard Nixon",
+            "Roger O. Egeberg"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q15",
+        "question": "Which writer was from England, Henry Roth or Robert Erskine Childers?",
+        "gold_answer": "Robert Erskine Childers DSC",
+        "predicted": "robert erskine childers",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Robert Erskine Childers",
+            "Henry Roth"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q16",
+        "question": "Which other Mexican Formula One race car driver has held the podium besides the Force India driver born in 1990?",
+        "gold_answer": "Pedro Rodr\u00edguez",
+        "predicted": "pedro rodr\u00edguez",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Sergio P\u00e9rez",
+            "Formula One drivers from Mexico"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q17",
+        "question": "This singer of A Rather Blustery Day also voiced what hedgehog?",
+        "gold_answer": "Sonic",
+        "predicted": "sonic hedgehog",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "A Rather Blustery Day",
+            "Jim Cummings"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q18",
+        "question": "Aside from the Apple Remote, what other device can control the program Apple Remote was originally designed to interact with?",
+        "gold_answer": "keyboard function keys",
+        "predicted": "keyboard function keys",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Apple Remote",
+            "Front Row (software)"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q19",
+        "question": "Which performance act has a higher instrument to person ratio, Badly Drawn Boy or Wolf Alice? ",
+        "gold_answer": "Badly Drawn Boy",
+        "predicted": "badly drawn boy",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 12,
+        "supporting_coverage": {
+          "found": [
+            "Wolf Alice",
+            "Badly Drawn Boy"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q20",
+        "question": "What was the father of Kasper Schmeichel voted to be by the IFFHS in 1992?",
+        "gold_answer": "World's Best Goalkeeper",
+        "predicted": "iffhs worlds best goalkeeper",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Kasper Schmeichel",
+            "Peter Schmeichel"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q21",
+        "question": "Who was the writer of These Boots Are Made for Walkin' and who died in 2007?",
+        "gold_answer": "Barton Lee Hazlewood",
+        "predicted": "lee hazlewood",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "These Boots Are Made for Walkin'",
+            "Lee Hazlewood"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q22",
+        "question": "The 2011\u201312 VCU Rams men's basketball team, led by third year head coach Shaka Smart, represented Virginia Commonwealth University which was founded in what year?",
+        "gold_answer": "1838",
+        "predicted": "1838",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Virginia Commonwealth University",
+            "2011\u201312 VCU Rams men's basketball team"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q23",
+        "question": "Are both Dictyosperma, and Huernia described as a genus?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Dictyosperma",
+            "Huernia"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q24",
+        "question": "Kaiser Ventures corporation was founded by an American industrialist who became known as the father of modern American shipbuilding?",
+        "gold_answer": "Henry J. Kaiser",
+        "predicted": "yes",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Kaiser Ventures",
+            "Henry J. Kaiser"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q25",
+        "question": "What is the name for the adventure in \"Tunnels and Trolls\", a game designed by Ken St. Andre?",
+        "gold_answer": "Arena of Khazan",
+        "predicted": "arena of khazan",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "hybrid",
+        "routed_type": null,
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Tunnels &amp; Trolls",
+            "Arena of Khazan"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      }
+    ],
+    "orchestrator": [
+      {
+        "query_id": "q1",
+        "question": "2014 S/S is the debut album of a South Korean boy group that was formed by who?",
+        "gold_answer": "YG Entertainment",
+        "predicted": "yg entertainment",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 10,
+        "supporting_coverage": {
+          "found": [
+            "Winner (band)",
+            "2014 S/S"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q2",
+        "question": "Who was known by his stage name Aladin and helped organizations improve their performance as a consultant?",
+        "gold_answer": "Eenasul Fateh",
+        "predicted": "eenasul fateh",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "single_hop",
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Eenasul Fateh",
+            "Management consulting"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q3",
+        "question": "The arena where the Lewiston Maineiacs played their home games can seat how many people?",
+        "gold_answer": "3,677 seated",
+        "predicted": "3677 seated",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Lewiston Maineiacs",
+            "Androscoggin Bank Colis\u00e9e"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q4",
+        "question": "Who is older, Annie Morton or Terry Richardson?",
+        "gold_answer": "Terry Richardson",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "graph",
+        "routed_type": "comparison",
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Annie Morton"
+          ],
+          "missing": [
+            "Terry Richardson"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q5",
+        "question": "Are Local H and For Against both from the United States?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": "comparison",
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "For Against",
+            "Local H"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q6",
+        "question": "What is the name of the fight song of the university whose main campus is in Lawrence, Kansas and whose branch campuses are in the Kansas City metropolitan area?",
+        "gold_answer": "Kansas Song",
+        "predicted": "kansas song we\u2019re from kansas",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Kansas Song",
+            "University of Kansas"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q7",
+        "question": "What screenwriter with credits for \"Evolution\" co-wrote a film starring Nicolas Cage and T\u00e9a Leoni?",
+        "gold_answer": "David Weissman",
+        "predicted": "david weissman",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 11,
+        "supporting_coverage": {
+          "found": [
+            "David Weissman",
+            "The Family Man"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q8",
+        "question": "What year did Guns N Roses perform a promo for a movie starring Arnold Schwarzenegger as a former New York Police detective?",
+        "gold_answer": "1999",
+        "predicted": "1999",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Oh My God (Guns N' Roses song)",
+            "End of Days (film)"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q9",
+        "question": "Are Random House Tower and 888 7th Avenue both used for real estate?",
+        "gold_answer": "no",
+        "predicted": "yes",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": "comparison",
+        "num_contexts": 7,
+        "supporting_coverage": {
+          "found": [
+            "Random House Tower"
+          ],
+          "missing": [
+            "888 7th Avenue"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q10",
+        "question": "The football manager who recruited David Beckham managed Manchester United during what timeframe?",
+        "gold_answer": "from 1986 to 2013",
+        "predicted": "1986 to 2013",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "1995\u201396 Manchester United F.C. season",
+            "Alex Ferguson"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q11",
+        "question": "Brown State Fishing Lake is in a country that has a population of how many inhabitants ?",
+        "gold_answer": "9,984",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Brown State Fishing Lake",
+            "Brown County, Kansas"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q12",
+        "question": "The Vermont Catamounts men's soccer team currently competes in a conference that was formerly known as what from 1988 to 1996?",
+        "gold_answer": "the North Atlantic Conference",
+        "predicted": "north atlantic conference",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "single_hop",
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "America East Conference",
+            "Vermont Catamounts men's soccer"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q13",
+        "question": "Are Giuseppe Verdi and Ambroise Thomas both Opera composers ?",
+        "gold_answer": "yes",
+        "predicted": "yes",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": "comparison",
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Ambroise Thomas",
+            "Giuseppe Verdi"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q14",
+        "question": "Roger O. Egeberg was Assistant Secretary for Health and Scientific Affairs during the administration of a president that served during what years?",
+        "gold_answer": "1969 until 1974",
+        "predicted": "19691974",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Richard Nixon",
+            "Roger O. Egeberg"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q15",
+        "question": "Which writer was from England, Henry Roth or Robert Erskine Childers?",
+        "gold_answer": "Robert Erskine Childers DSC",
+        "predicted": "robert erskine childers",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": "comparison",
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Robert Erskine Childers",
+            "Henry Roth"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q16",
+        "question": "Which other Mexican Formula One race car driver has held the podium besides the Force India driver born in 1990?",
+        "gold_answer": "Pedro Rodr\u00edguez",
+        "predicted": "pedro rodr\u00edguez",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 11,
+        "supporting_coverage": {
+          "found": [
+            "Sergio P\u00e9rez",
+            "Formula One drivers from Mexico"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q17",
+        "question": "This singer of A Rather Blustery Day also voiced what hedgehog?",
+        "gold_answer": "Sonic",
+        "predicted": "sonic hedgehog",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 12,
+        "supporting_coverage": {
+          "found": [
+            "A Rather Blustery Day",
+            "Jim Cummings"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q18",
+        "question": "Aside from the Apple Remote, what other device can control the program Apple Remote was originally designed to interact with?",
+        "gold_answer": "keyboard function keys",
+        "predicted": "keyboard function keys",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 12,
+        "supporting_coverage": {
+          "found": [
+            "Apple Remote",
+            "Front Row (software)"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q19",
+        "question": "Which performance act has a higher instrument to person ratio, Badly Drawn Boy or Wolf Alice? ",
+        "gold_answer": "Badly Drawn Boy",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": "comparison",
+        "num_contexts": 6,
+        "supporting_coverage": {
+          "found": [
+            "Wolf Alice"
+          ],
+          "missing": [
+            "Badly Drawn Boy"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q20",
+        "question": "What was the father of Kasper Schmeichel voted to be by the IFFHS in 1992?",
+        "gold_answer": "World's Best Goalkeeper",
+        "predicted": "iffhs worlds best goalkeeper",
+        "em": true,
+        "match_type": "subem",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Kasper Schmeichel",
+            "Peter Schmeichel"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q21",
+        "question": "Who was the writer of These Boots Are Made for Walkin' and who died in 2007?",
+        "gold_answer": "Barton Lee Hazlewood",
+        "predicted": "lee hazlewood",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 10,
+        "supporting_coverage": {
+          "found": [
+            "These Boots Are Made for Walkin'",
+            "Lee Hazlewood"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q22",
+        "question": "The 2011\u201312 VCU Rams men's basketball team, led by third year head coach Shaka Smart, represented Virginia Commonwealth University which was founded in what year?",
+        "gold_answer": "1838",
+        "predicted": "1838",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "multi_hop",
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Virginia Commonwealth University",
+            "2011\u201312 VCU Rams men's basketball team"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q23",
+        "question": "Are both Dictyosperma, and Huernia described as a genus?",
+        "gold_answer": "yes",
+        "predicted": "unknown",
+        "em": false,
+        "match_type": "none",
+        "query_type": "comparison",
+        "strategy": "graph",
+        "routed_type": "comparison",
+        "num_contexts": 7,
+        "supporting_coverage": {
+          "found": [
+            "Dictyosperma"
+          ],
+          "missing": [
+            "Huernia"
+          ],
+          "coverage": 0.5
+        }
+      },
+      {
+        "query_id": "q24",
+        "question": "Kaiser Ventures corporation was founded by an American industrialist who became known as the father of modern American shipbuilding?",
+        "gold_answer": "Henry J. Kaiser",
+        "predicted": "yes",
+        "em": false,
+        "match_type": "none",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "single_hop",
+        "num_contexts": 15,
+        "supporting_coverage": {
+          "found": [
+            "Kaiser Ventures",
+            "Henry J. Kaiser"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      },
+      {
+        "query_id": "q25",
+        "question": "What is the name for the adventure in \"Tunnels and Trolls\", a game designed by Ken St. Andre?",
+        "gold_answer": "Arena of Khazan",
+        "predicted": "arena of khazan",
+        "em": true,
+        "match_type": "strict",
+        "query_type": "bridge",
+        "strategy": "vector",
+        "routed_type": "single_hop",
+        "num_contexts": 13,
+        "supporting_coverage": {
+          "found": [
+            "Tunnels &amp; Trolls",
+            "Arena of Khazan"
+          ],
+          "missing": [],
+          "coverage": 1.0
+        }
+      }
+    ]
+  }
+}

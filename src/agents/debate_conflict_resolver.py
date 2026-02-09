@@ -224,3 +224,4 @@ Return JSON:
         logger.info(f"Resolved {conflicts_resolved} conflicts, kept {len(resolved_relationships)}/{len(relationships)} relationships")
 
         return resolved_relationships, conflicts_resolved
+

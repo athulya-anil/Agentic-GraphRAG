@@ -8,7 +8,6 @@ This agent resolves conflicts and deduplicates entities/relationships:
 - Validates against schema constraints
 - Assigns confidence scores to resolutions
 
-Author: Agentic GraphRAG Team
 """
 
 import logging
