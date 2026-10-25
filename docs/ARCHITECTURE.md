@@ -1,8 +1,8 @@
 # Agentic GraphRAG - System Architecture
 
-**A Multi-Agent System for Knowledge Graph Construction and Symbolic Answer Selection on HotpotQA**
+**A Multi-Agent System for Knowledge Graph Construction and LLM-Grounded Answer Selection on HotpotQA**
 
-*Last Updated: January 2026*
+*Last Updated: October 2026*
 
 ---
 

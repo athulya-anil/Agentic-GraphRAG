@@ -16,8 +16,11 @@ Make sure you've completed the installation steps from the main README:
 ### Step 1: Ingest HotpotQA Documents
 
 ```bash
-# Ingest documents for the 100-query evaluation set
-python ingest_hotpotqa.py
+# Mini-5 benchmark (5 queries, ~30s)
+python mini5/ingest_mini5.py
+
+# Mini-25 benchmark (25 queries, ~45s)
+python mini25/ingest_mini25_gold_only.py
 ```
 
 This will:
@@ -29,33 +32,29 @@ This will:
 ### Step 2: Run Evaluation
 
 ```bash
-# Run full evaluation on 100 queries
-python evaluate_hotpotqa_full.py
+# Mini-5 evaluation
+python mini5/evaluate_mini5.py
+
+# Mini-25 evaluation (tests all 4 strategies)
+python mini25/evaluate_mini25_gold_only.py
 ```
 
 Output:
 ```
-✓ FAISS: X,XXX vectors
-✓ Neo4j: X,XXX nodes, X,XXX relationships
-
-RUNNING EVALUATION (CACHE DISABLED)
-Evaluating: 100%|████████████████| 100/100
-
 RESULTS
 Overall Performance:
-   EM: 0.XXX (XX.X%)
-   Correct: XX/100
+   EM: 0.80 (80.0%)
+   Correct: 4/5
 
 By Question Type:
-   Comparison EM: 0.XXX (21 queries)
-   Bridge EM: 0.XXX (79 queries)
+   Comparison EM: 1.00 (2 queries)
+   Bridge EM: 0.67 (3 queries)
 
 By Retrieval Strategy:
-   Vector: 0.XXX (N queries)
-   Graph: 0.XXX (N queries)
+   Vector: 3 queries
+   Graph: 2 queries
 
-✓ Results saved to: data/hotpotqa/results_full_graphrag.json
-✓ Summary saved to: data/hotpotqa/summary_full_graphrag.json
+✓ Results saved to: data/hotpotqa/mini_5/evaluation_results.json
 ```
 
 ## Option B: Custom Documents
@@ -145,9 +144,7 @@ python query.py --help
 
 Open Neo4j Browser at http://localhost:7474
 
-Login:
-- Username: `neo4j`
-- Password: `password123`
+Login with the credentials from your `.env` file (default: `neo4j` / `password123` if using the provided Docker script).
 
 Useful Cypher queries:
 
@@ -222,17 +219,13 @@ em = int(normalize_answer(prediction) == normalize_answer(gold))
 | Type | Description | Strategy |
 |------|-------------|----------|
 | SINGLE_HOP | Direct fact lookup | VECTOR |
-| MULTI_HOP | Bridge entity reasoning | GRAPH |
+| MULTI_HOP | Bridge entity reasoning | VECTOR + two-hop |
 | COMPARISON | Compare 2+ entities | GRAPH |
 | YES_NO | Boolean question | GRAPH |
 
 ### Answer Selection
 
-The **AnswerSelector** is 100% symbolic (no LLM generation):
-
-- **YES_NO**: Entity + constraint co-mention → "yes" or "no"
-- **COMPARISON**: Boolean form → YES_NO logic; entity form → winner selection
-- **FACTOID**: KG node ranking by frequency and multi-doc support
+The **LLMAnswerer** (primary) uses Groq/llama-3.3-70b with a constrained prompt — answers only from the provided evidence, returns `"unknown"` when evidence is insufficient.
 
 ### Provenance
 
@@ -251,9 +244,8 @@ Every result includes `{doc_id, sent_id}` tracking:
 # Check Docker is running
 docker ps
 
-# Verify credentials in .env
-NEO4J_URI=bolt://localhost:7687
-NEO4J_PASSWORD=password123
+# Verify credentials in .env match what the Docker script used
+cat .env | grep NEO4J
 ```
 
 ### "GROQ_API_KEY not found"
@@ -271,7 +263,7 @@ echo "GROQ_API_KEY=your_key_here" >> .env
 python -c "from src.vector import get_faiss_index; print(f'Vectors: {get_faiss_index().get_count()}')"
 
 # Re-run ingestion if needed
-python ingest_hotpotqa.py
+python mini5/ingest_mini5.py
 ```
 
 ### "spaCy model not found"
@@ -290,15 +282,15 @@ python -m spacy download en_core_web_lg
 
 | File | Purpose |
 |------|---------|
-| `ingest_hotpotqa.py` | Ingest HotpotQA documents |
-| `evaluate_hotpotqa_full.py` | Run evaluation |
+| `mini5/ingest_mini5.py` | Ingest Mini-5 benchmark |
+| `mini5/evaluate_mini5.py` | Run Mini-5 evaluation |
+| `mini25/ingest_mini25_gold_only.py` | Ingest Mini-25 benchmark |
+| `mini25/evaluate_mini25_gold_only.py` | Run Mini-25 evaluation |
+| `ingest.py` | Ingest custom documents |
 | `query.py` | Interactive queries |
-| `data/hotpotqa/results_*.json` | Per-query results |
-| `data/hotpotqa/summary_*.json` | Aggregate metrics |
-| `data/faiss_index/` | Vector embeddings |
+| `data/hotpotqa/mini_5/evaluation_results.json` | Mini-5 results |
+| `data/hotpotqa/mini_25_gold_only/evaluation_results.json` | Mini-25 results |
 
 ## Need Help?
 
 - Architecture details: See [ARCHITECTURE.md](ARCHITECTURE.md)
-- Verify setup: `python verify_setup.py`
-- Check system: `python validate_system.py`

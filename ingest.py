@@ -325,7 +325,6 @@ Examples:
         print(f"\n💡 Next steps:")
         print(f"   • Query your knowledge graph with: python query.py")
         print(f"   • View in Neo4j Browser: http://localhost:7474")
-        print(f"   • Run full demo: python demo.py")
         print("=" * 70)
 
     sys.exit(0)

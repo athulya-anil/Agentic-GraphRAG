@@ -35,7 +35,7 @@ pip install -r requirements.txt
 
 echo ""
 echo "4️⃣  Downloading spaCy model..."
-python -m spacy download en_core_web_sm
+python -m spacy download en_core_web_lg
 
 echo ""
 echo "✅ Setup complete!"
